@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Networking_System/Networking/Admin_Module/Admin_Module.iml" filepath="$PROJECT_DIR$/Networking_System/Networking/Admin_Module/Admin_Module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Networking_System/Networking/Authentication/Authentication.iml" filepath="$PROJECT_DIR$/Networking_System/Networking/Authentication/Authentication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Motadata_Learning.iml" filepath="$PROJECT_DIR$/.idea/Motadata_Learning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Networking_System/Networking_System.iml" filepath="$PROJECT_DIR$/Networking_System/Networking_System.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Networking_System/Networking/Admin_Module/src/User_Module/User_Module.iml" filepath="$PROJECT_DIR$/Networking_System/Networking/Admin_Module/src/User_Module/User_Module.iml" />
+    </modules>
+  </component>
+</project>
