@@ -2,11 +2,15 @@ package networkauth;
 
 import networkuser.PingImplementationUser;
 
+import networkuser.WebBrowser;
+
 import java.io.BufferedReader;
+
 import java.io.IOException;
+
 import java.io.InputStreamReader;
 
-interface UserVerification extends PingImplementationUser {
+interface UserVerification extends PingImplementationUser, WebBrowser {
 
     default void UserFacility(String user) {
 
@@ -34,94 +38,87 @@ interface UserVerification extends PingImplementationUser {
 
                 while (true)
                 {
-                    BufferedReader number = new BufferedReader(new InputStreamReader(System.in));
-
-                    Integer choice = Integer.parseInt(number.readLine());
-
-                    try
+                    try(BufferedReader number = new BufferedReader(new InputStreamReader(System.in)))
                     {
-                        if (choice != null)
-                        {
-                            switch (choice)
+                            Integer choice = Integer.parseInt(number.readLine());
+
+                            try
                             {
-                                case 1:
+                                if (choice != null)
                                 {
-                                    break;
-                                }
-
-                                case 2:
-                                {
-                                    break;
-                                }
-
-                                case 3:
-                                {
-                                    break;
-                                }
-
-                                case 4:
-                                {
-                                    try
+                                    switch (choice)
                                     {
-                                        System.out.println("Please Enter WebSiteName");
-
-                                        website = number.readLine();
-
-                                        if(website != null)
-                                        {
-                                            String result = sendPingRequest(website);
-
-                                            System.out.println(result);
-
+                                        case 1: {
                                             break;
                                         }
 
-                                        else
+                                        case 2: {
+                                            break;
+                                        }
+
+                                        case 3: {
+                                            break;
+                                        }
+
+                                        case 4:
                                         {
-                                            throw new NullPointerException();
+                                            try
+                                            {
+                                                System.out.println("Please Enter WebSiteName");
+
+                                                website = number.readLine();
+
+                                                if (website != null) {
+                                                    String result = sendPingRequest(website);
+
+                                                    if (result == "Host is reachable") {
+                                                        System.out.println(result);
+
+                                                        OpenWeb(website, result);
+                                                    } else {
+                                                        System.out.println(result);
+
+                                                        break;
+                                                    }
+                                                } else {
+                                                    throw new NullPointerException();
+                                                }
+                                            }
+
+                                            catch (NullPointerException exception)
+                                            {
+                                                System.out.println("Enter Valid WebsiteName");
+
+                                                break;
+                                            }
                                         }
                                     }
-
-                                    catch (NullPointerException exception)
-                                    {
-                                        System.out.println("Enter Valid WebsiteName");
-
-                                        break;
-                                    }
-
                                 }
 
-                                default:
+                                else
                                 {
-                                    System.out.println("Enter Valid Choice");
-
-                                    break;
+                                    System.out.println("Enter correct choice");
                                 }
+
+                            }
+
+                            catch (Exception exception)
+                            {
+                                exception.printStackTrace();
                             }
                         }
-                        else
+
+                        catch (Exception exception)
                         {
-                            System.out.println("Enter correct choice");
+                            exception.printStackTrace();
                         }
-
                     }
-
-                    catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
-                }
             }
 
-            catch (ClassCastException e)
+            catch (Exception exception)
                 {
                     System.out.println("Please enter Valid Input");
                 }
-
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
         }
 
         catch (NullPointerException e)
