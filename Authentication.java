@@ -2,7 +2,7 @@ package networkauth;
 
 import java.io.*;
 
-public class Authentication implements UserVerification, AdminVerification{
+public class Authentication extends AdminVerification implements UserVerification {
 
     static String user;
 

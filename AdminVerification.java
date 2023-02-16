@@ -6,11 +6,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-interface AdminVerification extends PingImplementationAdmin{
+public class AdminVerification implements PingImplementationAdmin{
 
     String password = "Hem@nt#06";
 
-    default void AdminFacility(String user, String passwd) {
+    void AdminFacility(String user, String passwd) {
 
         String ipaddress;
 

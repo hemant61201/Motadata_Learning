@@ -24,7 +24,7 @@ public interface PingImplementationUser{
 
             System.out.println("Sending Ping Request to " + url);
 
-              //  Process p1 = Runtime.getRuntime().exec("ping -c 5" + url);
+            //  Process p1 = Runtime.getRuntime().exec("ping -c 5" + url);
 
                // boolean reachable = p1.waitFor(5, SECONDS);
 
