@@ -12,9 +12,11 @@ interface AdminVerification extends PingImplementationAdmin{
 
     default void AdminFacility(String user, String passwd) {
 
+        String ipaddress;
+
         try
         {
-            if(user == "Admin" && passwd == password)
+            if(user == "Admin" && passwd.equals(password))
             {
                 System.out.println("Welcome to AdminBasedApp");
 
@@ -33,87 +35,105 @@ interface AdminVerification extends PingImplementationAdmin{
                 System.out.println("6. SNMP Implementation");
 
                 System.out.println("7. SSH Implementation");
-            }
 
-            try
-            {
-
-                while (true)
+                try
                 {
-                    BufferedReader number = new BufferedReader(new InputStreamReader(System.in));
-
-                    Integer choice = Integer.parseInt(number.readLine());
-
-                    try
+                    while (true)
                     {
-                        if (choice != null)
+                        try(BufferedReader number = new BufferedReader(new InputStreamReader(System.in)))
                         {
-                            switch (choice)
+                            Integer choice = Integer.parseInt(number.readLine());
+
+                            try
                             {
-                                case 1:
+                                if (choice != null)
                                 {
-                                    break;
+                                    switch (choice)
+                                    {
+                                        case 1: {
+                                            break;
+                                        }
+
+                                        case 2: {
+                                            try {
+                                                System.out.println("Please Enter IPAddress");
+
+                                                ipaddress = number.readLine();
+
+                                                if (ipaddress != null) {
+                                                    PingRequest(ipaddress);
+                                                } else {
+                                                    throw new NullPointerException();
+                                                }
+                                            } catch (NullPointerException exception) {
+                                                System.out.println("Enter Valid WebsiteName");
+
+                                                break;
+                                            }
+                                        }
+
+                                        case 3: {
+                                            break;
+                                        }
+
+                                        case 4: {
+                                            break;
+                                        }
+
+                                        case 5: {
+                                            break;
+                                        }
+
+                                        case 6: {
+                                            break;
+                                        }
+
+                                        case 7: {
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    System.out.println("Enter correct choice");
                                 }
 
-                                case 2:
-                                {
-                                    break;
-                                }
+                            }
 
-                                case 3:
-                                {
-                                    break;
-                                }
-
-                                case 4:
-                                {
-                                    break;
-                                }
-
-                                case 5:
-                                {
-                                    break;
-                                }
-
-                                case 6:
-                                {
-                                    break;
-                                }
-
-                                case 7:
-                                {
-                                    break;
-                                }
-
-                                default:
-                                {
-                                    System.out.println("Enter Valid Choice");
-                                    break;
-                                }
+                            catch (Exception exception)
+                            {
+                                exception.printStackTrace();
                             }
                         }
-                        else
+
+                        catch (Exception exception)
                         {
-                            System.out.println("Enter correct choice");
+                            exception.printStackTrace();
                         }
-
                     }
+                }
 
-                    catch (Exception exception)
-                    {
-                        exception.printStackTrace();
-                    }
+                catch (Exception exception)
+                {
+                    System.out.println("Please enter Valid Input");
                 }
             }
 
-            catch (ClassCastException e)
+            else
             {
-                System.out.println("Please enter Valid Input");
-            }
+                System.out.println("Please Enter Correct Password");
 
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
+                try(BufferedReader number = new BufferedReader(new InputStreamReader(System.in)))
+                {
+                    String password = number.readLine();
+
+                    AdminFacility("Admin", password);
+                }
+
+                catch (Exception exception)
+                {
+                    exception.printStackTrace();
+                }
             }
         }
 

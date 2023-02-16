@@ -4,12 +4,19 @@ import java.io.*;
 
 import java.net.*;
 
-public interface PingImplementationUser {
+import java.lang.*;
+import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+
+public interface PingImplementationUser{
 
     default String sendPingRequest(String url)
     {
 
         String result = null;
+
+        int port = 80;
 
         try
         {
@@ -17,13 +24,14 @@ public interface PingImplementationUser {
 
             System.out.println("Sending Ping Request to " + url);
 
-            Process p1 = java.lang.Runtime.getRuntime().exec("ping -n 5" + website);
+              //  Process p1 = Runtime.getRuntime().exec("ping -c 5" + url);
 
-            int returnVal = p1.waitFor();
+               // boolean reachable = p1.waitFor(5, SECONDS);
 
-            boolean reachable = (returnVal==0);
+               // boolean reachable = (returnVal != 0);
+               // boolean reachable = Reachable(String.valueOf(website), port, 5000);
 
-            if (reachable)
+            if (website.isReachable(5000))
             {
                 result = "Host is reachable";
             }
@@ -34,17 +42,7 @@ public interface PingImplementationUser {
             }
         }
 
-        catch (UnknownHostException exception)
-        {
-            exception.printStackTrace();
-        }
-
-        catch (IOException exception)
-        {
-            exception.printStackTrace();
-        }
-
-        catch (InterruptedException exception)
+        catch (Exception exception)
         {
             exception.printStackTrace();
         }

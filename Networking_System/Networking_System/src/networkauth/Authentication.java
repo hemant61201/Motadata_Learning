@@ -1,7 +1,5 @@
 package networkauth;
 
-import java.util.Arrays;
-
 import java.io.*;
 
 public class Authentication implements UserVerification, AdminVerification{
@@ -26,45 +24,80 @@ public class Authentication implements UserVerification, AdminVerification{
 
             while (true)
             {
-                BufferedReader number = new BufferedReader(new InputStreamReader(System.in));
-
-                Integer choice = Integer.parseInt(number.readLine());
-
-                try
+                try(BufferedReader number = new BufferedReader(new InputStreamReader(System.in)))
                 {
-                    if (choice != null)
+                    Integer choice = Integer.parseInt(number.readLine());
+
+                    try
                     {
-                        if (choice == 1)
+                        if (choice != null)
                         {
-                            user = "User";
+                            if (choice == 1)
+                            {
+                                user = "User";
 
-                            UserVerification userObj = new Authentication();
+                                try
+                                {
+                                    UserVerification userObj = new Authentication();
 
-                            userObj.UserFacility(user);
+                                    if (userObj != null)
+                                    {
+                                        userObj.UserFacility(user);
+                                    }
+                                    else
+                                    {
+                                        throw new NullPointerException();
+                                    }
+                                }
 
-                        }
-                        else if (choice == 2)
-                        {
-                            System.out.println("Please enter Password to use AdminSection");
+                                catch (NullPointerException exception)
+                                {
+                                    exception.printStackTrace();
+                                }
 
-                            password = number.readLine();
+                            }
+                            else if (choice == 2)
+                            {
+                                user = "Admin";
 
-                            user = "Admin";
+                                System.out.println("Please enter Password to use AdminSection");
 
-                            AdminVerification adminObj = new Authentication();
+                                password = number.readLine();
 
-                            adminObj.AdminFacility(user, password);
+                                try
+                                {
+                                    AdminVerification adminObj = new Authentication();
+
+                                    if (adminObj != null)
+                                    {
+                                        adminObj.AdminFacility(user, password);
+                                    }
+                                    else
+                                    {
+                                        throw new NullPointerException();
+                                    }
+                                }
+                                catch (NullPointerException exception)
+                                {
+                                    exception.printStackTrace();
+                                }
+                            }
+                            else
+                            {
+                                System.out.println("Chose 1 or 2 Only");
+                            }
                         }
                         else
                         {
-                            System.out.println("Chose 1 or 2 Only");
+                            System.out.println("Enter correct choice");
                         }
-                    }
-                    else
-                    {
-                        System.out.println("Enter correct choice");
+
                     }
 
+                    catch (Exception exception)
+                    {
+                        exception.printStackTrace();
+                    }
                 }
 
                 catch (Exception exception)
@@ -74,13 +107,9 @@ public class Authentication implements UserVerification, AdminVerification{
             }
         }
 
-        catch (ClassCastException e)
+        catch (Exception exception)
         {
             System.out.println("Please enter Valid Input");
-        }
-        catch (IOException exception)
-        {
-            exception.printStackTrace();
         }
     }
 }
