@@ -8,7 +8,7 @@ import java.util.Scanner;
 public interface PingImplementationAdmin extends RttImplementationAdmin, PacketImplementationAdmin{
     default void PingRequest(String ip)
     {
-        String packet = null;
+        String packet;
 
         try
         {
@@ -22,9 +22,7 @@ public interface PingImplementationAdmin extends RttImplementationAdmin, PacketI
 
             try(BufferedReader inputStream = new BufferedReader(new InputStreamReader(p.getInputStream())))
             {
-                String pingoutput = "";
-
-                String result = null;
+                String pingoutput;
 
                 while ((pingoutput = inputStream.readLine()) != null)
                 {
@@ -80,6 +78,8 @@ public interface PingImplementationAdmin extends RttImplementationAdmin, PacketI
                             System.out.println("Enter Valid Input");
 
                             PingRequest(ip);
+
+                            break;
                         }
                     }
                 }

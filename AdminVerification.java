@@ -1,12 +1,13 @@
 package networkauth;
 
 import networkadmin.PingImplementationAdmin;
+import networkadmin.SshImplementationAdmin;
 
 import java.io.BufferedReader;
-import java.io.IOException;
+
 import java.io.InputStreamReader;
 
-public class AdminVerification implements PingImplementationAdmin{
+public class AdminVerification implements PingImplementationAdmin, SshImplementationAdmin {
 
     String password = "Hem@nt#06";
 
@@ -16,7 +17,7 @@ public class AdminVerification implements PingImplementationAdmin{
 
         try
         {
-            if(user == "Admin" && passwd.equals(password))
+            if(user.equals("Admin") && passwd.equals(password))
             {
                 System.out.println("Welcome to AdminBasedApp");
 
@@ -89,6 +90,7 @@ public class AdminVerification implements PingImplementationAdmin{
                                         }
 
                                         case 7: {
+                                            sshImplemntation();
                                             break;
                                         }
                                     }
@@ -103,12 +105,16 @@ public class AdminVerification implements PingImplementationAdmin{
                             catch (Exception exception)
                             {
                                 exception.printStackTrace();
+
+                                break;
                             }
                         }
 
                         catch (Exception exception)
                         {
                             exception.printStackTrace();
+
+                            break;
                         }
                     }
                 }

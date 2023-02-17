@@ -1,7 +1,6 @@
 package networkadmin;
 
 import java.io.*;
-import java.util.SortedMap;
 
 public interface RttImplementationAdmin {
 
@@ -49,7 +48,7 @@ public interface RttImplementationAdmin {
                                 {
                                     case 1:
                                     {
-                                        String minval = "ping -c 3 " + ip + " | grep \"rtt min/avg/max/mdev =\" " +
+                                        String minval = rtt + " | grep \"rtt min/avg/max/mdev =\" " +
                                                 " | awk -F \"=\" '{print$2}' " + " | awk -F \"/\" '{print$1}'";
 
                                         String[] min = {
@@ -76,7 +75,7 @@ public interface RttImplementationAdmin {
 
                                     case 2:
                                     {
-                                        String avgval = "ping -c 3 " + ip + " | grep \"rtt min/avg/max/mdev =\" " +
+                                        String avgval = rtt + " | grep \"rtt min/avg/max/mdev =\" " +
                                                 " | awk -F \"=\" '{print$2}' " + " | awk -F \"/\" '{print$2}'";
 
                                         String[] avg = {
@@ -103,7 +102,7 @@ public interface RttImplementationAdmin {
 
                                     case 3:
                                     {
-                                        String maxval = "ping -c 3 " + ip + " | grep \"rtt min/avg/max/mdev =\" " +
+                                        String maxval = rtt + " | grep \"rtt min/avg/max/mdev =\" " +
                                                 " | awk -F \"=\" '{print$2}' " + " | awk -F \"/\" '{print$3}'";
 
                                         String[] max = {
@@ -130,7 +129,7 @@ public interface RttImplementationAdmin {
 
                                     case 4:
                                     {
-                                        String mdev = "ping -c 3 " + ip + " | grep \"rtt min/avg/max/mdev =\" " +
+                                        String mdev = rtt + " | grep \"rtt min/avg/max/mdev =\" " +
                                                 " | awk -F \"=\" '{print$2}' " + " | awk -F \"/\" '{print$4}'";
 
                                         String[] dev = {
@@ -162,6 +161,8 @@ public interface RttImplementationAdmin {
                             System.out.println("Enter Valid Input");
 
                             rttImplementation(ip);
+
+                            break;
                         }
                     }
                 }

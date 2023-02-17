@@ -1,16 +1,14 @@
 package networkuser;
 
-import java.io.IOException;
-
 import java.net.URI;
 
 import java.awt.*;
 
 public interface WebBrowser {
 
-    default void OpenWeb(String url, String rechable) throws IOException {
+    default void OpenWeb(String url, String rechable) {
 
-        if(rechable == "Host is reachable")
+        if(rechable.equals("Host is reachable"))
         {
             System.out.printf(String.valueOf(Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)));
 

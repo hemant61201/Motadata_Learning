@@ -6,8 +6,6 @@ import networkuser.WebBrowser;
 
 import java.io.BufferedReader;
 
-import java.io.IOException;
-
 import java.io.InputStreamReader;
 
 interface UserVerification extends PingImplementationUser, WebBrowser {
@@ -18,7 +16,7 @@ interface UserVerification extends PingImplementationUser, WebBrowser {
 
         try
         {
-            if(user == "User")
+            if(user.equals("User"))
             {
                 System.out.println("Welcome to UserBasedApp");
 
@@ -31,6 +29,8 @@ interface UserVerification extends PingImplementationUser, WebBrowser {
                 System.out.println("3. SNMP Features");
 
                 System.out.println("4. Open Web in Chrome");
+
+                System.out.println("5. Exit");
             }
 
             try
@@ -68,19 +68,27 @@ interface UserVerification extends PingImplementationUser, WebBrowser {
 
                                                 website = number.readLine();
 
-                                                if (website != null) {
+                                                if (website != null)
+                                                {
                                                     String result = sendPingRequest(website);
 
-                                                    if (result == "Host is reachable") {
+                                                    if (result.equals("Host is reachable"))
+                                                    {
                                                         System.out.println(result);
 
                                                         OpenWeb(website, result);
-                                                    } else {
+                                                    }
+                                                    else
+                                                    {
                                                         System.out.println(result);
+
+                                                        UserFacility(user);
 
                                                         break;
                                                     }
-                                                } else {
+                                                }
+                                                else
+                                                {
                                                     throw new NullPointerException();
                                                 }
                                             }
@@ -91,6 +99,11 @@ interface UserVerification extends PingImplementationUser, WebBrowser {
 
                                                 break;
                                             }
+                                        }
+
+                                        case 5:
+                                        {
+                                            System.exit(0);
                                         }
                                     }
                                 }
@@ -104,13 +117,17 @@ interface UserVerification extends PingImplementationUser, WebBrowser {
 
                             catch (Exception exception)
                             {
-                                exception.printStackTrace();
+                                System.out.println("Enter Valid Input");
+
+                                System.exit(0);
                             }
                         }
 
                         catch (Exception exception)
                         {
-                            exception.printStackTrace();
+                            System.out.println("Enter Valid Input");
+
+                            System.exit(0);
                         }
                     }
             }
@@ -118,6 +135,8 @@ interface UserVerification extends PingImplementationUser, WebBrowser {
             catch (Exception exception)
                 {
                     System.out.println("Please enter Valid Input");
+
+                    System.exit(0);
                 }
         }
 

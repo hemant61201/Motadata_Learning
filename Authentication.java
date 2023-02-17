@@ -6,7 +6,7 @@ public class Authentication extends AdminVerification implements UserVerificatio
 
     static String user;
 
-    private static String password;
+    static String password;
 
     public static void main(String[] args)
     {
@@ -97,12 +97,16 @@ public class Authentication extends AdminVerification implements UserVerificatio
                     catch (Exception exception)
                     {
                         exception.printStackTrace();
+
+                        break;
                     }
                 }
 
                 catch (Exception exception)
                 {
                     exception.printStackTrace();
+
+                    break;
                 }
             }
         }
