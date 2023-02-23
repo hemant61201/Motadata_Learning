@@ -3,19 +3,26 @@ package networkadmin;
 import java.io.BufferedReader;
 
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
-public interface PingImplementationAdmin extends RttImplementationAdmin{
+public interface PingImplementationAdmin extends RttImplementationAdmin, PacketImplementationAdmin{
     default void PingRequest(String ip)
     {
+        String packet;
+
         try
         {
-            Process p = Runtime.getRuntime().exec("ping -c 5 " + ip);
+            System.out.println("Enter packet want to send");
+
+            Scanner pack = new Scanner(System.in);
+
+            packet = pack.nextLine();
+
+            Process p = Runtime.getRuntime().exec("ping -c "+ packet + " " + ip);
 
             try(BufferedReader inputStream = new BufferedReader(new InputStreamReader(p.getInputStream())))
             {
-                String pingoutput = "";
-
-                String result = null;
+                String pingoutput;
 
                 while ((pingoutput = inputStream.readLine()) != null)
                 {
@@ -30,37 +37,52 @@ public interface PingImplementationAdmin extends RttImplementationAdmin{
 
                 try(BufferedReader number = new BufferedReader(new InputStreamReader(System.in)))
                 {
-                    System.out.println("Enter your Choice");
-
-                    Integer choice = Integer.parseInt(number.readLine());
-
-                    try
+                    while (true)
                     {
-                        if(choice != null)
+                        System.out.println("Enter your Choice");
+
+                        Integer choice = Integer.parseInt(number.readLine());
+
+                        try
                         {
-                            switch (choice)
+                            if (choice != null)
                             {
-                                case 1:
+                                try
                                 {
-                                    rttImplementation(ip);
-                                    break;
+                                    switch (choice)
+                                    {
+                                        case 1:
+                                        {
+                                            rttImplementation(ip);
+                                            break;
+                                        }
+
+                                        case 2:
+                                        {
+                                            packetImplementation(ip, packet);
+                                            break;
+                                        }
+                                    }
                                 }
 
-                                case 2:
+                                catch (Exception exception)
                                 {
-                                    break;
+                                    System.out.println("Enter Valid Input");
+
+                                    PingRequest(ip);
                                 }
                             }
                         }
-                    }
+                        catch (Exception exception)
+                        {
+                            System.out.println("Enter Valid Input");
 
-                    catch (Exception exception)
-                    {
-                        exception.printStackTrace();
+                            PingRequest(ip);
+
+                            break;
+                        }
                     }
                 }
-
-                System.exit(0);
             }
             catch (Exception exception)
             {
