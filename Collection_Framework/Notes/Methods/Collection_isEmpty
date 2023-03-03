@@ -1,5 +1,0 @@
-used to check if the Collection upon which it is called is empty or not.
-
-Collection.isEmpty()
-
-
