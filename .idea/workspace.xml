@@ -4,7 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="" />
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="Hello">
+      <change afterPath="$PROJECT_DIR$/Collection_Framework/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework/.idea/Collection_Framework.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/ArrayMembers.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/ArrayMembers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/LinearSearchExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/LinearSearchExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Set/EnumSetExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Set/EnumSetExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Set/HashSetExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Set/HashSetExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/BubbleSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/BubbleSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/CountingSortForNegative.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/CountingSortForNegative.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/CountingSortNonStable.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/CountingSortNonStable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/InsertionSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/InsertionSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/MergeSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/MergeSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/QuickSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/QuickSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/RadixSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/RadixSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/Recursion.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/Recursion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/SelectionSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/SelectionSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/ShellSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/ShellSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/SortUsingJdk.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Sorting_Algorithm/SortUsingJdk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Stack/StackEmpty.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Stack/StackEmpty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Stack/StackPeek.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Stack/StackPeek.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Stack/StackPushPop.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Stack/StackPushPop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Stack/StackSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Stack/StackSearch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Vector/VectorExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/Collection_Framework/Collection_FrameWork/Methods/src/Vector/VectorExample.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,6 +49,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -31,7 +67,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "jdk.selected.JAVA_MODULE": "corretto-11",
     "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
-    "last_opened_file_path": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Networking/Admin_Module/src"
+    "last_opened_file_path": "/home/hemant/Motadata_Learning/Collection_Framework/Collection_FrameWork"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -55,6 +91,25 @@
       <option name="presentableId" value="Default" />
       <updated>1676447133479</updated>
     </task>
+    <task id="LOCAL-00001" summary="Hello">
+      <created>1677835818971</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1677835818971</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Hello">
+      <created>1677835965007</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1677835965007</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Hello" />
+    <option name="LAST_COMMIT_MESSAGE" value="Hello" />
   </component>
 </project>
