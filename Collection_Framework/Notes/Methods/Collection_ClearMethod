@@ -1,0 +1,5 @@
+used to clear the Collection
+
+Collection.clear()
+
+UnsupportedOperationException: if the add operation is not supported by this collection

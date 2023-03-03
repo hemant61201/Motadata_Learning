@@ -1,0 +1,6 @@
+used to return the maximum element of the given collection
+
+max(Collection coll)
+
+1. ClassCastException – if the collection contains elements that are not mutually comparable (for example, strings and integers).
+2. NoSuchElementException – if the collection is empty

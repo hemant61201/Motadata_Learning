@@ -1,0 +1,6 @@
+used to check whether the element ‘element’ exists in this collection.
+
+Collection.contains(Object element)
+
+1. ClassCastException: if the class of the specified element prevents it from being added to this collection
+2. NullPointerException: if the specified element is null and this collection does not permit null elements
