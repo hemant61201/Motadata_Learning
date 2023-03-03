@@ -30,17 +30,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "jdk.selected.JAVA_MODULE": "corretto-11",
-    "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
-    "last_opened_file_path": "/home/hemant/Motadata_Learning/Collection_Framework_Programmes"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-11&quot;,
+    &quot;last_directory_selection&quot;: &quot;/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/hemant/Motadata_Learning/Collection_Framework_Programmes&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Collection_Framework_Programmes" />
       <recent name="$PROJECT_DIR$/Networking_System/Networking/Admin_Module/src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -102,7 +103,21 @@
       <option name="project" value="LOCAL" />
       <updated>1677843278120</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Collection FrameWork Programmes">
+      <created>1677843672230</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1677843672230</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Collection FrameWork Programmes">
+      <created>1677843820339</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1677843820339</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

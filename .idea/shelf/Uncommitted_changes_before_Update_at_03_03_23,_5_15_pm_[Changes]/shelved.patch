@@ -1,0 +1,52 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"fc993dd9-fa17-423a-900a-de4402147b34\" name=\"Changes\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Class\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/Collection_Framework/CollectionFrameWork\" />\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"ProjectId\" id=\"2LlYS96RtazLhcZSVTdLe917zw9\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"jdk.selected.JAVA_MODULE\": \"corretto-11\",\n    \"last_directory_selection\": \"/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking\",\n    \"last_opened_file_path\": \"/home/hemant/Motadata_Learning/Collection_Framework_Programmes\"\n  }\n}]]></component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/Networking_System/Networking/Admin_Module/src\" />\n    </key>\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/Networking_System/Networking/Admin_Module/src\" />\n      <recent name=\"$PROJECT_DIR$/Networking_System/Networking/Admin_Module\" />\n      <recent name=\"$PROJECT_DIR$/Networking_System/Networking\" />\n      <recent name=\"$PROJECT_DIR$/Networking_System\" />\n      <recent name=\"$PROJECT_DIR$/Networking_System/Networking_System\" />\n    </key>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"fc993dd9-fa17-423a-900a-de4402147b34\" name=\"Changes\" comment=\"\" />\n      <created>1676447133479</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1676447133479</updated>\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"Hello\">\n      <created>1677835818971</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677835818971</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"Hello\">\n      <created>1677835965007</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677835965007</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"Collection FrameWork Programmes\">\n      <created>1677842968835</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677842968835</updated>\n    </task>\n    <task id=\"LOCAL-00004\" summary=\"Collection FrameWork Programmes\">\n      <created>1677843067014</created>\n      <option name=\"number\" value=\"00004\" />\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677843067014</updated>\n    </task>\n    <task id=\"LOCAL-00005\" summary=\"Collection FrameWork Programmes\">\n      <created>1677843146005</created>\n      <option name=\"number\" value=\"00005\" />\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677843146005</updated>\n    </task>\n    <task id=\"LOCAL-00006\" summary=\"Collection FrameWork Programmes\">\n      <created>1677843278120</created>\n      <option name=\"number\" value=\"00006\" />\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1677843278120</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"7\" />\n    <servers />\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"Hello\" />\n    <MESSAGE value=\"Collection FrameWork Programmes\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Collection FrameWork Programmes\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision a366a20d46b90d8242fbecee03dd6d64d5074bd8)
++++ b/.idea/workspace.xml	(date 1677843915547)
+@@ -4,9 +4,7 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="">
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-    </list>
++    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="" />
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -41,6 +39,7 @@
+ }]]></component>
+   <component name="RecentsManager">
+     <key name="CopyFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$/Collection_Framework_Programmes" />
+       <recent name="$PROJECT_DIR$/Networking_System/Networking/Admin_Module/src" />
+     </key>
+     <key name="MoveFile.RECENT_KEYS">
+@@ -102,7 +101,21 @@
+       <option name="project" value="LOCAL" />
+       <updated>1677843278120</updated>
+     </task>
+-    <option name="localTasksCounter" value="7" />
++    <task id="LOCAL-00007" summary="Collection FrameWork Programmes">
++      <created>1677843672230</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1677843672230</updated>
++    </task>
++    <task id="LOCAL-00008" summary="Collection FrameWork Programmes">
++      <created>1677843820339</created>
++      <option name="number" value="00008" />
++      <option name="presentableId" value="LOCAL-00008" />
++      <option name="project" value="LOCAL" />
++      <updated>1677843820339</updated>
++    </task>
++    <option name="localTasksCounter" value="9" />
+     <servers />
+   </component>
+   <component name="VcsManagerConfiguration">
