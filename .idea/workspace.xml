@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,17 +30,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-11&quot;,
-    &quot;last_directory_selection&quot;: &quot;/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/hemant/Motadata_Learning/Collection_Framework_Programmes&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "jdk.selected.JAVA_MODULE": "corretto-11",
+    "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
+    "last_opened_file_path": "/home/hemant/Motadata_Learning"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/Collection_Framework_Programmes" />
       <recent name="$PROJECT_DIR$/Networking_System/Networking/Admin_Module/src" />
     </key>
@@ -124,12 +125,20 @@
       <option name="project" value="LOCAL" />
       <updated>1677844464921</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Challenge Programs">
+      <created>1678114662939</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1678114662939</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Hello" />
     <MESSAGE value="Collection FrameWork Programmes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Collection FrameWork Programmes" />
+    <MESSAGE value="Challenge Programs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Challenge Programs" />
   </component>
 </project>
