@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="" />
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,11 +36,12 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;corretto-11&quot;,
     &quot;last_directory_selection&quot;: &quot;/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/hemant/Motadata_Learning&quot;
+    &quot;last_opened_file_path&quot;: &quot;/home/hemant/Motadata_Learning/MultiThreading&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/MultiThreading" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/Collection_Framework_Programmes" />
       <recent name="$PROJECT_DIR$/Networking_System/Networking/Admin_Module/src" />
@@ -137,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678373000756</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="MultiThreading Programs">
+      <created>1678459890613</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1678459890613</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
