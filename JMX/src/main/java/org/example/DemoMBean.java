@@ -1,8 +1,7 @@
 package org.example;
 
-public interface DemoMBean {
-
-
+public interface DemoMBean
+{
     public void setName(String args);
 
     public void setPlayer(String args);
@@ -12,7 +11,6 @@ public interface DemoMBean {
     public String getPlayer();
 
     public void PrintName();
+
     public void Play();
-
-
 }

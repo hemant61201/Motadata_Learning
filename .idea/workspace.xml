@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="Main Project">
-      <change afterPath="$PROJECT_DIR$/JMX/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework_Programmes/.idea/Collection_Framework_Programmes.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Collection_Framework_Programmes/Collection_Interface_Methods/Contains_Method/ContainsAll/ContainsAll.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/MainProject/.idea/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/MainProject/.idea/compiler.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/MainProject/.idea/encodings.xml" afterDir="false" />
@@ -4348,12 +4349,6 @@
       <change afterPath="$PROJECT_DIR$/MainProject/target/MainProject/plugins/uplot/uPlot.min.css" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/MainProject/target/classes/com/nms/action/TraceOrgMonitorAction.class" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/MainProject/target/classes/struts.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Networking_System/Networking_System/path/to/mydomain.cer" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Networking_System/Networking_System/path/to/truststore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Networking_System/Networking_System/src/Hi.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Networking_System/Networking_System/src/Hi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Networking_System/Networking_System/src/mykeystore1.jks" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -4393,6 +4388,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/JMX" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/MultiThreading" />
       <recent name="$PROJECT_DIR$/Collection_Framework_Programmes" />
@@ -4499,7 +4495,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678459890613</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="JConsole Programme">
+      <created>1679919565718</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1679919565718</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -4509,6 +4512,7 @@
     <MESSAGE value="Challenge Programs" />
     <MESSAGE value="MultiThreading Programs" />
     <MESSAGE value="Main Project" />
-    <option name="LAST_COMMIT_MESSAGE" value="Main Project" />
+    <MESSAGE value="JConsole Programme" />
+    <option name="LAST_COMMIT_MESSAGE" value="JConsole Programme" />
   </component>
 </project>

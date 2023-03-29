@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Add_Methods/AddAll/AddAll.iml" filepath="$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Add_Methods/AddAll/AddAll.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Add_Methods/Add_Methods.iml" filepath="$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Add_Methods/Add_Methods.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Clear_Method/Clear_Method.iml" filepath="$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Clear_Method/Clear_Method.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Collection_FrameWork/Methods/src/Collection_Interface_Methods/Contains_Method/ContainsAll/ContainsAll.iml" filepath="$PROJECT_DIR$/Collection_FrameWork/Methods/src/Collection_Interface_Methods/Contains_Method/ContainsAll/ContainsAll.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Contains_Method/Contains_Method.iml" filepath="$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Contains_Method/Contains_Method.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/IsEmpty_Method/IsEmpty_Method.iml" filepath="$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/IsEmpty_Method/IsEmpty_Method.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Max_Method/Max_Method.iml" filepath="$PROJECT_DIR$/CollectionFrameWork/Methods/src/Collection_Interface_Methods/Max_Method/Max_Method.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CollectionFrameWork/Methods/Methods.iml" filepath="$PROJECT_DIR$/CollectionFrameWork/Methods/Methods.iml" />
+    </modules>
+  </component>
+</project>
