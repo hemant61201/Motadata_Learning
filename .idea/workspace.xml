@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="Hello">
-      <change beforePath="$PROJECT_DIR$/SocketProgrammingExamples/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SocketProgrammingExamples/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocketProgrammingExamples/src/heapdump.hprof" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocketProgrammingExamples/src/heapdump.hprof.hwcache/NBProfiler.nphd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocketProgrammingExamples/src/heapdump.hprof.hwcache/NBProfiler4781515253556192130.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SocketProgrammingExamples/src/heapdump.hprof.hwcache/NBProfiler5595862862938246869.ref" beforeDir="false" />
-    </list>
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="Hello" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,16 +31,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "jdk.selected.JAVA_MODULE": "1.8",
-    "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
-    "last_opened_file_path": "/home/hemant/Motadata_Learning"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
+    &quot;last_directory_selection&quot;: &quot;/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/hemant/Motadata_Learning&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/JMX" />
