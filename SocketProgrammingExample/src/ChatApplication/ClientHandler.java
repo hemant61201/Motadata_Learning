@@ -37,10 +37,6 @@ public class ClientHandler extends Thread
     @Override
     public void run()
     {
-//        while (true)
-//        {
-//
-//        }
         BufferedWriter writer = null;
 
         try
@@ -53,153 +49,59 @@ public class ClientHandler extends Thread
 
                 if(msg.equals("/all"))
                 {
-                    writer.write(String.valueOf(clients) + '\n');
-
-                    writer.flush();
+                    all(writer);
                 }
 
                 else if (msg.contains("/create"))
                 {
-                    String[] msgs = msg.split(" ");
-
-                    String[] clients = msgs[1].split(",");
-
-                    for(String client : clients)
-                    {
-                        sockets.add(clientSockets.get(client));
-                    }
-
-                    group.put(msgs[2],sockets);
-
-                    writer.write("Group " + msgs[2] + " is Created." + '\n');
-
-                    writer.flush();
+                    create(msg, writer);
                 }
 
                 else if (msg.equals("/groups"))
                 {
-                    writer.write(String.valueOf(group.keySet()) + '\n');
-
-                    writer.flush();
+                    groups(writer);
                 }
 
                 else if (msg.contains("/members"))
                 {
-                    String[] msgs = msg.split(" ");
-
-                    ArrayList<Socket> groupSockets = group.get(msgs[1]);
-
-                    ArrayList<String> members = new ArrayList<>();
-
-                    for (Socket socket : groupSockets)
-                    {
-                        for(Map.Entry<String, Socket> entry : clientSockets.entrySet())
-                        {
-                            if(entry.getValue() == socket)
-                            {
-                                members.add(entry.getKey());
-                            }
-                        }
-                    }
-
-                    writer.write("Members are : " + String.valueOf(group) + '\n');
-
-                    writer.flush();
+                    members(msg, writer);
                 }
 
                 else if (msg.contains("/join"))
                 {
-                    String[] msgs = msg.split(" ");
-
-                    if (!group.containsKey(msgs[1]))
-                    {
-                        writer.write("Group Does Not Exists" + '\n');
-
-                        writer.flush();
-                    }
-
-                    ArrayList<Socket> tempSocket = group.get(msgs[1]);
-
-                    tempSocket.add(clientSocket);
-
-                    group.put(msgs[1], tempSocket);
-
-                    writer.write("Group Joined" + '\n');
-
-                    writer.flush();
+                    join(msg, writer);
                 }
 
                 else if (msg.contains("/leave"))
                 {
-                    String[] msgs = msg.split(" ");
-
-                    if (!group.containsKey(msgs[1]))
-                    {
-                        writer.write("You are Not in that Group" + '\n');
-
-                        writer.flush();
-                    }
-
-                    ArrayList<Socket> tempSocket = group.get(msgs[1]);
-
-                    tempSocket.remove(clientSocket);
-
-                    group.put(msgs[1], tempSocket);
-
-                    writer.write("You Leave The Group" + '\n');
-
-                    writer.flush();
+                    leave(msg, writer);
                 }
 
                 else if (msg.contains("/msg"))
                 {
-                    String[] msgs = msg.split("_");
+                    groupMsg(msg, writer);
+                }
 
-                    if (!group.containsKey(msgs[1]))
-                    {
-                        writer.write("Group Does Not Exists" + '\n');
-
-                        writer.flush();
-                    }
-
-                    ArrayList<Socket> groupMembers = group.get(msgs[1]);
-
-                    for(Socket groupMember: groupMembers)
-                    {
-//                        if (groupMember == clientSocket)
-//                        {
-//                            continue;
-//                        }
-                        Thread writeThread = new Thread(new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                BufferedWriter writer1 = null;
-
-                                try
-                                {
-                                    writer1 = new BufferedWriter(new OutputStreamWriter(groupMember.getOutputStream()));
-
-                                    writer1.write(msgs[2]);
-
-                                    writer1.flush();
-                                }
-
-                                catch (Exception exception)
-                                {
-                                    exception.printStackTrace();
-                                }
-                            }
-                        });
-
-                        writeThread.start();
-                    }
+                else if (msg.contains("/private"))
+                {
+                    privateMsg(msg, writer);
                 }
 
                 else
                 {
-                    continue;
+                    for (Socket member : clientSockets.values())
+                    {
+                        if (member == clientSocket)
+                        {
+                            continue;
+                        }
+
+                        PrintWriter writer1 = new PrintWriter(member.getOutputStream());
+
+                        writer1.println(msg);
+
+                        writer1.flush();
+                    }
                 }
             }
         }
@@ -223,6 +125,334 @@ public class ClientHandler extends Thread
                     exception.printStackTrace();
                 }
             }
+        }
+    }
+
+    public void all(BufferedWriter writer)
+    {
+        try
+        {
+            writer.write(String.valueOf(clients) + '\n');
+
+            writer.flush();
+        }
+
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public void create(String msg, BufferedWriter writer)
+    {
+        try
+        {
+            String[] msgs = msg.split(" ");
+
+            boolean flag = true;
+
+            if(msgs.length == 3)
+            {
+                String[] clients = msgs[1].split(",");
+
+                for (String client : clients)
+                {
+                    if (clientSockets.containsKey(client))
+                    {
+                        sockets.add(clientSockets.get(client));
+                    }
+
+                    else
+                    {
+                        writer.write("No Such Client in Server");
+
+                        writer.flush();
+
+                        flag = false;
+
+                        break;
+                    }
+                }
+
+                if(flag)
+                {
+                    group.put(msgs[2], sockets);
+
+                    writer.write("Group " + msgs[2] + " is Created." + '\n');
+
+                    writer.flush();
+                }
+
+                else
+                {
+                    writer.write("Please enter Correct Format --> '/create {client1,client2} GroupName'" + '\n');
+
+                    writer.flush();
+                }
+
+            }
+
+            else
+            {
+                writer.write("Please enter Correct Format --> '/create {client1,client2} GroupName'" + '\n');
+
+                writer.flush();
+            }
+        }
+
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public void groups(BufferedWriter writer)
+    {
+        try
+        {
+            writer.write("Groups are : " + String.valueOf(group.keySet()) + '\n');
+
+            writer.flush();
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public void members(String msg, BufferedWriter writer)
+    {
+        try
+        {
+            String[] msgs = msg.split(" ");
+
+            if(msgs.length == 2)
+            {
+                if(group.containsKey(msgs[1]))
+                {
+                    ArrayList<Socket> groupSockets = group.get(msgs[1]);
+
+                    ArrayList<String> members = new ArrayList<>();
+
+                    for (Socket socket : groupSockets)
+                    {
+                        for(Map.Entry<String, Socket> entry : clientSockets.entrySet())
+                        {
+                            if(entry.getValue() == socket)
+                            {
+                                members.add(entry.getKey());
+                            }
+                        }
+                    }
+
+                    writer.write("Members are : " + String.valueOf(members) + '\n');
+
+                    writer.flush();
+                }
+
+                else
+                {
+                    writer.write("There is No Such Group" + '\n');
+
+                    writer.flush();
+                }
+            }
+
+            else
+            {
+                writer.write("Please enter Correct Format --> '/members GroupName'" + '\n');
+
+                writer.flush();
+            }
+        }
+
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public void join(String msg, BufferedWriter writer)
+    {
+        try
+        {
+            String[] msgs = msg.split(" ");
+
+            if(msgs.length == 2)
+            {
+                if (!group.containsKey(msgs[1]))
+                {
+                    writer.write("Group Does Not Exists" + '\n');
+
+                    writer.flush();
+                }
+
+                ArrayList<Socket> tempSocket = group.get(msgs[1]);
+
+                tempSocket.add(clientSocket);
+
+                group.put(msgs[1], tempSocket);
+
+                writer.write("Group Joined" + '\n');
+
+                writer.flush();
+            }
+
+            else
+            {
+                writer.write("Please enter Correct Format --> '/join groupName'" + '\n');
+
+                writer.flush();
+            }
+        }
+
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public void leave(String msg, BufferedWriter writer)
+    {
+        try
+        {
+            String[] msgs = msg.split(" ");
+
+            if(msgs.length == 2)
+            {
+                if (!group.containsKey(msgs[1]))
+                {
+                    writer.write("You are Not in that Group" + '\n');
+
+                    writer.flush();
+                }
+
+                ArrayList<Socket> tempSocket = group.get(msgs[1]);
+
+                tempSocket.remove(clientSocket);
+
+                group.put(msgs[1], tempSocket);
+
+                writer.write("You Leave The Group" + '\n');
+
+                writer.flush();
+            }
+
+            else
+            {
+                writer.write("Please enter Correct Format --> '/leave groupName'" + '\n');
+
+                writer.flush();
+            }
+        }
+
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public void groupMsg(String msg, BufferedWriter writer)
+    {
+        try
+        {
+            String senderName = null;
+
+            String[] msgs = msg.split("_");
+
+            if(msgs.length == 3)
+            {
+                if (!group.containsKey(msgs[1]))
+                {
+                    writer.write("Group Does Not Exists" + '\n');
+
+                    writer.flush();
+                }
+
+                for(Map.Entry<String, Socket> entry : clientSockets.entrySet())
+                {
+                    if(entry.getValue() == clientSocket)
+                    {
+                        senderName = entry.getKey();
+                    }
+                }
+
+                ArrayList<Socket> groupMembers = group.get(msgs[1]);
+
+                for(Socket groupMember: groupMembers)
+                {
+                    if (groupMember == clientSocket)
+                    {
+                        continue;
+                    }
+
+                    PrintWriter writer1 = new PrintWriter(groupMember.getOutputStream());
+
+                    writer1.println(senderName + " : " + msgs[2]);
+
+                    writer1.flush();
+                }
+            }
+
+            else
+            {
+                writer.write("Please enter Correct Format --> '/msg_groupName_{msg}'" + '\n');
+
+                writer.flush();
+            }
+        }
+
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+        }
+    }
+
+    public void privateMsg(String msg, BufferedWriter writer)
+    {
+        try
+        {
+            String senderName = null;
+
+            String[] msgs = msg.split("_");
+
+            if(msgs.length == 3)
+            {
+                for(Map.Entry<String, Socket> entry : clientSockets.entrySet())
+                {
+                    if(entry.getValue() == clientSocket)
+                    {
+                        senderName = entry.getKey();
+                    }
+                }
+
+                if (!clientSockets.containsKey(msgs[1]))
+                {
+                    writer.write("Member Does Not Exists" + '\n');
+
+                    writer.flush();
+                }
+
+                Socket person = clientSockets.get(msgs[1]);
+
+                PrintWriter writer1 = new PrintWriter(person.getOutputStream());
+
+                writer1.println(senderName + " [Private_Message] : " + msgs[2]);
+
+                writer1.flush();
+            }
+
+            else
+            {
+                writer.write("Please enter Correct Format --> '/private_ClientName_{msg}'" + '\n');
+
+                writer.flush();
+            }
+        }
+
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
         }
     }
 }

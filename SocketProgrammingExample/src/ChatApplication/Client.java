@@ -82,9 +82,9 @@ public class Client
 
         System.out.println("Leave Group --> '/leave groupName'");
 
-        System.out.println("Send Message To Particular Group --> '/msg_groupName_{msg}");
+        System.out.println("Send Message To Particular Group --> '/msg_groupName_{msg}'");
 
-        System.out.println("Send Private Message --> '/private clientName'");
+        System.out.println("Send Private Message --> '/private_ClientName_{msg}'");
 
         try(PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true); BufferedReader input = new BufferedReader(new InputStreamReader(System.in)))
         {

@@ -25,7 +25,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/home/hemant/Motadata_Learning",
+    "last_opened_file_path": "/home/hemant/Motadata_Learning/SocketProgrammingExample/src",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0"
@@ -33,6 +33,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -52,11 +53,19 @@
       <option name="project" value="LOCAL" />
       <updated>1680192775044</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="March 31 SocketProgramming">
+      <created>1680288342844</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680288342844</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="March 30 SocketProgramming" />
-    <option name="LAST_COMMIT_MESSAGE" value="March 30 SocketProgramming" />
+    <MESSAGE value="March 31 SocketProgramming" />
+    <option name="LAST_COMMIT_MESSAGE" value="March 31 SocketProgramming" />
   </component>
 </project>
