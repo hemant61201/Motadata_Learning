@@ -15,16 +15,14 @@
         {
             output = document.getElementById("output");
 
-            name = document.getElementById("text1").value;
-
             if(document.location.protocol === "https:")
             {
-                wsUri = "wss://" + document.location.host + "/chat/" + name;
+                wsUri = "wss://" + document.location.host + "/chat";
             }
 
             else
             {
-                wsUri = "ws://" + document.location.host + "/chat/" + name;
+                wsUri = "ws://" + document.location.host + "/chat";
             }
 
             ConnectWebSocket();
@@ -52,7 +50,7 @@
 
             websocket.onerror = function(evt)
             {
-                onError("Please Enter Name To Connect")
+                onError(evt)
             };
         }
 
@@ -108,16 +106,13 @@
 
     </script>
 
-    <h2>WebSocket Application</h2>
+    <h2>WebSocket Application For IP</h2>
+
     <div id = "output">
-
-        <label>Enter Name :</label>
-
-        <input id="text1">
 
         <label>Message :</label>
 
-        <input id="text2" value="Message_{name of client}">
+        <input id="text2">
 
         <button onclick="doSend()">Send</button>
 

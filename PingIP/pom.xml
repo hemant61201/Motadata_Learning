@@ -2,14 +2,14 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.example</groupId>
-  <artifactId>WebSocket_Application</artifactId>
+  <artifactId>PingIP</artifactId>
   <packaging>war</packaging>
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
   </properties>
   <version>1.0-SNAPSHOT</version>
-  <name>WebSocket_Application Maven Webapp</name>
+  <name>PingIP Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -33,8 +33,13 @@
       <artifactId>jetty-annotations</artifactId>
       <version>10.0.4</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.11</version>
+    </dependency>
   </dependencies>
   <build>
-    <finalName>WebSocket_Application</finalName>
+    <finalName>PingIP</finalName>
   </build>
 </project>
