@@ -5,80 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/PingIP/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/src/main/java/webSocketServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/src/main/webapp/index.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/META-INF/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/classes/webSocketServer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/asm-9.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/asm-analysis-9.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/asm-commons-9.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/asm-tree-9.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/commons-lang3-3.11.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jakarta.annotation-api-1.3.5.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jakarta.transaction-api-1.3.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/javax.websocket-api-1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/javax.websocket-client-api-1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-annotations-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-http-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-io-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-jndi-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-plus-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-security-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-server-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-servlet-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-servlet-api-4.0.6.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-util-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-webapp-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/jetty-xml-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/lib/slf4j-api-2.0.0-alpha1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/WEB-INF/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/PingIP/index.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PingIP/target/classes/webSocketServer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/.idea/webContexts.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/src/main/java/webSocketServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application.war" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/classes/WebClient.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/classes/webSocketServer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/asm-9.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/asm-analysis-9.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/asm-commons-9.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/asm-tree-9.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jakarta.annotation-api-1.3.5.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jakarta.transaction-api-1.3.2.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/javax.websocket-api-1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/javax.websocket-client-api-1.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-annotations-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-http-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-io-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-jndi-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-plus-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-security-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-server-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-servlet-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-servlet-api-4.0.6.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-util-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-webapp-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/jetty-xml-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/slf4j-api-2.0.0-alpha1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/websocket-core-common-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/websocket-core-server-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/websocket-jetty-api-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/websocket-jetty-common-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/websocket-jetty-server-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/WEB-INF/lib/websocket-servlet-10.0.4.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WebSocket_Application/target/classes/webSocketServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebSocket_Application/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/WebSocket_Application/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebSocket_Application/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/WebSocket_Application/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebSocket_Application/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/WebSocket_Application/src/main/webapp/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/WebSocket_Application/target/WebSocket_Application/index.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,7 +173,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680363859038</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="April 3 WebSocket">
+      <created>1680529370396</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1680529370397</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -258,6 +192,7 @@
     <MESSAGE value="JConsole Programme" />
     <MESSAGE value="Hello" />
     <MESSAGE value="April 1 WebSocket" />
-    <option name="LAST_COMMIT_MESSAGE" value="April 1 WebSocket" />
+    <MESSAGE value="April 3 WebSocket" />
+    <option name="LAST_COMMIT_MESSAGE" value="April 3 WebSocket" />
   </component>
 </project>
