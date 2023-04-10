@@ -40,13 +40,13 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
     &quot;last_directory_selection&quot;: &quot;/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/hemant/Motadata_Learning/SocketProgrammingExample&quot;
+    &quot;last_opened_file_path&quot;: &quot;/home/hemant/Motadata_Learning&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/SocketProgrammingExample" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/SocketProgrammingExample" />
       <recent name="$PROJECT_DIR$/JMX" />
       <recent name="$PROJECT_DIR$/MultiThreading" />
       <recent name="$PROJECT_DIR$/Collection_Framework_Programmes" />
@@ -187,7 +187,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680620552189</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="April 5 WebSocket">
+      <created>1680708380386</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1680708380387</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -201,6 +208,7 @@
     <MESSAGE value="April 1 WebSocket" />
     <MESSAGE value="April 3 WebSocket" />
     <MESSAGE value="April 4 WebSocket" />
-    <option name="LAST_COMMIT_MESSAGE" value="April 4 WebSocket" />
+    <MESSAGE value="April 5 WebSocket" />
+    <option name="LAST_COMMIT_MESSAGE" value="April 5 WebSocket" />
   </component>
 </project>
