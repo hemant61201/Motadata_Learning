@@ -1,9 +1,9 @@
-package Push_Pull;
+package KillingSignal;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
 
-public class tasksink
+public class tasksink2
 {
     public static void main(String[] args) throws Exception
     {
@@ -13,17 +13,19 @@ public class tasksink
 
             receiver.bind("tcp://*:5558");
 
-            String string = new String(receiver.recv(0), ZMQ.CHARSET);
+            ZMQ.Socket controller = context.socket(SocketType.PUB);
+
+            controller.bind("tcp://*:5559");
+
+            receiver.recv(0);
 
             long tstart = System.currentTimeMillis();
 
             int task_nbr;
 
-            int total_msec = 0;
-
             for (task_nbr = 0; task_nbr < 100; task_nbr++)
             {
-                string = new String(receiver.recv(0), ZMQ.CHARSET).trim();
+                receiver.recv(0);
 
                 if ((task_nbr / 10) * 10 == task_nbr)
                 {
@@ -34,11 +36,17 @@ public class tasksink
                 {
                     System.out.print(".");
                 }
+
+                System.out.flush();
             }
 
             long tend = System.currentTimeMillis();
 
-            System.out.println("\nTotal elapsed time: " + (tend - tstart) + " msec");
+            System.out.println("Total elapsed time: " + (tend - tstart) + " msec");
+
+            controller.send("KILL", 0);
+
+            Thread.sleep(1);
         }
     }
 }

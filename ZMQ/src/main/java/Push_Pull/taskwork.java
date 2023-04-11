@@ -2,33 +2,33 @@ package Push_Pull;
 
 import org.zeromq.SocketType;
 import org.zeromq.ZMQ;
-import org.zeromq.ZContext;
 
 public class taskwork
 {
     public static void main(String[] args) throws Exception
     {
-        try (ZContext context = new ZContext()) {
-            //  Socket to receive messages on
-            ZMQ.Socket receiver = context.createSocket(SocketType.PULL);
+        try (ZMQ.Context context = ZMQ.context(1))
+        {
+            ZMQ.Socket receiver = context.socket(SocketType.PULL);
+
             receiver.connect("tcp://localhost:5557");
 
-            //  Socket to send messages to
-            ZMQ.Socket sender = context.createSocket(SocketType.PUSH);
+            ZMQ.Socket sender = context.socket(SocketType.PUSH);
+
             sender.connect("tcp://localhost:5558");
 
-            //  Process tasks forever
-            while (!Thread.currentThread().isInterrupted()) {
+            while (true)
+            {
                 String string = new String(receiver.recv(0), ZMQ.CHARSET).trim();
+
                 long msec = Long.parseLong(string);
-                //  Simple progress indicator for the viewer
+
                 System.out.flush();
+
                 System.out.print(string + '.');
 
-                //  Do the work
                 Thread.sleep(msec);
 
-                //  Send results to sink
                 sender.send(ZMQ.MESSAGE_SEPARATOR, 0);
             }
         }
