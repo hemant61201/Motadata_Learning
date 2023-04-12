@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -194,7 +192,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680708380387</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="April 11 NSQ">
+      <created>1681239523833</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1681239523833</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -209,6 +214,7 @@
     <MESSAGE value="April 3 WebSocket" />
     <MESSAGE value="April 4 WebSocket" />
     <MESSAGE value="April 5 WebSocket" />
-    <option name="LAST_COMMIT_MESSAGE" value="April 5 WebSocket" />
+    <MESSAGE value="April 11 NSQ" />
+    <option name="LAST_COMMIT_MESSAGE" value="April 11 NSQ" />
   </component>
 </project>
