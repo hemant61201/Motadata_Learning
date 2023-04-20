@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -40,7 +38,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "jdk.selected.JAVA_MODULE": "1.8",
     "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
-    "last_opened_file_path": "/home/hemant/Motadata_Learning/ZMQ"
+    "last_opened_file_path": "/home/hemant/Motadata_Learning"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -201,7 +199,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681239523833</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="April 19 JDBC">
+      <created>1681921373470</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1681921373470</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -218,6 +223,7 @@
     <MESSAGE value="April 5 WebSocket" />
     <MESSAGE value="April 11 NSQ" />
     <MESSAGE value="April 12 NSQ" />
-    <option name="LAST_COMMIT_MESSAGE" value="April 12 NSQ" />
+    <MESSAGE value="April 19 JDBC" />
+    <option name="LAST_COMMIT_MESSAGE" value="April 19 JDBC" />
   </component>
 </project>

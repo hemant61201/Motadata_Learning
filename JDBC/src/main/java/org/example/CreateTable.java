@@ -6,7 +6,7 @@ public class CreateTable
 {
     public static void main(String[] args)
     {
-        String query = "create table employees(emp_id number, emp_name varchar2(10), emp_salary number(10,2), emp_addr varchar2(100))";
+        String query = "create table employees(emp_id int, emp_name varchar2(10), emp_salary number(10,2), emp_addr varchar2(100))";
 
         try
         {
