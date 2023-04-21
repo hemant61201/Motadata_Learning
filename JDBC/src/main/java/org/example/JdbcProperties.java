@@ -28,7 +28,7 @@ public class JdbcProperties
         {
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("create table Stud3(id int, name varchar(10))");
+            statement.executeUpdate("create table Stud4(id int, name varchar(10))");
 
             System.out.println("Successful");
         }

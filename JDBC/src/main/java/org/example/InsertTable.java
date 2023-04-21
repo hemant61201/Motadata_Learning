@@ -10,7 +10,7 @@ public class InsertTable
     {
         String s1 = "text with \"double quote\" \'single quote\'";
 
-        String query = "insert into employee values(4,'Hemu2',1500," + "'text with \"double quote\"" + "'single quote'"+ "')";
+        String query = "insert into employees1 values(3,'Hemant',10000,'xyz')";
 //        String query = "select * from employee";
 
         System.out.println(query);
