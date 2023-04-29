@@ -5,34 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/JQuery/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JQuery/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JQuery/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JQuery/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JQuery/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JQuery/src/main/java/Person_Info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JQuery/src/main/resources/struts.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JQuery/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/JQuery/src/main/webapp/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/src/main/java/Person_Info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/src/main/resources/struts.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/src/main/webapp/WEB-INF/web.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/src/main/webapp/index.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/classes/Person_Info.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/classes/struts.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/commons-fileupload-1.4.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/commons-io-2.6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/commons-lang3-3.8.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/freemarker-2.3.28.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/h2-2.1.214.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/javassist-3.20.0-GA.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/log4j-api-2.12.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/ognl-3.1.26.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/struts2-core-2.5.22.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/lib/struts2-json-plugin-2.5.22.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/WEB-INF/web.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/JQuery/index.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/classes/Person_Info.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JQuery/target/classes/struts.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,16 +49,16 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "jdk.selected.JAVA_MODULE": "1.8",
     "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
-    "last_opened_file_path": "/home/hemant/Motadata_Learning"
+    "last_opened_file_path": "/home/hemant/Motadata_Learning/JQuery"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/JQuery" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/JDBC/src/main" />
       <recent name="$PROJECT_DIR$/SocketProgrammingExample" />
       <recent name="$PROJECT_DIR$/JMX" />
-      <recent name="$PROJECT_DIR$/MultiThreading" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Networking_System/Networking_System/src" />
@@ -263,7 +245,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682691694245</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="hi">
+      <created>1682760833952</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1682760833952</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -285,6 +274,7 @@
     <MESSAGE value="April 21 JDBC" />
     <MESSAGE value="April 24 JDBC" />
     <MESSAGE value="April 28 JQuery" />
-    <option name="LAST_COMMIT_MESSAGE" value="April 28 JQuery" />
+    <MESSAGE value="hi" />
+    <option name="LAST_COMMIT_MESSAGE" value="hi" />
   </component>
 </project>
