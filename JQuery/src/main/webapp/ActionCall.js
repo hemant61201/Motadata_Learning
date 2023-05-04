@@ -10,6 +10,14 @@ $(document).ready(function()
 
     var age;
 
+    var callbackMethod;
+
+    var count = 0;
+
+    var callbacks = $.Callbacks();
+
+    var dataTable;
+
     $("#btn1").click(function()
     {
         console.log("btn1 called");
@@ -29,6 +37,8 @@ $(document).ready(function()
 
         url = "storeDB";
 
+        callbackMethod = insertTable;
+
         type = "POST";
 
         callAJAX();
@@ -41,8 +51,60 @@ $(document).ready(function()
 
         type = "GET";
 
+        callbackMethod = getData;
+
         callAJAX();
     });
+
+
+    function insertTable( value )
+    {
+        $("#output").text(value.insertresult);
+
+        callbacks.remove(callbackMethod);
+
+        if (count > 0)
+        {
+            url = "fetchDB";
+
+            type = "GET";
+
+            callbackMethod = getData;
+
+            callbacks.remove(callbackMethod);
+
+            callAJAX();
+        }
+    }
+
+    function getData( value )
+    {
+        var dataArray = value.result.map(function(arr) {
+            return arr.slice();
+        });
+
+        dataTable = $(".table_id").DataTable({
+            aaData: dataArray,
+            "bDestroy": true,
+        });
+
+        callbacks.remove(callbackMethod);
+
+        count++;
+    }
+
+    function errorDetection( type )
+    {
+        if(type === "POST")
+        {
+            $("#output").text("Data Not Inserted")
+        }
+
+        else if(type === "GET")
+        {
+            $("#output").text("Data Not Fetched")
+        }
+    }
 
     function callAJAX()
     {
@@ -50,47 +112,20 @@ $(document).ready(function()
             url: url,
             type: type,
             data: {
-                First_name: fname,
-                Last_name: lname,
+                firstname: fname,
+                lastname: lname,
                 age: age
             },
             success: function(data, status) {
 
-                if(type === "POST")
-                {
-                    if(data.insert_result == null || data.insert_result === "")
-                    {
-                        $("#output").text("Data Not Inserted");
-                    }
+                callbacks.add( callbackMethod );
 
-                    else
-                    {
-                        $("#output").text(data.insert_result);
-                    }
-                }
-
-                else if(type === "GET")
-                {
-                    $("#output").text("");
-
-                    for (var key in data.result)
-                    {
-                        $("#output").append(key + " = " + data.result[key] + "<br>");
-                    }
-                }
+                callbacks.fire( data );
 
             },
             error: function()
             {
-                if(type === "POST")
-                {
-                    $("#output").text("Data Not Inserted")
-                }
-
-                else if(type === "GET")
-                {
-                    $("#output").text("Data Not Fetched")
-                }
+                errorDetection(type);
             }
         });
     }
