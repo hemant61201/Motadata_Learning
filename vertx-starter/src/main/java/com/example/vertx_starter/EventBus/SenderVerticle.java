@@ -1,6 +1,7 @@
 package com.example.vertx_starter.EventBus;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
@@ -11,9 +12,11 @@ public class SenderVerticle extends AbstractVerticle
   {
     Vertx vertx = Vertx.vertx();
 
-    vertx.deployVerticle(new SenderVerticle());
+//    DeploymentOptions deploymentOptions = new DeploymentOptions().setInstances(3);
 
-    vertx.deployVerticle(new ReciverVerticle());
+    vertx.deployVerticle(SenderVerticle.class.getName(), new DeploymentOptions().setInstances(3));
+
+    vertx.deployVerticle(ReciverVerticle.class.getName(), new DeploymentOptions().setInstances(3));
   }
 
   @Override
@@ -22,7 +25,7 @@ public class SenderVerticle extends AbstractVerticle
     EventBus eventBus = vertx.eventBus();
 
     vertx.setPeriodic(1000, h -> {
-      eventBus.request("message.req.nikunj", "Hola receiver...")
+      eventBus.request("message.req.hemant", "Hola receiver...")
         .onComplete(handler -> {
           if (handler.succeeded())
           {

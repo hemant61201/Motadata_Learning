@@ -4,17 +4,16 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 
-public class ReciverVerticle extends AbstractVerticle
+public class Consumer3 extends AbstractVerticle
 {
   @Override
   public void start(Promise<Void> startPromise) throws Exception
   {
     EventBus eventBus = vertx.eventBus();
 
-    eventBus.consumer("message.req.hemant", handler -> {
-      System.out.println("Message: "+handler.body());
-
-      handler.reply("Hola sender... message received");
+    eventBus.consumer("message.send.hemant", handler ->
+    {
+      System.out.println("Consumer3: Message: "+handler.body());
     });
 
     startPromise.complete();

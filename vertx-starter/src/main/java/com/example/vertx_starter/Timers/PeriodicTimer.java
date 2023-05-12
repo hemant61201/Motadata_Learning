@@ -12,9 +12,21 @@ public class PeriodicTimer extends AbstractVerticle
   {
     Vertx vertx = Vertx.vertx();
 
-    vertx.deployVerticle(new PeriodicTimer());
+    vertx.deployVerticle(new PeriodicTimer()).onComplete(handler ->
+    {
+      if(handler.succeeded())
+      {
+        System.out.println("actual id : " + handler.result());
+      }
+      else
+      {
+        System.out.println(handler.cause());
+      }
+    });
 
-    Context context = vertx.getOrCreateContext();
+
+//    System.out.println(vertx.deploymentIDs());
+
 //    vertx.setPeriodic(3000, id -> {
 //      System.out.println(Thread.currentThread().getName());
 //
@@ -56,7 +68,8 @@ public class PeriodicTimer extends AbstractVerticle
   @Override
   public void start(Promise<Void> startPromise) throws Exception
   {
-    vertx.setPeriodic(1000, id -> {
+
+    vertx.setPeriodic(3000, id -> {
 
 //      try {
 //        Thread.sleep(2000);
@@ -74,14 +87,17 @@ public class PeriodicTimer extends AbstractVerticle
 //      }
     });
 
-    long timerID = vertx.setTimer(3000, id -> {
+    long timerID = vertx.setTimer(5000, id -> {
 
       System.out.println(Thread.currentThread().getName());
 
       System.out.println("3 seconds have passed");
 
+      System.out.println(deploymentID());
+
       vertx.undeploy(deploymentID())
         .onComplete(result -> {
+          System.out.println("In Undeploy COmplete!");
           if (result.succeeded())
           {
             System.out.println("Undeployed");
@@ -90,12 +106,13 @@ public class PeriodicTimer extends AbstractVerticle
           {
             System.out.println("Failed to undeployed: "+result.cause().getMessage());
           }
-        }).onFailure(result -> {
-          System.out.println("FAILURE: "+result.getMessage());
         });
     });
 
     System.out.println("timerID: "+timerID);
+
+    startPromise.complete();
+//    startPromise.fail("");
 
     }
 

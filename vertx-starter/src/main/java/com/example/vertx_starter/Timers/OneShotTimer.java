@@ -6,14 +6,16 @@ import io.vertx.core.Vertx;
 
 public class OneShotTimer extends AbstractVerticle
 {
-  public static void main(String[] args)
-  {
+  public static void main(String[] args) throws InterruptedException {
     Vertx vertx = Vertx.vertx();
 
-    vertx.deployVerticle(new OneShotTimer());
+//    vertx.deployVerticle(new OneShotTimer());
 
-    vertx.setTimer(2500, id ->
+    vertx.setTimer(1000, id ->
     {
+
+      System.out.println("timer");
+
       System.out.println(Thread.currentThread().getName());
 
       System.out.println(Thread.currentThread().getState());
@@ -23,10 +25,17 @@ public class OneShotTimer extends AbstractVerticle
 
     System.out.println(Thread.currentThread().getState());
 
-//    while (true)
-//    {
-//      System.out.println("hey");
-//    }
+    while (true)
+    {
+      int i =10_00_00_000;
+
+      while(i-->0)
+      {
+
+      }
+
+      System.out.println("hey");
+    }
 
   }
 

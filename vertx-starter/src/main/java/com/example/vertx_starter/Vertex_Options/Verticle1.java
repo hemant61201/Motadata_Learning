@@ -12,7 +12,8 @@ public class Verticle1 extends AbstractVerticle
 
     System.out.println(Thread.currentThread().getName());
 
-    Thread.sleep(2000);
+//    Thread.sleep(2000);
+    context.put("name", "hemant");
 
     System.out.println("hi");
   }

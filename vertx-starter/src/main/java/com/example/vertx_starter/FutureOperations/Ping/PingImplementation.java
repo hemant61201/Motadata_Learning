@@ -16,6 +16,8 @@ public class PingImplementation extends AbstractVerticle{
 
   Promise<String> promise = Promise.promise();
 
+  Promise<Connection> promise1 = Promise.promise();
+
   Scanner input = new Scanner(System.in);
 
   @Override
@@ -137,18 +139,19 @@ public class PingImplementation extends AbstractVerticle{
     try
     {
       Class.forName("org.h2.Driver");
+
+      Connection connection = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test","sa","");
+
+      promise1.complete(connection);
+
     }
 
     catch (Exception exception)
     {
       System.out.println("Class Not Found");
+
+      promise1.fail(exception);
     }
-
-    Connection connection = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test","sa","");
-
-    Promise<Connection> promise1 = Promise.promise();
-
-    promise1.complete(connection);
 
     return promise1.future();
   }

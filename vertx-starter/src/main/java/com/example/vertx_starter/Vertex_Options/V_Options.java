@@ -19,11 +19,13 @@ public class V_Options extends AbstractVerticle
 
     vertx.deployVerticle(Verticle1.class.getName(),
       new DeploymentOptions()
-        .setInstances(7)
+        .setInstances(1)
 //        .setWorker(true)
         .setConfig(new JsonObject()
           .put("id", UUID.randomUUID().toString())
           .put("name", VerticleN.class.getSimpleName())));
+
+    vertx.deployVerticle(new Verticle2());
 
   }
 
