@@ -15,7 +15,14 @@ public class MainVerticle extends AbstractVerticle
     {
         final Vertx vertx = Vertx.vertx();
 
-        vertx.deployVerticle(new MainVerticle());
+        vertx.deployVerticle(new MainVerticle()).onComplete(ar->{
+          if (ar.succeeded())
+          {
+            System.out.println(ar.result());
+          }
+        });
+
+        System.out.println("ids : " + vertx.deploymentIDs());
     }
 
     @Override
@@ -34,7 +41,7 @@ public class MainVerticle extends AbstractVerticle
 
         vertx.deployVerticle(VerticleN.class.getName(),
               new DeploymentOptions()
-                .setInstances(1)
+                .setInstances(10)
                 .setConfig(new JsonObject()
                   .put("id", UUID.randomUUID().toString())
                   .put("name", VerticleN.class.getSimpleName())
@@ -42,7 +49,7 @@ public class MainVerticle extends AbstractVerticle
           ).compose(res->{
             vertx.deployVerticle(new VerticleA());
             return null;
-        });
+          });
 
         startPromise.complete();
     }
