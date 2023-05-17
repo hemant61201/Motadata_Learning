@@ -8,27 +8,27 @@ import io.vertx.ext.web.Router;
 
 public class CookieExample extends AbstractVerticle {
 
-  public static void main(String[] args) {
-
+  public static void main(String[] args)
+  {
     Vertx vertx = Vertx.vertx();
 
-    vertx.deployVerticle(CookieExample.class.getName(), new DeploymentOptions().setInstances(3));
+    vertx.deployVerticle(CookieExample.class.getName(), new DeploymentOptions().setInstances(1));
   }
 
   @Override
-  public void start() {
-
+  public void start()
+  {
     Router router = Router.router(vertx);
 
-    router.post("/books").handler(context -> {
-
-      Cookie cookie = context.request().getCookie("year");
-
-      System.out.println(cookie.getValue());
+    router.route("/books").handler(context -> {
 
       context.response().addCookie(Cookie.cookie("request", "completed").setHttpOnly(true).setMaxAge(60));
 
-      context.response().end();
+      Cookie cookie = context.request().getCookie("request");
+
+      System.out.println(cookie.getValue());
+
+      context.response().end(cookie.getValue());
 
     });
 

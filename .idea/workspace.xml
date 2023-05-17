@@ -41,7 +41,7 @@
     "WebServerToolWindowFactoryState": "false",
     "jdk.selected.JAVA_MODULE": "1.8",
     "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
-    "last_opened_file_path": "/home/hemant/Motadata_Learning/vertx-starter/src/main/java/com/example/vertx_starter",
+    "last_opened_file_path": "/home/hemant/Motadata_Learning/vertx-starter/src/main/java/com/example/vertx_starter/Web",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -51,11 +51,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/Web" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/JQuery/src/main/webapp" />
-      <recent name="$PROJECT_DIR$/JQuery/src/main" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Networking_System/Networking_System/src" />
@@ -75,7 +75,7 @@
       <updated>1676447133479</updated>
       <workItem from="1683217666492" duration="411000" />
       <workItem from="1683844636890" duration="2589000" />
-      <workItem from="1683901137218" duration="2759000" />
+      <workItem from="1683901137218" duration="3401000" />
     </task>
     <task id="LOCAL-00001" summary="Hello">
       <created>1677835818971</created>
@@ -308,7 +308,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684265416626</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="16 May Vertex">
+      <created>1684301270778</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1684301270778</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

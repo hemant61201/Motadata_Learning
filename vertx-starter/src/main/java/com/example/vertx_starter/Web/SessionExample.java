@@ -15,7 +15,7 @@ public class SessionExample extends AbstractVerticle
   {
     Vertx vertx = Vertx.vertx();
 
-    vertx.deployVerticle(SessionExample.class.getName(), new DeploymentOptions().setInstances(3));
+    vertx.deployVerticle(SessionExample.class.getName(), new DeploymentOptions().setInstances(1));
   }
 
   @Override
@@ -23,7 +23,16 @@ public class SessionExample extends AbstractVerticle
 
     Router router = Router.router(vertx);
 
-    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx, "session")).setCookieless(true).setSessionTimeout(9000));
+    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx, "session")).setCookieless(true).setSessionTimeout(20000));
+
+    router.get("/session").handler(routingContext -> {
+      Session session = routingContext.session();
+      routingContext.response().end(new JsonObject()
+        .put("id", session.get("id"))
+        .put("password", session.get("password"))
+        .encodePrettily());
+    });
+
 
     router.post("/session").produces("application/json").handler(context -> {
 
