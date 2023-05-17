@@ -9,12 +9,13 @@ import io.vertx.ext.web.Session;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 
-public class SessionExample extends AbstractVerticle {
-  public static void main(String[] args) {
+public class SessionExample extends AbstractVerticle
+{
+  public static void main(String[] args)
+  {
     Vertx vertx = Vertx.vertx();
 
     vertx.deployVerticle(SessionExample.class.getName(), new DeploymentOptions().setInstances(3));
-
   }
 
   @Override
@@ -30,9 +31,9 @@ public class SessionExample extends AbstractVerticle {
 
       System.out.println(session.timeout());
 
-      session.put("id", "yash007");
+      session.put("id", "hemant");
 
-      session.put("password", "yash1234");
+      session.put("password", "hemant1234");
 
       context.response().end(new JsonObject()
         .put("id", session.get("id"))
