@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="18 May Vertex">
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="19 May Vertex">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -75,7 +75,7 @@
       <updated>1676447133479</updated>
       <workItem from="1683217666492" duration="411000" />
       <workItem from="1683844636890" duration="2589000" />
-      <workItem from="1683901137218" duration="5427000" />
+      <workItem from="1683901137218" duration="6037000" />
     </task>
     <task id="LOCAL-00001" summary="Hello">
       <created>1677835818971</created>
@@ -329,7 +329,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684443465035</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="19 May Vertex">
+      <created>1684527432361</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1684527432361</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,7 +344,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Challenge Programs" />
     <MESSAGE value="MultiThreading Programs" />
     <MESSAGE value="Main Project" />
     <MESSAGE value="JConsole Programme" />
@@ -362,6 +368,7 @@
     <MESSAGE value="16 May Vertex" />
     <MESSAGE value="17 May Vertex" />
     <MESSAGE value="18 May Vertex" />
-    <option name="LAST_COMMIT_MESSAGE" value="18 May Vertex" />
+    <MESSAGE value="19 May Vertex" />
+    <option name="LAST_COMMIT_MESSAGE" value="19 May Vertex" />
   </component>
 </project>
