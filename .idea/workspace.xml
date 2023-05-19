@@ -4,24 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="17 May Vertex">
-      <change afterPath="$PROJECT_DIR$/vertx-starter/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/Deployer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EmptyVerticle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBus/HeatSensor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBus/HttpServerImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBus/Listener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBus/MainClass.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBus/SensorData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventLoop.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/HelloVerticle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/MixedThreading.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/Offload.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/ReadFileVertex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/SimpleTcpConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/resources/HEMANT_VADHAIYA_Resume_16-05-2023-01-36-56.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/resources/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/resources/logback.xml" afterDir="false" />
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="18 May Vertex">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -92,7 +75,7 @@
       <updated>1676447133479</updated>
       <workItem from="1683217666492" duration="411000" />
       <workItem from="1683844636890" duration="2589000" />
-      <workItem from="1683901137218" duration="4803000" />
+      <workItem from="1683901137218" duration="5427000" />
     </task>
     <task id="LOCAL-00001" summary="Hello">
       <created>1677835818971</created>
@@ -339,7 +322,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684359889923</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="18 May Vertex">
+      <created>1684443465035</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1684443465035</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -347,7 +337,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Collection FrameWork Programmes" />
     <MESSAGE value="Challenge Programs" />
     <MESSAGE value="MultiThreading Programs" />
     <MESSAGE value="Main Project" />
@@ -372,6 +361,7 @@
     <MESSAGE value="15 May Vertex" />
     <MESSAGE value="16 May Vertex" />
     <MESSAGE value="17 May Vertex" />
-    <option name="LAST_COMMIT_MESSAGE" value="17 May Vertex" />
+    <MESSAGE value="18 May Vertex" />
+    <option name="LAST_COMMIT_MESSAGE" value="18 May Vertex" />
   </component>
 </project>
