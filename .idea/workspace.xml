@@ -5,6 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="19 May Vertex">
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EdgeServiceWIthFuture/FutureCollectorService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EdgeServiceWIthFuture/HeatSensor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EdgeServiceWIthFuture/MainClass.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EdgeServiceWIthFuture/SnapshotService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/DataVerticle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/HeatSensor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/HttpServerImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/MainClass.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/SensorDataService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/SensorDataServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/SensorDataServiceVertxEBProxy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/SensorDataServiceVertxProxyHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/package-info.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/FutureExample.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,10 +66,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/vertx-starter" />
+      <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/Web" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main" />
-      <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Networking_System/Networking_System/src" />
@@ -75,7 +89,7 @@
       <updated>1676447133479</updated>
       <workItem from="1683217666492" duration="411000" />
       <workItem from="1683844636890" duration="2589000" />
-      <workItem from="1683901137218" duration="6037000" />
+      <workItem from="1683901137218" duration="6663000" />
     </task>
     <task id="LOCAL-00001" summary="Hello">
       <created>1677835818971</created>
@@ -336,7 +350,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684527432361</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="19 May Vertex">
+      <created>1684529277689</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1684529277689</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
