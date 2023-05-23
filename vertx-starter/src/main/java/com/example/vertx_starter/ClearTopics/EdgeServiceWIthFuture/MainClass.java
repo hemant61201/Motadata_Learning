@@ -4,23 +4,43 @@ import com.example.vertx_starter.ClearTopics.EdgeServiceWithCallbacks.CollectorS
 import com.example.vertx_starter.ClearTopics.EdgeServiceWithCallbacks.HeatSensor;
 import com.example.vertx_starter.ClearTopics.EdgeServiceWithCallbacks.SnapshotService;
 import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
 public class MainClass
 {
+//  public static Vertx vertx = Vertx.vertx();
+
   public static void main(String[] args)
   {
     Vertx vertx = Vertx.vertx();
 
-    vertx.deployVerticle(com.example.vertx_starter.ClearTopics.EdgeServiceWithCallbacks.HeatSensor.class.getName(), new DeploymentOptions().setConfig(new JsonObject().put("http.port", 3000)));
+    vertx.eventBus().consumer("te", jm -> {
+      var ha = jm.body().toString();
+      System.out.println(ha);
+    });
 
-    vertx.deployVerticle(com.example.vertx_starter.ClearTopics.EdgeServiceWithCallbacks.HeatSensor.class.getName(), new DeploymentOptions().setConfig(new JsonObject().put("http.port", 3001)));
+    vertx.eventBus().consumer("te", jm -> {
+      var ha = jm.body().toString();
+      System.out.println(ha);
+    });
 
-    vertx.deployVerticle(HeatSensor.class.getName(), new DeploymentOptions().setConfig(new JsonObject().put("http.port", 3002)));
+    vertx.eventBus().consumer("te", jm -> {
+      var ha = jm.body().toString();
+      System.out.println(ha);
+    });
 
-    vertx.deployVerticle(SnapshotService.class.getName());
+    HashMap da = new HashMap<>();
+    da.put(1234,"vicken");
+//    da.put(123,"hi");
+    vertx.eventBus().send("te", new JsonObject().put("key", da));
 
-    vertx.deployVerticle(FutureCollectorService.class.getName());
+    vertx.close();
+
+
   }
 }

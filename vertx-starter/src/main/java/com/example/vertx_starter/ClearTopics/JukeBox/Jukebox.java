@@ -1,5 +1,6 @@
 package com.example.vertx_starter.ClearTopics.JukeBox;
 
+import com.example.vertx_starter.ClearTopics.MixedThreading;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
@@ -19,8 +20,8 @@ import java.util.stream.Collectors;
 
 public class Jukebox extends AbstractVerticle
 {
-  private final Logger logger = LoggerFactory.getLogger(Jukebox.class);
 
+  private final Logger logger = LoggerFactory.getLogger(MixedThreading.class);
   private enum State {PLAYING, PAUSED}
 
   private State currentMode = State.PAUSED;

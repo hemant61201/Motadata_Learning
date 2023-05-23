@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="19 May Vertex">
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EdgeServiceWIthFuture/FutureCollectorService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EdgeServiceWIthFuture/HeatSensor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EdgeServiceWIthFuture/MainClass.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EdgeServiceWIthFuture/SnapshotService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/DataVerticle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/HeatSensor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/HttpServerImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/MainClass.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/SensorDataService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/SensorDataServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/SensorDataServiceVertxEBProxy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/SensorDataServiceVertxProxyHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/EventBusWithProxy/package-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics/FutureExample.java" afterDir="false" />
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="20 May Vertex">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -89,7 +75,7 @@
       <updated>1676447133479</updated>
       <workItem from="1683217666492" duration="411000" />
       <workItem from="1683844636890" duration="2589000" />
-      <workItem from="1683901137218" duration="6663000" />
+      <workItem from="1683901137218" duration="7914000" />
     </task>
     <task id="LOCAL-00001" summary="Hello">
       <created>1677835818971</created>
@@ -357,7 +343,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684529277689</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="20 May Vertex">
+      <created>1684620624820</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1684620624820</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -365,7 +358,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="MultiThreading Programs" />
     <MESSAGE value="Main Project" />
     <MESSAGE value="JConsole Programme" />
     <MESSAGE value="Hello" />
@@ -390,6 +382,7 @@
     <MESSAGE value="17 May Vertex" />
     <MESSAGE value="18 May Vertex" />
     <MESSAGE value="19 May Vertex" />
-    <option name="LAST_COMMIT_MESSAGE" value="19 May Vertex" />
+    <MESSAGE value="20 May Vertex" />
+    <option name="LAST_COMMIT_MESSAGE" value="20 May Vertex" />
   </component>
 </project>
