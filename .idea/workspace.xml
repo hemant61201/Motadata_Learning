@@ -4,41 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="23 May Vertex">
-      <change afterPath="$PROJECT_DIR$/awesomeProject/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/.idea/awesomeProject.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/AnonymousFunction.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/ArraysExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/ChannelBuffered.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/ChannelDirection.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/ChannelSynchronization.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/ChannelsExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/ClosingChannel.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/ErrorsExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/FunctionsExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Genrics.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/GoRoutins.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/InterfacesExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Loops.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/MapExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Methods.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/MultipleReturn.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/NoBlockingChannnelOperation.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Pointers.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/RangeExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/RangeOverChannel.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Recursion.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/SelectExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/SlicesExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/StructEmbedding.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/StructsExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/SwitchExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/TimeoutsExample.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Variables.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/VariadicFunction.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/go.mod" afterDir="false" />
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="27 May Go">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,11 +52,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/vertx-starter" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/Web" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter" />
-      <recent name="$PROJECT_DIR$/vertx-starter/src/main" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Networking_System/Networking_System/src" />
@@ -112,7 +78,7 @@
       <workItem from="1683844636890" duration="2589000" />
       <workItem from="1683901137218" duration="7914000" />
       <workItem from="1684883288518" duration="803000" />
-      <workItem from="1684930831187" duration="622000" />
+      <workItem from="1684930831187" duration="1244000" />
     </task>
     <task id="LOCAL-00001" summary="Hello">
       <created>1677835818971</created>
@@ -394,7 +360,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684883495376</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="27 May Go">
+      <created>1685164369932</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1685164369932</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -403,7 +376,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="JConsole Programme" />
     <MESSAGE value="Hello" />
     <MESSAGE value="April 1 WebSocket" />
     <MESSAGE value="April 3 WebSocket" />
@@ -428,6 +400,7 @@
     <MESSAGE value="19 May Vertex" />
     <MESSAGE value="20 May Vertex" />
     <MESSAGE value="23 May Vertex" />
-    <option name="LAST_COMMIT_MESSAGE" value="23 May Vertex" />
+    <MESSAGE value="27 May Go" />
+    <option name="LAST_COMMIT_MESSAGE" value="27 May Go" />
   </component>
 </project>
