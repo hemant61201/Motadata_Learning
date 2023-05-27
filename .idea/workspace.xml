@@ -4,7 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="20 May Vertex">
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="23 May Vertex">
+      <change afterPath="$PROJECT_DIR$/awesomeProject/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/.idea/awesomeProject.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/AnonymousFunction.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/ArraysExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/ChannelBuffered.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/ChannelDirection.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/ChannelSynchronization.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/ChannelsExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/ClosingChannel.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/ErrorsExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/FunctionsExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/Genrics.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/GoRoutins.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/InterfacesExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/Loops.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/Main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/MapExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/Methods.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/MultipleReturn.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/NoBlockingChannnelOperation.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/Pointers.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/RangeExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/RangeOverChannel.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/Recursion.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/SelectExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/SlicesExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/StructEmbedding.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/StructsExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/SwitchExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/TimeoutsExample.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/Variables.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/VariadicFunction.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/awesomeProject/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,10 +72,11 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "jdk.selected.JAVA_MODULE": "1.8",
     "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
-    "last_opened_file_path": "/home/hemant/Motadata_Learning/vertx-starter",
+    "last_opened_file_path": "/home/hemant/Motadata_Learning",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -76,6 +111,8 @@
       <workItem from="1683217666492" duration="411000" />
       <workItem from="1683844636890" duration="2589000" />
       <workItem from="1683901137218" duration="7914000" />
+      <workItem from="1684883288518" duration="803000" />
+      <workItem from="1684930831187" duration="622000" />
     </task>
     <task id="LOCAL-00001" summary="Hello">
       <created>1677835818971</created>
@@ -350,15 +387,22 @@
       <option name="project" value="LOCAL" />
       <updated>1684620624820</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="23 May Vertex">
+      <created>1684883495376</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1684883495376</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Main Project" />
     <MESSAGE value="JConsole Programme" />
     <MESSAGE value="Hello" />
     <MESSAGE value="April 1 WebSocket" />
@@ -383,6 +427,7 @@
     <MESSAGE value="18 May Vertex" />
     <MESSAGE value="19 May Vertex" />
     <MESSAGE value="20 May Vertex" />
-    <option name="LAST_COMMIT_MESSAGE" value="20 May Vertex" />
+    <MESSAGE value="23 May Vertex" />
+    <option name="LAST_COMMIT_MESSAGE" value="23 May Vertex" />
   </component>
 </project>
