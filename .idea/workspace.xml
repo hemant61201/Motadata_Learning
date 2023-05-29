@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="27 May Go">
-      <change afterPath="$PROJECT_DIR$/awesomeProject/AtomicCounter.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Mutexes.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/RateLimiting.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Tickers.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/Timers.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/WaitGroups.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/awesomeProject/WorkerPools.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +42,7 @@
     "WebServerToolWindowFactoryState": "false",
     "jdk.selected.JAVA_MODULE": "1.8",
     "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
-    "last_opened_file_path": "/home/hemant/Motadata_Learning/awesomeProject",
+    "last_opened_file_path": "/home/hemant/Motadata_Learning",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -58,8 +52,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/awesomeProject" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/awesomeProject" />
       <recent name="$PROJECT_DIR$/vertx-starter" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/ClearTopics" />
       <recent name="$PROJECT_DIR$/vertx-starter/src/main/java/com/example/vertx_starter/Web" />
@@ -84,7 +78,7 @@
       <workItem from="1683844636890" duration="2589000" />
       <workItem from="1683901137218" duration="7914000" />
       <workItem from="1684883288518" duration="803000" />
-      <workItem from="1684930831187" duration="1555000" />
+      <workItem from="1684930831187" duration="2879000" />
     </task>
     <task id="LOCAL-00001" summary="Hello">
       <created>1677835818971</created>
@@ -380,7 +374,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685212137692</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="27 May Go">
+      <created>1685212546074</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1685212546074</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
