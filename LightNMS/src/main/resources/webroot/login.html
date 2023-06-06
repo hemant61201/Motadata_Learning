@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>AdminLTE 3 | Log in (v2)</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+  <link rel="stylesheet" href="css/all.min.css">
+
+  <link rel="stylesheet" href="css/icheck-bootstrap.min.css">
+
+  <link rel="stylesheet" href="css/adminlte.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <script src="js/verifyLogin.js"></script>
+
+  <script src="js/ajax.js"></script>
+
+  <script src="js/jquery.min.js"></script>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+
+  <script src="js/adminlte.min.js"></script>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="row justify-content-between px-3" style="position: relative;background-color: black">
+
+    <div class="">
+
+    </div>
+
+    <div class="m-3 row p-2" id="hemant-alert" style="background-color: black;color: #e9ecef;width:15%;font-size: 18px;font-weight: 800">
+
+      <div class="col-4" id="hemant-icon"></div>
+
+      <div class="col-8" id="hemant-text" style="color:black">X</div>
+
+    </div>
+
+  </div>
+
+  <div class="hold-transition login-page" style="top:-20px;background-color: black;">
+
+    <div class="logo">
+
+      <a href="https://www.motadata.com" data-wpel-link="internal">
+
+        <img width="200" height="75" src="MicrosoftTeams-image (4).png" alt="" data-lazy-src="https://www.motadata.com/wp-content/themes/motadata/assets/images/logo.svg" data-ll-status="loaded" class="entered lazyloaded">
+
+        <noscript>
+
+          <img width="200" height="75" src="https://www.motadata.com/wp-content/themes/motadata/assets/images/logo.svg" alt="" />
+
+        </noscript>
+
+      </a>
+
+    </div>
+
+    <br>
+
+    <p class="login-box-msg" style="color: whitesmoke">Sign in to start your session</p>
+
+    <div class="input-group mb-3" style="width:250px">
+
+      <input type="text" name="username" id="username" class="form-control" placeholder="Name" required/>
+
+      <div class="input-group-append">
+
+        <div class="input-group-text">
+
+          <span class="fa fa-envelope"></span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="input-group mb-3" style="width: 250px">
+
+      <input type="password" name="password" id="password" class="form-control" placeholder="Password" required/>
+
+      <div class="input-group-append">
+
+        <div class="input-group-text">
+
+          <span class="fa fa-lock"></span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="row" style="width: 150px">
+
+      <button type="submit" id="submit" class="btn btn-primary btn-block" onclick="login.onclick()">Sign In</button>
+
+    </div>
+
+  </div>
+</body>
+
+</html>
+
