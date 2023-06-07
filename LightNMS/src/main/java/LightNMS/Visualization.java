@@ -47,15 +47,44 @@ public class Visualization extends AbstractVerticle
 
         JsonObject json = routingContext.body().asJsonObject();
 
-        vertx.eventBus().send("addDiscoveryTable", json);
+        System.out.println(json.getString("ip"));
 
+        vertx.eventBus().request("add_DiscoveryTable", json, result ->
+        {
+          if (result.succeeded())
+          {
+            routingContext.response().putHeader("Content-Type", "application/json").end(result.result().body().toString());
+          }
+        });
       });
 
-      router.get("/monitors").handler(routingContext ->
+      router.get("/getDiscoveryTable").handler(routingContext ->
       {
-        JsonObject json = new JsonObject().put("id",1).put("deviceName","hemant").put("ip","10.20.40.156").put("deviceType","Ping").put("status","Unknown");
+        String message = "get";
 
-        routingContext.response().end(json.toString());
+        vertx.eventBus().request("get_DiscoveryTable", message, databaseResult ->
+        {
+          if(databaseResult.succeeded())
+          {
+            routingContext.response().end(databaseResult.result().body().toString());
+          }
+        });
+      });
+
+      router.post("/deleteDiscoveryTable").handler(routingContext ->
+      {
+        String message = routingContext.request().getParam("id");
+
+        System.out.println("message : " + message);
+
+        vertx.eventBus().request("delete_DiscoveryTable", message, deleteResult ->
+        {
+          if(deleteResult.succeeded())
+          {
+            routingContext.response().end("success");
+          }
+        });
+
       });
 
       vertx.createHttpServer(new HttpServerOptions()

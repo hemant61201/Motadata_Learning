@@ -25,13 +25,18 @@
 
     <link rel="stylesheet" href="../css/summernote-bs4.min.css">
 
+    <link rel="stylesheet" href="../css/rotating-icon.css">
+
     <link
       rel="stylesheet"
       type="text/css"
       href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"
     />
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
     <script
       type="text/javascript"
@@ -84,6 +89,12 @@
     <script src="../js/Discovery.js"></script>
 
     <script src="../js/ajax.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+    <script src="../js/tableButton.js"></script>
 </head>
 
 <body>
@@ -279,7 +290,7 @@
 
           <div class="col-sm-6">
 
-            <h1><i class="fa fa-binoculars menu-grid-fa-size"></i>Discovery</h1>
+            <h1><i class="fa fa-binoculars menu-grid-fa-size rotating-icon" id="icon"></i>Discovery</h1>
 
           </div>
 
@@ -394,72 +405,9 @@
 
         </div>
 
-        <table id="datatable" class="table">
-          <thead>
-          <tr>
-            <th>ID</th>
-            <th>Device Name</th>
-            <th>IP</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <br>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-
-        <script>
-          $(document).ready(function() {
-            $.ajax({
-              url: "/monitors",
-              method: "GET",
-              dataType: "json",
-              success: function(data) {
-                var datatable = $('#datatable').DataTable({
-                  data: data,
-                  columns: [
-                    { data: 'id' },
-                    { data: 'deviceName' },
-                    { data: 'ip' },
-                    { data: 'type' },
-                    { data: 'status' },
-                    {
-                      data: null,
-                      render: function(data, type, row) {
-                        // Render action buttons for each row
-                        return `
-                  <button type="button" class="btn btn-primary btn-sm" onclick="editRow(${data.id})">Edit</button>
-                  <button type="button" class="btn btn-success btn-sm" onclick="runRow(${data.id})">Run</button>
-                  <button type="button" class="btn btn-danger btn-sm" onclick="deleteRow(${data.id})">Delete</button>
-                `;
-                      }
-                    }
-                  ]
-                });
-              }
-            });
-          });
-
-          function editRow(id) {
-            // Handle edit button click for a specific row
-            console.log('Edit row with ID: ' + id);
-          }
-
-          function runRow(id) {
-            // Handle run button click for a specific row
-            console.log('Run row with ID: ' + id);
-          }
-
-          function deleteRow(id) {
-            // Handle delete button click for a specific row
-            console.log('Delete row with ID: ' + id);
-          }
-        </script>
-
+        <table id="discoveryTable" class="display" width="100%"></table>
 
       </div>
 

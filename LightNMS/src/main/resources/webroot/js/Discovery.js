@@ -1,3 +1,12 @@
+$(document).ready(function ()
+{
+  let config = getConfig();
+
+  console.log("config : " + config)
+
+  ajax.get(config);
+})
+
 var discovery =
   {
     onclick()
@@ -32,6 +41,13 @@ function fetchData()
 
   const credential_password = document.getElementById("credential_passwd").value;
 
+  var credential = {
+
+    credential_userName: credential_userName,
+
+    credential_password: credential_password
+  };
+
   myData =
     {
       method: method,
@@ -44,12 +60,26 @@ function fetchData()
 
       deviceType: deviceType,
 
-      credential_userName: credential_userName,
-
-      credential_password: credential_password,
+      credential : credential,
     };
 
   return myData;
+}
+
+function getConfig()
+{
+  const method = "GET";
+
+  const url = "/getDiscoveryTable"
+
+  var config =
+    {
+      method: method,
+
+      url: url
+    }
+
+    return config;
 }
 
 
