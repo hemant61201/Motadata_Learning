@@ -28,6 +28,19 @@ public class Queries
 
   public static String getQuery(String tableName)
   {
+    String[] table = new String[2];
+
+    boolean flag = false;
+
+    if(tableName.contains("_"))
+    {
+      table = tableName.split("_");
+
+      tableName = table[0];
+
+      flag = true;
+    }
+
     switch (tableName)
     {
       case "DiscoveryTable":
@@ -46,6 +59,15 @@ public class Queries
       }
     }
 
+    if(flag)
+    {
+      query = "select * from " + tableName + " where id = ?";
+
+      System.out.println(query);
+
+      return query;
+    }
+
     return query;
   }
 
@@ -56,6 +78,29 @@ public class Queries
       case "DiscoveryTable":
       {
         query = "delete from " + tableName + " where id = ?";
+      }
+
+      case "MonitorTable":
+      {
+
+      }
+
+      case "PollingTable":
+      {
+
+      }
+    }
+
+    return query;
+  }
+
+  public static String updateQuery(String tableName)
+  {
+    switch (tableName)
+    {
+      case "DiscoveryTable":
+      {
+        query = "update " + tableName + " set Status = ? where id = ?";
       }
 
       case "MonitorTable":

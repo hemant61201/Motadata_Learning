@@ -18,6 +18,7 @@ public class CrudOperations extends AbstractVerticle {
   private String updatedRow;
   private Connectionpool connectionPool = new Connectionpool();
   private String id;
+  private String status;
   private HashMap<Integer, JsonObject> discoveryDataTable = new HashMap<>();
 
   private void connectionConfig(String message, Promise<Object> promise)
@@ -42,9 +43,19 @@ public class CrudOperations extends AbstractVerticle {
 
         case "get":
 
-          query = Queries.getQuery(queryAddress[1]);
+          if(queryAddress.length == 3)
+          {
+            query = Queries.getQuery(queryAddress[1] + "_" + queryAddress[2]);
 
-          selectData(connection, query, promise);
+            getSingleData(connection, query, promise);
+          }
+
+          else
+          {
+            query = Queries.getQuery(queryAddress[1]);
+
+            selectData(connection, query, promise);
+          }
 
           break;
 
@@ -55,6 +66,12 @@ public class CrudOperations extends AbstractVerticle {
           deleteData(connection, query, promise);
 
           break;
+
+        case "update":
+
+          query = Queries.updateQuery(queryAddress[1]);
+
+          updateData(connection, query, promise);
       }
     }
 
@@ -153,7 +170,71 @@ public class CrudOperations extends AbstractVerticle {
         }
 
         blockingPromise.complete(discoveryDataTable);
+      }
 
+      catch (Exception exception)
+      {
+        blockingPromise.fail(exception);
+      }
+
+    }).onComplete(result ->
+    {
+      if (result.succeeded())
+      {
+        HashMap<Integer, JsonObject> resultData = result.result();
+
+        promise.complete(resultData);
+      }
+
+      else
+      {
+        Throwable cause = result.cause();
+
+        promise.fail(cause);
+      }
+    });
+  }
+
+  private void getSingleData(Connection connection, String query, Promise<Object> promise)
+  {
+    vertx.<HashMap<Integer, JsonObject>>executeBlocking(blockingPromise ->
+    {
+      try
+      {
+        preparedStatement = connection.prepareStatement(query);
+
+        preparedStatement.setString(1, id);
+
+        ResultSet getSingleDiscoveryTableSet = preparedStatement.executeQuery();
+
+        ResultSetMetaData discoveryTableSetMetaData = getSingleDiscoveryTableSet.getMetaData();
+
+        int columnCount = discoveryTableSetMetaData.getColumnCount();
+
+        if (getSingleDiscoveryTableSet.next())
+        {
+          JsonObject discoveryData = new JsonObject();
+
+          for (int i = 1; i <= columnCount; i++)
+          {
+            String columnName = discoveryTableSetMetaData.getColumnName(i);
+
+            Object columnValue = getSingleDiscoveryTableSet.getObject(i);
+
+            discoveryData.put(columnName, columnValue);
+          }
+
+          HashMap<Integer, JsonObject> discoveryDataTable = new HashMap<>();
+
+          discoveryDataTable.put(1, discoveryData);
+
+          blockingPromise.complete(discoveryDataTable);
+        }
+
+        else
+        {
+          blockingPromise.fail("No data found for the specified query");
+        }
       }
 
       catch (Exception exception)
@@ -188,6 +269,49 @@ public class CrudOperations extends AbstractVerticle {
         preparedStatement = connection.prepareStatement(query);
 
         preparedStatement.setString(1, id);
+
+        int updatedRow = preparedStatement.executeUpdate();
+
+        System.out.println("Records deleted Successfully " + updatedRow);
+
+        blockingPromise.complete(updatedRow);
+
+      }
+
+      catch (Exception exception)
+      {
+        blockingPromise.fail(exception);
+      }
+
+    }).onComplete(result ->
+    {
+      if (result.succeeded())
+      {
+        updatedRow = result.result().toString();
+
+        promise.complete(updatedRow);
+      }
+
+      else
+      {
+        Throwable cause = result.cause();
+
+        promise.fail(cause);
+      }
+    });
+  }
+
+  private void updateData(Connection connection, String query, Promise<Object> promise)
+  {
+    vertx.<Integer>executeBlocking(blockingPromise ->
+    {
+      try
+      {
+        preparedStatement = connection.prepareStatement(query);
+
+        preparedStatement.setString(1, status);
+
+        preparedStatement.setString(2,id);
 
         int updatedRow = preparedStatement.executeUpdate();
 
@@ -300,11 +424,88 @@ public class CrudOperations extends AbstractVerticle {
         connectionConfig(address, promise);
       });
 
+      vertx.eventBus().consumer("get_DiscoveryTable_id", message ->
+      {
+        String[] modifyAddress = message.address().split("_");
+
+        String address = modifyAddress[0] + "_" + modifyAddress[1] + "_" + message.body().toString();
+
+        id = message.body().toString();
+
+        System.out.println(address);
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) result.result();
+
+            JsonObject rowData = new JsonObject();
+
+            for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+            {
+              rowData = entry.getValue();
+            }
+
+            message.reply(rowData);
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Get operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
       vertx.eventBus().consumer("delete_DiscoveryTable", message ->
       {
         String address = message.address();
 
         id = message.body().toString();
+
+        System.out.println("id : " + id);
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            String reply = result.result().toString();
+
+            message.reply(reply);
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Delete operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
+      vertx.eventBus().consumer("update_DiscoveryTable", message ->
+      {
+        String address = message.address();
+
+        String[] splitMsg = message.body().toString().split("_");
+
+        status = splitMsg[0];
+
+        id = splitMsg[1].trim();
 
         System.out.println("id : " + id);
 

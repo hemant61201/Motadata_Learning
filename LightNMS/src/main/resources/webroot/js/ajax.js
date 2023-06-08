@@ -124,6 +124,30 @@ var ajax = {
         }
       })
     }
+
+    else if (data.url === "/runDiscovery")
+    {
+      console.log("run id " + data.id)
+
+      $.ajax({
+
+        method: data.method,
+
+        url: data.url,
+
+        data: data.id,
+
+        success: function (ajaxResponse)
+        {
+          console.log(ajaxResponse)
+
+          if (ajaxResponse !== null)
+          {
+            location.reload();
+          }
+        }
+      })
+    }
   },
 
   get: function (data)
@@ -153,15 +177,20 @@ var ajax = {
               { title: 'DeviceName', data: 'DEVICENAME' },
               { title: 'IP', data: 'IP' },
               { title: 'DeviceType', data: 'DEVICETYPE' },
-              { title: 'Status', data: 'STATUS' },
+              { title: 'Discovery_Status', data: 'STATUS' },
               {
                 title: 'Actions',
                 data: null,
-                render: function (data, type, row) {
+                render: function (data, type, row)
+                {
+                  var editButton = '<button class="edit-button" onclick="tableButton.openDialog()">Edit</button>';
+                  var runButton = '<button class="run-button" onclick="runButton.onclick(this)">Run</button>';
+                  var deleteButton = '<button class="delete-button" onclick="tableButton.onclick(this)">Delete</button>';
 
-                  var editButton = '<button class="edit-button" id="editBtn" onclick="tableButton.openDialog()">Edit</button>';
-                  var runButton = '<button class="run-button" onclick="tableButton.startIconRotation()">Run</button>';
-                  var deleteButton = '<button id="deleteBtn" class="delete-button" onclick="tableButton.onclick(this)">Delete</button>';
+                  if (data.STATUS === "success") {
+                    var provisionButton = '<button class="provision-button" onclick="provisionButton.onclick(this)">Provision</button>';
+                    return editButton + ' ' + runButton + ' ' + deleteButton + ' ' + provisionButton;
+                  }
 
                   return editButton + ' ' + runButton + ' ' + deleteButton;
                 }

@@ -10,7 +10,7 @@ var tableButton =
 
       var id = data.ID;
 
-      let btnConf = btnConfig(id);
+      let btnConf = deleteConfig(id);
 
       ajax.post(btnConf);
     },
@@ -38,11 +38,51 @@ var tableButton =
 
   }
 
-  function btnConfig(id_no)
+  var runButton =
+    {
+      onclick(button)
+      {
+        var dataTable = $(button).closest('table').DataTable();
+
+        var row = dataTable.row($(button).closest('tr'));
+
+        var data = row.data();
+
+        var id = data.ID;
+
+        let btnConf = runConfig(id);
+
+        ajax.post(btnConf);
+      },
+    }
+
+  function deleteConfig(id_no)
   {
     const method = "POST";
 
     const url = "/deleteDiscoveryTable";
+
+    const id = {
+      id: id_no
+    }
+
+    var config =
+      {
+        method: method,
+
+        url: url,
+
+        id: id,
+      }
+
+    return config;
+  }
+
+  function runConfig(id_no)
+  {
+    const method = "POST";
+
+    const url = "/runDiscovery";
 
     const id = {
       id: id_no

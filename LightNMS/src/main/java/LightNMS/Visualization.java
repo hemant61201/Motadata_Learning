@@ -87,7 +87,23 @@ public class Visualization extends AbstractVerticle
             routingContext.response().end("success");
           }
         });
+      });
 
+      router.post("/runDiscovery").handler(routingContext ->
+      {
+        String message = routingContext.request().getParam("id");
+
+        System.out.println("message :" + message);
+
+        vertx.eventBus().request("run_Discovery", message, runResult ->
+        {
+          if(runResult.succeeded())
+          {
+            System.out.println("response  " + runResult.result().body().toString());
+
+            routingContext.response().end("success");
+          }
+        });
       });
 
       vertx.createHttpServer(new HttpServerOptions()
