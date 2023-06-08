@@ -8,10 +8,16 @@ public class Main {
   {
     Vertx vertx = Vertx.vertx();
 
-    vertx.deployVerticle(Visualization.class.getName());
+    vertx.deployVerticle(Visualization.class.getName()).onSuccess(res -> {
+      System.out.println("deploy succede visual" + res);
+    });
 
-    vertx.deployVerticle(Discovery.class.getName());
+    vertx.deployVerticle(Discovery.class.getName()).onSuccess(res -> {
+      System.out.println("deploy succede discovery" + res);
+    });
 
-    vertx.deployVerticle(QueryService.class.getName());
+    vertx.deployVerticle(CrudOperations.class.getName()).onSuccess(res -> {
+      System.out.println("deploy succede crud" + res);
+    });
   }
 }

@@ -53,7 +53,7 @@ public class Visualization extends AbstractVerticle
         {
           if (result.succeeded())
           {
-            routingContext.response().putHeader("Content-Type", "application/json").end(result.result().body().toString());
+            routingContext.response().end(result.result().body().toString());
           }
         });
       });
@@ -62,10 +62,13 @@ public class Visualization extends AbstractVerticle
       {
         String message = "get";
 
+        System.out.println(message);
+
         vertx.eventBus().request("get_DiscoveryTable", message, databaseResult ->
         {
           if(databaseResult.succeeded())
           {
+            System.out.println("response" + databaseResult.result().body().toString());
             routingContext.response().end(databaseResult.result().body().toString());
           }
         });
