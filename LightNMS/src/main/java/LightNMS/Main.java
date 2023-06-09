@@ -19,5 +19,9 @@ public class Main {
     vertx.deployVerticle(CrudOperations.class.getName()).onSuccess(res -> {
       System.out.println("deploy succede crud" + res);
     });
+
+    vertx.deployVerticle(PollingExecution.class.getName()).onSuccess(res -> {
+      System.out.println("deploy succede crud" + res);
+    });
   }
 }

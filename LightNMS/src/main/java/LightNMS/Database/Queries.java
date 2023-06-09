@@ -96,6 +96,19 @@ public class Queries
 
   public static String updateQuery(String tableName)
   {
+    String[] table = new String[2];
+
+    boolean flag = false;
+
+    if(tableName.contains("_"))
+    {
+      table = tableName.split("_");
+
+      tableName = table[0];
+
+      flag = true;
+    }
+
     switch (tableName)
     {
       case "DiscoveryTable":
@@ -112,6 +125,15 @@ public class Queries
       {
 
       }
+    }
+
+    if(flag)
+    {
+      query = "update " + tableName + " set " + table[1] + " = ?, status = ? where id = ?";
+
+      System.out.println(query);
+
+      return query;
     }
 
     return query;

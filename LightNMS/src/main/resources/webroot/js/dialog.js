@@ -2,6 +2,8 @@ const addButton = document.getElementById('add-button');
 const addDialog = document.getElementById('add-dialog');
 const minusButton = document.getElementById('minus-button');
 const closeForm = document.getElementById("addMontior");
+const updateDialog = document.getElementById("update-dialog");
+const minusUpdatdeButton = document.getElementById("minus-update-button");
 
 addButton.addEventListener('click', () => {
   addDialog.showModal();
@@ -10,6 +12,10 @@ addButton.addEventListener('click', () => {
 minusButton.addEventListener('click', () => {
   addDialog.close();
 });
+
+minusUpdatdeButton.addEventListener('click', () => {
+  updateDialog.close();
+})
 
 closeForm.addEventListener('click', () => {
   addDialog.close();

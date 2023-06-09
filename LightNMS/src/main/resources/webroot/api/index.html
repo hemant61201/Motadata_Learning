@@ -27,6 +27,8 @@
 
     <link rel="stylesheet" href="../css/rotating-icon.css">
 
+  <link rel="stylesheet" href="../css/hidden.css">
+
     <link
       rel="stylesheet"
       type="text/css"
@@ -390,7 +392,7 @@
 
                     <label for="credential_passwd">Password</label>
 
-                    <input type="text" id="credential_passwd" class="form-control" name="credential">
+                    <input type="password" id="credential_passwd" class="form-control" name="credential">
 
                   </div>
 
@@ -400,6 +402,98 @@
 
               </div>
           </dialog>
+
+          <dialog id="update-dialog" aria-hidden="true">
+
+            <div class="card card-primary">
+
+              <div class="card-header">
+
+                <h3 class="card-title">Discovery Details</h3>
+
+                <div class="card-tools">
+
+                  <button type="button" id="minus-update-button" class="btn btn-tool" data-card-widget="close" title="Close">
+
+                    <i class="fa fa-minus"></i>
+
+                  </button>
+
+                </div>
+
+              </div>
+
+              <div class="card-body">
+
+                <div class="form-group">
+
+                  <label for="deviceSelect">Select a field:</label>
+
+                  <select id="deviceSelect" onchange="toggleField()">
+
+                    <option value="">-- Select --</option>
+
+                    <option value="DeviceName">Device Name</option>
+
+                    <option value="IP">IP</option>
+
+                    <option value="DeviceType">Device Type</option>
+
+                    <option value="credential">Credential</option>
+
+                  </select>
+
+                  <br><br>
+
+                  <div id="DeviceNameField" class="hidden">
+
+                    <label for="update_deviceName">Device Name:</label>
+
+                    <input type="text" id="update_deviceName">
+
+                  </div>
+
+                  <div id="IPField" class="hidden">
+
+                    <label for="update_ip">IP:</label>
+
+                    <input type="text" id="update_ip">
+
+                  </div>
+
+                  <div id="DeviceTypeField" class="hidden">
+
+                    <label for="update_deviceType">Device Type:</label>
+
+                    <input type="text" id="update_deviceType">
+
+                  </div>
+
+                  <div id="credentialField" class="hidden">
+
+                    <label for="update_username">Username:</label>
+
+                    <input type="text" id="update_username">
+
+                    <br><br>
+
+                    <label for="update_password">Password:</label>
+
+                    <input type="password" id="update_password">
+
+                  </div>
+
+                </div>
+
+                <button type="button" id="update_btn" data-card-widget="close" onclick="updateBtn.onclick()">Update</button>
+
+              </div>
+
+            </div>
+
+          </dialog>
+
+          <script src="../js/toggle.js"></script>
 
           <script src="../js/dialog.js"></script>
 

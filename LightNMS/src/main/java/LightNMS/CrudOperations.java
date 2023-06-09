@@ -19,6 +19,8 @@ public class CrudOperations extends AbstractVerticle {
   private Connectionpool connectionPool = new Connectionpool();
   private String id;
   private String status;
+
+  private String fieldValue;
   private HashMap<Integer, JsonObject> discoveryDataTable = new HashMap<>();
 
   private void connectionConfig(String message, Promise<Object> promise)
@@ -69,9 +71,19 @@ public class CrudOperations extends AbstractVerticle {
 
         case "update":
 
-          query = Queries.updateQuery(queryAddress[1]);
+          if(queryAddress.length == 3)
+          {
+            query = Queries.updateQuery(queryAddress[1] + "_" + queryAddress[2]);
 
-          updateData(connection, query, promise);
+            updateData(connection, query, promise);
+          }
+
+          else
+          {
+            query = Queries.updateQuery(queryAddress[1]);
+
+            updateStatus(connection, query, promise);
+          }
       }
     }
 
@@ -114,7 +126,7 @@ public class CrudOperations extends AbstractVerticle {
         blockingPromise.fail(exception);
       }
 
-    }).onComplete(result ->
+    }, false).onComplete(result ->
     {
       if (result.succeeded())
       {
@@ -177,7 +189,7 @@ public class CrudOperations extends AbstractVerticle {
         blockingPromise.fail(exception);
       }
 
-    }).onComplete(result ->
+    }, false).onComplete(result ->
     {
       if (result.succeeded())
       {
@@ -242,7 +254,7 @@ public class CrudOperations extends AbstractVerticle {
         blockingPromise.fail(exception);
       }
 
-    }).onComplete(result ->
+    }, false).onComplete(result ->
     {
       if (result.succeeded())
       {
@@ -283,7 +295,7 @@ public class CrudOperations extends AbstractVerticle {
         blockingPromise.fail(exception);
       }
 
-    }).onComplete(result ->
+    }, false).onComplete(result ->
     {
       if (result.succeeded())
       {
@@ -309,6 +321,51 @@ public class CrudOperations extends AbstractVerticle {
       {
         preparedStatement = connection.prepareStatement(query);
 
+        preparedStatement.setString(1, fieldValue);
+
+        preparedStatement.setString(2, "unknown");
+
+        preparedStatement.setString(3, id);
+
+        int updatedRow = preparedStatement.executeUpdate();
+
+        System.out.println("Records Updated Successfully " + updatedRow);
+
+        blockingPromise.complete(updatedRow);
+
+      }
+
+      catch (Exception exception)
+      {
+        blockingPromise.fail(exception);
+      }
+
+    }, false).onComplete(result ->
+    {
+      if (result.succeeded())
+      {
+        updatedRow = result.result().toString();
+
+        promise.complete(updatedRow);
+      }
+
+      else
+      {
+        Throwable cause = result.cause();
+
+        promise.fail(cause);
+      }
+    });
+  }
+
+  private void updateStatus(Connection connection, String query, Promise<Object> promise)
+  {
+    vertx.<Integer>executeBlocking(blockingPromise ->
+    {
+      try
+      {
+        preparedStatement = connection.prepareStatement(query);
+
         preparedStatement.setString(1, status);
 
         preparedStatement.setString(2,id);
@@ -326,7 +383,7 @@ public class CrudOperations extends AbstractVerticle {
         blockingPromise.fail(exception);
       }
 
-    }).onComplete(result ->
+    }, false).onComplete(result ->
     {
       if (result.succeeded())
       {
@@ -497,6 +554,56 @@ public class CrudOperations extends AbstractVerticle {
         connectionConfig(address, promise);
       });
 
+      vertx.eventBus().consumer("update_Discovery", message ->
+      {
+        String address = message.address();
+
+        String[] splitMsg = message.body().toString().split("_");
+
+        id = splitMsg[0];
+
+        if(splitMsg[1].equals("credential"))
+        {
+          System.out.println(splitMsg[2]);
+
+          String[] credentialValue = splitMsg[2].split("\\.");
+
+          fieldValue = "{\"credential_userName\":" + "\"" + credentialValue[0] + "\"" + ",\"credential_password\":" + "\"" +credentialValue[1] + "\"}";
+        }
+
+        else
+        {
+          fieldValue = splitMsg[2];
+        }
+
+        System.out.println("id : " + id);
+
+        address += "Table_" + splitMsg[1];
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            String reply = result.result().toString();
+
+            message.reply(reply);
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Update operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
       vertx.eventBus().consumer("update_DiscoveryTable", message ->
       {
         String address = message.address();
@@ -524,7 +631,7 @@ public class CrudOperations extends AbstractVerticle {
           {
             Throwable cause = result.cause();
 
-            System.out.println("Delete operation failed: " + cause.getMessage());
+            System.out.println("Update operation failed: " + cause.getMessage());
 
             message.fail(500, cause.getMessage());
           }

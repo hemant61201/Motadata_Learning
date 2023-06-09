@@ -148,6 +148,30 @@ var ajax = {
         }
       })
     }
+
+    else if (data.url === "/updateDiscovery")
+    {
+      console.log("ajax : " + data.id);
+
+      $.ajax({
+
+        method: data.method,
+
+        url: data.url,
+
+        data: data.id,
+
+        success: function (ajaxResponse)
+        {
+          console.log(ajaxResponse)
+
+          if (ajaxResponse !== null)
+          {
+            location.reload();
+          }
+        }
+      })
+    }
   },
 
   get: function (data)
@@ -183,7 +207,7 @@ var ajax = {
                 data: null,
                 render: function (data, type, row)
                 {
-                  var editButton = '<button class="edit-button" onclick="tableButton.openDialog()">Edit</button>';
+                  var editButton = '<button class="edit-button" onclick="tableButton.openDialog(this)">Edit</button>';
                   var runButton = '<button class="run-button" onclick="runButton.onclick(this)">Run</button>';
                   var deleteButton = '<button class="delete-button" onclick="tableButton.onclick(this)">Delete</button>';
 

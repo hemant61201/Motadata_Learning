@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"plugins/functions"
+	"runtime"
 )
 
 type CredentialProfile struct {
@@ -14,10 +16,11 @@ type CredentialProfile struct {
 type DiscoveryProfile struct {
 	IP   string `json:"ip"`
 	Port int    `json:"port"`
-	ID   int    `json:"id"`
+	ID   []int  `json:"id"`
 }
 
 type InputData struct {
+	Method            string            `json:"Method"`
 	Operation         string            `json:"Operation"`
 	CredentialProfile CredentialProfile `json:"credentialProfile"`
 	DiscoveryProfile  DiscoveryProfile  `json:"discoveryProfile"`
@@ -34,6 +37,8 @@ func main() {
 
 	jsonData := os.Args[1]
 
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
 	var inputData InputData
 
 	err := json.Unmarshal([]byte(jsonData), &inputData)
@@ -49,11 +54,11 @@ func main() {
 
 	case "SSH":
 
-		result := performFping(inputData.DiscoveryProfile.IP)
+		result := functions.PerformfpingDiscovery(inputData.DiscoveryProfile.IP)
 
 		if result == "success" {
 
-			fmt.Println(executeDiscovery(inputData.DiscoveryProfile.IP, inputData.CredentialProfile.Username, inputData.CredentialProfile.Password), inputData.DiscoveryProfile.ID)
+			fmt.Println(functions.ExecuteDiscovery(inputData.DiscoveryProfile.IP, inputData.CredentialProfile.Username, inputData.CredentialProfile.Password), inputData.DiscoveryProfile.ID)
 
 		} else {
 			fmt.Println("failed_", inputData.DiscoveryProfile.ID)
@@ -61,9 +66,28 @@ func main() {
 
 	case "Ping":
 
-		result := performFping(inputData.DiscoveryProfile.IP)
+		switch inputData.Method {
 
-		fmt.Println(result+"_", inputData.DiscoveryProfile.ID)
+		case "Discovery":
+
+			result := functions.PerformfpingDiscovery(inputData.DiscoveryProfile.IP)
+
+			fmt.Println(result+"_", inputData.DiscoveryProfile.ID)
+
+		case "Polling":
+
+			results, err := functions.PerformfpingPolling(jsonData)
+
+			if err != nil {
+				fmt.Println("Error:", err)
+				return
+			}
+
+			for id, result := range results {
+				fmt.Printf("%d: %+v\n", id, result)
+			}
+
+		}
 
 	default:
 

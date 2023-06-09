@@ -130,6 +130,7 @@ public class Discovery extends AbstractVerticle
 
     vertx.<String>executeBlocking(future ->
     {
+      System.out.println(Thread.currentThread().getName());
       try
       {
         NuProcess process = pb.start();
@@ -146,7 +147,7 @@ public class Discovery extends AbstractVerticle
 
       future.complete(processOutputFuture.join());
 
-    }, handler);
+    },false, handler);
   }
 
   private static class NuProcessHandler extends NuAbstractProcessHandler
