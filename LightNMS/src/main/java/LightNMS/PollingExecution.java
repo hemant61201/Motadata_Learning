@@ -8,8 +8,10 @@ import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class PollingExecution extends AbstractVerticle
@@ -17,7 +19,7 @@ public class PollingExecution extends AbstractVerticle
   @Override
   public void start(Promise<Void> startPromise)
   {
-    vertx.setPeriodic(120_000, timerId ->
+    vertx.setPeriodic(20000, timerId ->
     {
       JsonObject requestData = new JsonObject()
         .put("Method", "Polling")
@@ -26,42 +28,43 @@ public class PollingExecution extends AbstractVerticle
           .put("username", "anshu")
           .put("password", "Anushk@2001"))
         .put("discoveryProfile", new JsonObject()
-          .put("ip", "10.20.40.64,10.20.30.23,10.20.40.156")
+          .put("ip", "10.20.40.156,10.20.40.199,10.20.40.24,10.20.40.64")
           .put("port", 22)
-          .put("id", new JsonArray().add(1).add(2).add(3)));
+          .put("id", new JsonArray().add(1).add(2).add(3).add(4)));
 
-      executeCommand("/home/hemant/Downloads/starter/src/main/resources/BootStrap", requestData.encode())
-        .onComplete(result ->
+      executeCommand("/home/hemant/Music/LightNMS/src/main/resources/BootStrap", requestData.encode(), exeResult ->
+      {
+        if (exeResult.succeeded())
         {
-          if (result.succeeded())
-          {
-            System.out.println("Process executed successfully");
+          System.out.println("Process executed successfully");
 
-            System.out.println("Output:\n" + result.result());
-          }
+          System.out.println("Output:\n" + exeResult.result());
+        }
+        else
+        {
+          System.err.println("Process execution failed: " + exeResult.cause().getMessage());
 
-          else
-          {
-            System.err.println("Process execution failed: " + result.cause().getMessage());
-          }
-        });
+          startPromise.fail(exeResult.cause());
+        }
+      });
     });
 
     startPromise.complete();
   }
 
-  private io.vertx.core.Future<String> executeCommand(String command, String input)
+  private void executeCommand(String command, String input, io.vertx.core.Handler<io.vertx.core.AsyncResult<String>> handler)
   {
-    Promise<String> processOutputPromise = Promise.promise();
+    CompletableFuture<String> processOutputFuture = new CompletableFuture<>();
 
     command += " " + input;
 
     NuProcessBuilder pb = new NuProcessBuilder(Arrays.asList(command.split("\\s+")));
 
-    pb.setProcessListener(new NuProcessHandler(processOutputPromise));
+    pb.setProcessListener(new NuProcessHandler(processOutputFuture));
 
     vertx.<String>executeBlocking(future ->
     {
+      System.out.println(Thread.currentThread().getName());
       try
       {
         NuProcess process = pb.start();
@@ -76,69 +79,8 @@ public class PollingExecution extends AbstractVerticle
         return;
       }
 
-      future.complete(processOutputPromise.future().result());
+      future.complete(processOutputFuture.join());
 
-    }, false, result ->
-    {
-      if (result.succeeded())
-      {
-        if (!processOutputPromise.future().isComplete())
-        {
-          processOutputPromise.complete(result.result());
-        }
-      }
-
-      else
-      {
-        if (!processOutputPromise.future().isComplete())
-        {
-          processOutputPromise.fail(result.cause());
-        }
-      }
-    });
-
-    return processOutputPromise.future();
-  }
-
-  private static class NuProcessHandler extends NuAbstractProcessHandler
-  {
-    private final io.vertx.core.Promise<String> processOutputPromise;
-    private final StringBuilder outputBuffer;
-
-    public NuProcessHandler(io.vertx.core.Promise<String> processOutputPromise)
-    {
-      this.processOutputPromise = processOutputPromise;
-
-      this.outputBuffer = new StringBuilder();
-    }
-
-    @Override
-    public void onStdout(ByteBuffer buffer, boolean closed)
-    {
-      byte[] bytes = new byte[buffer.remaining()];
-
-      buffer.get(bytes);
-
-      outputBuffer.append(new String(bytes));
-    }
-
-    @Override
-    public void onStderr(ByteBuffer buffer, boolean closed)
-    {
-      byte[] bytes = new byte[buffer.remaining()];
-
-      buffer.get(bytes);
-
-      outputBuffer.append(new String(bytes));
-    }
-
-    @Override
-    public void onExit(int statusCode)
-    {
-      if (!processOutputPromise.future().isComplete())
-      {
-        processOutputPromise.complete(outputBuffer.toString());
-      }
-    }
+    },false, handler);
   }
 }

@@ -15,7 +15,7 @@ public class Connectionpool
 
   private static ArrayList<Connection> activeConnections = new ArrayList<>();
 
-  private final int poolCapacity = 7;
+  private final int poolCapacity = 10;
 
   private static Connectionpool connectionPool;
 
@@ -72,11 +72,21 @@ public class Connectionpool
 
   public Connection getConnection ()
   {
-    Connection connection = connectionQueue.poll();
+    try
+    {
+      Connection connection = connectionQueue.take();
 
-    activeConnections.add(connection);
+      activeConnections.add(connection);
 
-    return connection;
+      return connection;
+    }
+
+    catch (Exception exception)
+    {
+      exception.printStackTrace();
+    }
+
+    return null;
   }
 
   public static void removeConnection (Connection connection)

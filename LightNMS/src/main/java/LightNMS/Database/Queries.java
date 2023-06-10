@@ -10,16 +10,18 @@ public class Queries
       case "DiscoveryTable":
       {
         query = "insert into " + tableName + " (DEVICENAME, IP, DEVICETYPE, STATUS, CREDENTIAL) values(?,?,?,?,?)";
+
+        break;
       }
 
       case "MonitorTable":
       {
-
+        break;
       }
 
       case "PollingTable":
       {
-
+        break;
       }
     }
 
@@ -46,16 +48,18 @@ public class Queries
       case "DiscoveryTable":
       {
         query = "select id,deviceName,ip,deviceType,status from " + tableName;
+
+        break;
       }
 
       case "MonitorTable":
       {
-
+        break;
       }
 
       case "PollingTable":
       {
-
+        break;
       }
     }
 
@@ -78,16 +82,18 @@ public class Queries
       case "DiscoveryTable":
       {
         query = "delete from " + tableName + " where id = ?";
+
+        break;
       }
 
       case "MonitorTable":
       {
-
+        break;
       }
 
       case "PollingTable":
       {
-
+        break;
       }
     }
 
@@ -114,16 +120,18 @@ public class Queries
       case "DiscoveryTable":
       {
         query = "update " + tableName + " set Status = ? where id = ?";
+
+        break;
       }
 
       case "MonitorTable":
       {
-
+        break;
       }
 
       case "PollingTable":
       {
-
+        break;
       }
     }
 

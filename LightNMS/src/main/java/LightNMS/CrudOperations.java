@@ -17,7 +17,7 @@ public class CrudOperations extends AbstractVerticle {
   private JsonObject jsonObject = null;
   private String updatedRow;
   private Connectionpool connectionPool = new Connectionpool();
-  private String id;
+  private int id;
   private String status;
 
   private String fieldValue;
@@ -130,6 +130,8 @@ public class CrudOperations extends AbstractVerticle {
     {
       if (result.succeeded())
       {
+        connectionPool.removeConnection(connection);
+
         updatedRow = result.result().toString();
 
         promise.complete(updatedRow);
@@ -138,6 +140,8 @@ public class CrudOperations extends AbstractVerticle {
 
       else
       {
+        connectionPool.removeConnection(connection);
+
         Throwable cause = result.cause();
 
         promise.fail(cause);
@@ -193,6 +197,8 @@ public class CrudOperations extends AbstractVerticle {
     {
       if (result.succeeded())
       {
+        connectionPool.removeConnection(connection);
+
         HashMap<Integer, JsonObject> resultData = result.result();
 
         promise.complete(resultData);
@@ -200,6 +206,8 @@ public class CrudOperations extends AbstractVerticle {
 
       else
       {
+        connectionPool.removeConnection(connection);
+
         Throwable cause = result.cause();
 
         promise.fail(cause);
@@ -215,7 +223,7 @@ public class CrudOperations extends AbstractVerticle {
       {
         preparedStatement = connection.prepareStatement(query);
 
-        preparedStatement.setString(1, id);
+        preparedStatement.setInt(1, id);
 
         ResultSet getSingleDiscoveryTableSet = preparedStatement.executeQuery();
 
@@ -258,6 +266,8 @@ public class CrudOperations extends AbstractVerticle {
     {
       if (result.succeeded())
       {
+        connectionPool.removeConnection(connection);
+
         HashMap<Integer, JsonObject> resultData = result.result();
 
         promise.complete(resultData);
@@ -265,6 +275,8 @@ public class CrudOperations extends AbstractVerticle {
 
       else
       {
+        connectionPool.removeConnection(connection);
+
         Throwable cause = result.cause();
 
         promise.fail(cause);
@@ -280,7 +292,7 @@ public class CrudOperations extends AbstractVerticle {
       {
         preparedStatement = connection.prepareStatement(query);
 
-        preparedStatement.setString(1, id);
+        preparedStatement.setInt(1, id);
 
         int updatedRow = preparedStatement.executeUpdate();
 
@@ -299,6 +311,8 @@ public class CrudOperations extends AbstractVerticle {
     {
       if (result.succeeded())
       {
+        connectionPool.removeConnection(connection);
+
         updatedRow = result.result().toString();
 
         promise.complete(updatedRow);
@@ -306,6 +320,8 @@ public class CrudOperations extends AbstractVerticle {
 
       else
       {
+        connectionPool.removeConnection(connection);
+
         Throwable cause = result.cause();
 
         promise.fail(cause);
@@ -325,7 +341,7 @@ public class CrudOperations extends AbstractVerticle {
 
         preparedStatement.setString(2, "unknown");
 
-        preparedStatement.setString(3, id);
+        preparedStatement.setInt(3, id);
 
         int updatedRow = preparedStatement.executeUpdate();
 
@@ -344,6 +360,8 @@ public class CrudOperations extends AbstractVerticle {
     {
       if (result.succeeded())
       {
+        connectionPool.removeConnection(connection);
+
         updatedRow = result.result().toString();
 
         promise.complete(updatedRow);
@@ -351,6 +369,8 @@ public class CrudOperations extends AbstractVerticle {
 
       else
       {
+        connectionPool.removeConnection(connection);
+
         Throwable cause = result.cause();
 
         promise.fail(cause);
@@ -364,15 +384,17 @@ public class CrudOperations extends AbstractVerticle {
     {
       try
       {
+        System.out.println(query);
+
         preparedStatement = connection.prepareStatement(query);
 
         preparedStatement.setString(1, status);
 
-        preparedStatement.setString(2,id);
+        preparedStatement.setInt(2,id);
 
         int updatedRow = preparedStatement.executeUpdate();
 
-        System.out.println("Records deleted Successfully " + updatedRow);
+        System.out.println("Records update Successfully " + updatedRow);
 
         blockingPromise.complete(updatedRow);
 
@@ -380,6 +402,8 @@ public class CrudOperations extends AbstractVerticle {
 
       catch (Exception exception)
       {
+        exception.printStackTrace();
+
         blockingPromise.fail(exception);
       }
 
@@ -387,6 +411,8 @@ public class CrudOperations extends AbstractVerticle {
     {
       if (result.succeeded())
       {
+        connectionPool.removeConnection(connection);
+
         updatedRow = result.result().toString();
 
         promise.complete(updatedRow);
@@ -394,6 +420,8 @@ public class CrudOperations extends AbstractVerticle {
 
       else
       {
+        connectionPool.removeConnection(connection);
+
         Throwable cause = result.cause();
 
         promise.fail(cause);
@@ -487,7 +515,7 @@ public class CrudOperations extends AbstractVerticle {
 
         String address = modifyAddress[0] + "_" + modifyAddress[1] + "_" + message.body().toString();
 
-        id = message.body().toString();
+        id = Integer.parseInt(message.body().toString());
 
         System.out.println(address);
 
@@ -526,7 +554,7 @@ public class CrudOperations extends AbstractVerticle {
       {
         String address = message.address();
 
-        id = message.body().toString();
+        id = Integer.parseInt(message.body().toString());
 
         System.out.println("id : " + id);
 
@@ -560,7 +588,7 @@ public class CrudOperations extends AbstractVerticle {
 
         String[] splitMsg = message.body().toString().split("_");
 
-        id = splitMsg[0];
+        id = Integer.parseInt(splitMsg[0]);
 
         if(splitMsg[1].equals("credential"))
         {
@@ -595,7 +623,7 @@ public class CrudOperations extends AbstractVerticle {
           {
             Throwable cause = result.cause();
 
-            System.out.println("Update operation failed: " + cause.getMessage());
+            System.out.println("UpdateStatus operation failed: " + cause.getMessage());
 
             message.fail(500, cause.getMessage());
           }
@@ -608,11 +636,19 @@ public class CrudOperations extends AbstractVerticle {
       {
         String address = message.address();
 
+        System.out.println(message.body().toString());
+
         String[] splitMsg = message.body().toString().split("_");
 
         status = splitMsg[0];
 
-        id = splitMsg[1].trim();
+        String number = splitMsg[1].trim();
+
+        String numberString = number.substring(1, number.length() - 1);
+
+        System.out.println(numberString);
+
+        id = Integer.parseInt(numberString);
 
         System.out.println("id : " + id);
 

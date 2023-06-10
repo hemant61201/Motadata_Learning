@@ -4,13 +4,13 @@ import com.zaxxer.nuprocess.NuProcess;
 import com.zaxxer.nuprocess.NuProcessBuilder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import com.zaxxer.nuprocess.NuAbstractProcessHandler;
 
 
 public class Discovery extends AbstractVerticle
@@ -65,14 +65,15 @@ public class Discovery extends AbstractVerticle
 
             System.out.println(credentialObject.getString("credential_userName"));
 
-            requestData.put("Operation", getData.getString("DEVICETYPE"))
+            requestData.put("Method", "Discovery")
+              .put("Operation", getData.getString("DEVICETYPE"))
               .put("credentialProfile", new JsonObject()
               .put("username", credentialObject.getString("credential_userName"))
               .put("password", credentialObject.getString("credential_password")))
               .put("discoveryProfile", new JsonObject()
               .put("ip", getData.getString("IP"))
               .put("port", 22)
-                .put("id", getData.getInteger("ID")));
+                .put("id", new JsonArray().add(getData.getInteger("ID"))));
 
             executeCommand("/home/hemant/Music/LightNMS/src/main/resources/BootStrap", requestData.encode(), exeResult ->
             {
@@ -94,10 +95,7 @@ public class Discovery extends AbstractVerticle
                     promise.fail(updateResult.cause());
                   }
                 });
-
-                startPromise.complete();
               }
-
               else
               {
                 System.err.println("Process execution failed: " + exeResult.cause().getMessage());
@@ -148,44 +146,5 @@ public class Discovery extends AbstractVerticle
       future.complete(processOutputFuture.join());
 
     },false, handler);
-  }
-
-  private static class NuProcessHandler extends NuAbstractProcessHandler
-  {
-    private final CompletableFuture<String> processOutputFuture;
-    private final StringBuilder outputBuffer;
-
-    public NuProcessHandler(CompletableFuture<String> processOutputFuture)
-    {
-      this.processOutputFuture = processOutputFuture;
-
-      this.outputBuffer = new StringBuilder();
-    }
-
-    @Override
-    public void onStdout(ByteBuffer buffer, boolean closed)
-    {
-      byte[] bytes = new byte[buffer.remaining()];
-
-      buffer.get(bytes);
-
-      outputBuffer.append(new String(bytes));
-    }
-
-    @Override
-    public void onStderr(ByteBuffer buffer, boolean closed)
-    {
-      byte[] bytes = new byte[buffer.remaining()];
-
-      buffer.get(bytes);
-
-      outputBuffer.append(new String(bytes));
-    }
-
-    @Override
-    public void onExit(int statusCode)
-    {
-      processOutputFuture.complete(outputBuffer.toString());
-    }
   }
 }
