@@ -20,8 +20,14 @@ public class CrudOperations extends AbstractVerticle {
   private int id;
   private String status;
 
+  private String type;
+
+  private String table;
+
   private String fieldValue;
   private HashMap<Integer, JsonObject> discoveryDataTable = new HashMap<>();
+
+  private HashMap<Integer, JsonObject> monitorDataTable = new HashMap<>();
 
   private void connectionConfig(String message, Promise<Object> promise)
   {
@@ -103,15 +109,23 @@ public class CrudOperations extends AbstractVerticle {
       {
         preparedStatement = connection.prepareStatement(query);
 
-        preparedStatement.setString(1, jsonObject.getString("deviceName"));
+        preparedStatement.setString(1, jsonObject.getString("DEVICENAME"));
 
-        preparedStatement.setString(2, jsonObject.getString("ip"));
+        preparedStatement.setString(2, jsonObject.getString("IP"));
 
-        preparedStatement.setString(3, jsonObject.getString("deviceType"));
+        preparedStatement.setString(3, jsonObject.getString("DEVICETYPE"));
 
         preparedStatement.setString(4, "Unknown");
 
-        preparedStatement.setObject(5, jsonObject.getJsonObject("credential").toString());
+        if(table.equals("MonitorTable"))
+        {
+          preparedStatement.setObject(5, jsonObject.getString("CREDENTIAL").toString());
+        }
+
+        else
+        {
+          preparedStatement.setObject(5, jsonObject.getJsonObject("CREDENTIAL").toString());
+        }
 
         int updatedRow = preparedStatement.executeUpdate();
 
@@ -155,41 +169,91 @@ public class CrudOperations extends AbstractVerticle {
     {
       JsonObject discoveryData;
 
+      JsonObject monitorData;
+
       try
       {
-        preparedStatement = connection.prepareStatement(query);
-
-        ResultSet getDiscoveryTableSet = preparedStatement.executeQuery();
-
-        ResultSetMetaData discoveryTableSetMetaData = getDiscoveryTableSet.getMetaData();
-
-        int columnCount = discoveryTableSetMetaData.getColumnCount();
-
-        Integer rows = 1;
-
-        while (getDiscoveryTableSet.next())
+        if(table.equals("MonitorTable"))
         {
-          discoveryData = new JsonObject();
+          Connection connection1 = connectionPool.getConnection();
 
-          for (int i = 1; i <= columnCount; i++)
+          PreparedStatement prepareStatement = connection1.prepareStatement(query);
+
+          prepareStatement.setString(1, type);
+
+          ResultSet resultSet = prepareStatement.executeQuery();
+
+          monitorData = new JsonObject();
+
+          monitorData.put("type", type);
+
+          JsonArray ipArray = new JsonArray();
+
+          JsonArray idArray = new JsonArray();
+
+          while (resultSet.next())
           {
-            String columnName = discoveryTableSetMetaData.getColumnName(i);
+            String ip = resultSet.getString("IP");
 
-            Object columnValue = getDiscoveryTableSet.getObject(i);
+            int id = resultSet.getInt("ID");
 
-            discoveryData.put(columnName, columnValue);
+            ipArray.add(ip);
+
+            idArray.add(id);
           }
 
-          discoveryDataTable.put(rows, discoveryData);
+          monitorData.put("ip", ipArray);
 
-          rows++;
+          monitorData.put("id", idArray);
+
+          System.out.println("crudResult : " + monitorData.toString());
+
+          monitorDataTable.put(1, monitorData);
+
+          connectionPool.removeConnection(connection1);
+
+          blockingPromise.complete(monitorDataTable);
         }
 
-        blockingPromise.complete(discoveryDataTable);
+        else
+        {
+          preparedStatement = connection.prepareStatement(query);
+
+          ResultSet getDiscoveryTableSet = preparedStatement.executeQuery();
+
+          ResultSetMetaData discoveryTableSetMetaData = getDiscoveryTableSet.getMetaData();
+
+          int columnCount = discoveryTableSetMetaData.getColumnCount();
+
+          Integer rows = 1;
+
+          while (getDiscoveryTableSet.next())
+          {
+            discoveryData = new JsonObject();
+
+            for (int i = 1; i <= columnCount; i++)
+            {
+              String columnName = discoveryTableSetMetaData.getColumnName(i);
+
+              Object columnValue = getDiscoveryTableSet.getObject(i);
+
+              discoveryData.put(columnName, columnValue);
+            }
+
+            discoveryDataTable.put(rows, discoveryData);
+
+            rows++;
+          }
+
+          blockingPromise.complete(discoveryDataTable);
+        }
+
       }
 
       catch (Exception exception)
       {
+        System.out.println(exception);
+
         blockingPromise.fail(exception);
       }
 
@@ -468,9 +532,49 @@ public class CrudOperations extends AbstractVerticle {
         connectionConfig(address, promise);
       });
 
+      vertx.eventBus().consumer("add_MonitorTable", message ->
+      {
+        String address = message.address();
+
+        String[] splitAddress = address.split("_");
+
+        table = splitAddress[1];
+
+        jsonObject = (JsonObject) message.body();
+
+        System.out.println("hi" + jsonObject.getString("CREDENTIAL"));
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            String reply = result.result().toString();
+
+            message.reply(reply);
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Add operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
       vertx.eventBus().consumer("get_DiscoveryTable", message ->
       {
         String address = message.address();
+
+        String[] splitAddress = address.split("_");
+
+        table = splitAddress[1];
 
         System.out.println(address);
 
@@ -516,6 +620,49 @@ public class CrudOperations extends AbstractVerticle {
         String address = modifyAddress[0] + "_" + modifyAddress[1] + "_" + message.body().toString();
 
         id = Integer.parseInt(message.body().toString());
+
+        System.out.println(address);
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) result.result();
+
+            JsonObject rowData = new JsonObject();
+
+            for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+            {
+              rowData = entry.getValue();
+            }
+
+            message.reply(rowData);
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Get operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
+      vertx.eventBus().consumer("get_MonitorTable", message ->
+      {
+        String address = message.address();
+
+        String[] splitAddress = address.split("_");
+
+        table = splitAddress[1];
+
+        type = message.body().toString();
 
         System.out.println(address);
 

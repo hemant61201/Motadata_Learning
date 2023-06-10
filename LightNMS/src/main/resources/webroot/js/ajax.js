@@ -83,10 +83,10 @@ var ajax = {
         url: data.url,
 
         data: JSON.stringify({
-          deviceName: data.deviceName,
-          deviceType: data.deviceType,
-          ip: data.ip,
-          credential: data.credential
+          DEVICENAME: data.deviceName,
+          DEVICETYPE: data.deviceType,
+          IP: data.ip,
+          CREDENTIAL: data.credential
         }),
 
         success: function (ajaxResponse)
@@ -172,6 +172,31 @@ var ajax = {
         }
       })
     }
+
+    else if (data.url === "/addMonitorTable")
+    {
+      console.log("ajax : " + data.id);
+
+      $.ajax({
+
+        method: data.method,
+
+        url: data.url,
+
+        data: data.id,
+
+        success: function (ajaxResponse)
+        {
+          console.log(ajaxResponse)
+
+          // if (ajaxResponse !== null)
+          // {
+          //   location.reload();
+          // }
+        }
+      })
+    }
+
   },
 
   get: function (data)
@@ -212,7 +237,7 @@ var ajax = {
                   var deleteButton = '<button class="delete-button" onclick="tableButton.onclick(this)">Delete</button>';
 
                   if (data.STATUS === "success") {
-                    var provisionButton = '<button class="provision-button" onclick="provisionButton.onclick(this)">Provision</button>';
+                    var provisionButton = '<button class="provision-button" onclick="provisonButton.onclick(this)">Provision</button>';
                     return editButton + ' ' + runButton + ' ' + deleteButton + ' ' + provisionButton;
                   }
 

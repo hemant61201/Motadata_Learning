@@ -1,6 +1,5 @@
 package LightNMS;
 
-import com.zaxxer.nuprocess.NuAbstractProcessHandler;
 import com.zaxxer.nuprocess.NuProcess;
 import com.zaxxer.nuprocess.NuProcessBuilder;
 import io.vertx.core.AbstractVerticle;
@@ -8,8 +7,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -21,30 +19,48 @@ public class PollingExecution extends AbstractVerticle
   {
     vertx.setPeriodic(20000, timerId ->
     {
-      JsonObject requestData = new JsonObject()
-        .put("Method", "Polling")
-        .put("Operation", "Ping")
-        .put("credentialProfile", new JsonObject()
-          .put("username", "anshu")
-          .put("password", "Anushk@2001"))
-        .put("discoveryProfile", new JsonObject()
-          .put("ip", "10.20.40.156,10.20.40.199,10.20.40.24,10.20.40.64")
-          .put("port", 22)
-          .put("id", new JsonArray().add(1).add(2).add(3).add(4)));
+      String deviceType = "Ping";
 
-      executeCommand("/home/hemant/Music/LightNMS/src/main/resources/BootStrap", requestData.encode(), exeResult ->
+      vertx.eventBus().request("get_MonitorTable", deviceType, runResult ->
       {
-        if (exeResult.succeeded())
+        if(runResult.succeeded())
         {
-          System.out.println("Process executed successfully");
+          System.out.println("response  " + runResult.result().body().toString());
 
-          System.out.println("Output:\n" + exeResult.result());
-        }
-        else
-        {
-          System.err.println("Process execution failed: " + exeResult.cause().getMessage());
+          JsonObject getData = (JsonObject) runResult.result().body();
 
-          startPromise.fail(exeResult.cause());
+          JsonArray ipArray = new JsonArray(getData.getString("ip"));
+
+          JsonArray idArray = new JsonArray(getData.getString("id"));
+
+          JsonObject requestData = new JsonObject()
+            .put("Method", "Polling")
+            .put("Operation", getData.getString("type"))
+            .put("credentialProfile", new JsonObject()
+              .put("username", "")
+              .put("password", ""))
+            .put("discoveryProfile", new JsonObject()
+              .put("ip", ipArray)
+              .put("port", 22)
+              .put("id", idArray));
+
+          System.out.println(requestData);
+
+          executeCommand("/home/hemant/Music/LightNMS/src/main/resources/BootStrap", requestData.encode(), exeResult ->
+          {
+            if (exeResult.succeeded())
+            {
+              System.out.println("Process executed successfully");
+
+              System.out.println("Output:\n" + exeResult.result());
+            }
+            else
+            {
+              System.err.println("Process execution failed: " + exeResult.cause().getMessage());
+
+              startPromise.fail(exeResult.cause());
+            }
+          });
         }
       });
     });
@@ -69,7 +85,7 @@ public class PollingExecution extends AbstractVerticle
       {
         NuProcess process = pb.start();
 
-        process.waitFor(60, TimeUnit.SECONDS);
+        process.waitFor(120, TimeUnit.SECONDS);
       }
 
       catch (Exception e)

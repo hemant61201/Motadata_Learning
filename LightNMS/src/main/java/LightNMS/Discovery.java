@@ -61,6 +61,14 @@ public class Discovery extends AbstractVerticle
 
             String credentialData = getData.getString("CREDENTIAL");
 
+            String[] values = getData.getString("IP").split(",");
+
+            JsonArray ipArray = new JsonArray();
+
+            for (String value : values) {
+              ipArray.add(value);
+            }
+
             JsonObject credentialObject = new JsonObject(credentialData);
 
             System.out.println(credentialObject.getString("credential_userName"));
@@ -71,7 +79,7 @@ public class Discovery extends AbstractVerticle
               .put("username", credentialObject.getString("credential_userName"))
               .put("password", credentialObject.getString("credential_password")))
               .put("discoveryProfile", new JsonObject()
-              .put("ip", getData.getString("IP"))
+              .put("ip", ipArray)
               .put("port", 22)
                 .put("id", new JsonArray().add(getData.getInteger("ID"))));
 

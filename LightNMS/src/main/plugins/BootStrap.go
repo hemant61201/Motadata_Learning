@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"plugins/functions"
-	"runtime"
 )
 
 type CredentialProfile struct {
@@ -14,9 +13,9 @@ type CredentialProfile struct {
 }
 
 type DiscoveryProfile struct {
-	IP   string `json:"ip"`
-	Port int    `json:"port"`
-	ID   []int  `json:"id"`
+	IP   []string `json:"ip"`
+	Port int      `json:"port"`
+	ID   []int    `json:"id"`
 }
 
 type InputData struct {
@@ -36,8 +35,6 @@ func main() {
 	}
 
 	jsonData := os.Args[1]
-
-	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	var inputData InputData
 
@@ -83,8 +80,9 @@ func main() {
 				return
 			}
 
-			for id, result := range results {
-				fmt.Printf("%d: %+v\n", id, result)
+			for _, ip := range inputData.DiscoveryProfile.IP {
+				result := results[ip]
+				fmt.Printf("{Loss:%s Min:%s Avg:%s Max:%s Status:%s IP:%s ID:%d}\n", result.Loss, result.Min, result.Avg, result.Max, result.Status, result.IP, result.ID)
 			}
 
 		}

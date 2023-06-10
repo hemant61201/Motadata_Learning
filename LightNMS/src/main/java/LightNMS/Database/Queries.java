@@ -16,6 +16,8 @@ public class Queries
 
       case "MonitorTable":
       {
+        query = "insert into " + tableName + " (DEVICENAME, IP, DEVICETYPE, STATUS, CREDENTIAL) values(?,?,?,?,?)";
+
         break;
       }
 
@@ -54,6 +56,8 @@ public class Queries
 
       case "MonitorTable":
       {
+        query = "SELECT IP, ID FROM " + tableName + " WHERE DEVICETYPE = ?";
+
         break;
       }
 

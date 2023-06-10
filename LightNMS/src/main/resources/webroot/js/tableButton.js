@@ -126,6 +126,21 @@ var tableButton =
           ajax.post(updateval);
         },
       }
+
+      var provisonButton =
+        {
+          onclick(button)
+          {
+            var dataTable = $(button).closest('table').DataTable();
+
+            var row = dataTable.row($(button).closest('tr'));
+
+            let provisonBtnConf = provisonConfig(row);
+
+            ajax.post(provisonBtnConf);
+          }
+        }
+
   function deleteConfig(id_no)
   {
     const method = "POST";
@@ -190,4 +205,28 @@ var tableButton =
       }
 
     return config;
+  }
+
+  function provisonConfig(tableValue)
+  {
+    var data = tableValue.data();
+
+    const method = "POST"
+
+    const url = "/addMonitorTable"
+
+    const id = {
+      id: data.ID,
+    }
+
+    var provConf =
+      {
+        method: method,
+
+        url: url,
+
+        id: id,
+      };
+
+    return provConf;
   }

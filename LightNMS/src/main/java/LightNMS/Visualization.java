@@ -123,6 +123,31 @@ public class Visualization extends AbstractVerticle
         });
       });
 
+      router.post("/addMonitorTable").handler(routingContext ->
+      {
+        String message = routingContext.request().getParam("id");
+
+        System.out.println("message :" + message);
+
+        vertx.eventBus().request("get_DiscoveryTable_id", message, rowResult ->
+        {
+          if (rowResult.succeeded())
+          {
+            System.out.println("response" + rowResult.result().body().toString());
+
+            vertx.eventBus().request("add_MonitorTable", rowResult.result().body(), runResult ->
+            {
+              if(runResult.succeeded())
+              {
+                System.out.println("response  " + runResult.result().body().toString());
+
+                routingContext.response().end("success");
+              }
+            });
+          }
+        });
+      });
+
       vertx.createHttpServer(new HttpServerOptions()
           .setMaxHeaderSize(32 * 1024)
           .setTcpKeepAlive(true))

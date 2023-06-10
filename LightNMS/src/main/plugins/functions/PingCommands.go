@@ -17,9 +17,9 @@ type DiscoveryRequest struct {
 		Password string `json:"password"`
 	} `json:"credentialProfile"`
 	DiscoveryProfile struct {
-		IP   string `json:"ip"`
-		Port int    `json:"port"`
-		IDs  []int  `json:"id"`
+		IP   []string `json:"ip"`
+		Port int      `json:"port"`
+		IDs  []int    `json:"id"`
 	} `json:"discoveryProfile"`
 }
 
@@ -38,135 +38,116 @@ type SafeResults struct {
 	Results []Result
 }
 
-func PerformfpingDiscovery(ip string) string {
+func PerformfpingDiscovery(ip []string) string {
 
-	cmd := exec.Command("fping", "-c", "3", ip)
+	for _, ip := range ip {
 
-	_, err := cmd.CombinedOutput()
+		cmd := exec.Command("fping", "-c", "3", ip)
 
-	if err != nil {
-		return "failed"
+		_, err := cmd.CombinedOutput()
+
+		if err != nil {
+			return "failed"
+		}
+
 	}
 
 	return "success"
 }
 
-func PerformfpingPolling(requestJSON string) ([]Result, error) {
-
+func PerformfpingPolling(requestJSON string) (map[string]Result, error) {
 	var request DiscoveryRequest
 
 	err := json.Unmarshal([]byte(requestJSON), &request)
-
 	if err != nil {
-		return nil, fmt.Errorf("Failed to parse JSON data: %v", err)
+		return nil, fmt.Errorf("failed to unmarshal JSON: %v", err)
 	}
 
-	ips := strings.Split(request.DiscoveryProfile.IP, ",")
-
+	ips := request.DiscoveryProfile.IP
 	ids := request.DiscoveryProfile.IDs
 
-	results := make([]Result, len(ids))
-
-	var mutex sync.Mutex
-
-	var wg sync.WaitGroup
-
-	wg.Add(len(ips))
-
-	worker := func(ip string, id int) {
-
-		defer wg.Done()
-
-		result := performPing(ip)
-
-		result.ID = id
-
-		mutex.Lock()
-
-		defer mutex.Unlock()
-
-		results[id-1] = result
+	if len(ips) != len(ids) {
+		return nil, fmt.Errorf("number of IPs and IDs do not match")
 	}
+
+	resultMap := make(map[string]Result)
 
 	for i, ip := range ips {
+		command := fmt.Sprintf("fping -c 3 -q %s", ip)
+		cmd := exec.Command("bash", "-c", command)
+		output, err := cmd.CombinedOutput()
 
-		id := ids[i%len(ids)]
+		if err != nil {
+			result := Result{
+				Loss:   "100%",
+				Min:    "0",
+				Avg:    "0",
+				Max:    "0",
+				Status: "failed",
+				IP:     ip,
+				ID:     ids[i],
+			}
 
-		go worker(ip, id)
-	}
-
-	wg.Wait()
-
-	return results, nil
-}
-
-func performPing(ip string) Result {
-
-	command := fmt.Sprintf("fping -c 3 -q %s", ip)
-
-	cmd := exec.Command("bash", "-c", command)
-
-	output, err := cmd.CombinedOutput()
-
-	if err != nil {
-
-		return Result{
-			Loss:   "100%",
-			Min:    "0",
-			Avg:    "0",
-			Max:    "0",
-			Status: "failed",
-			IP:     ip,
-		}
-
-	}
-
-	lines := strings.Split(string(output), "\n")
-
-	for _, line := range lines {
-
-		line = strings.TrimSpace(line)
-
-		if line == "" || strings.Contains(line, "failed") {
+			resultMap[ip] = result
 			continue
 		}
 
-		r := regexp.MustCompile(`(?m)^([^:]+)\s+:\s+xmt/rcv/%loss = (\d+)/(\d+)/(\d+)%,\s+min/avg/max = ([\d.]+)/([\d.]+)/([\d.]+)$`)
+		lines := strings.Split(string(output), "\n")
+		successfulOutput := false
 
-		matches := r.FindStringSubmatch(line)
+		for _, line := range lines {
+			line = strings.TrimSpace(line)
 
-		if len(matches) != 9 {
-			continue
+			if line == "" || strings.Contains(line, "failed") {
+				continue
+			}
+
+			r := regexp.MustCompile(`(?m)^([^:]+)\s+:\s+xmt/rcv/%loss = (\d+)/(\d+)/(\d+)%,\s+min/avg/max = ([\d.]+)/([\d.]+)/([\d.]+)$`)
+			matches := r.FindStringSubmatch(line)
+
+			if len(matches) != 8 {
+				continue
+			}
+
+			loss := matches[4]
+			min := matches[5]
+			avg := matches[6]
+			max := matches[7]
+
+			status := "success"
+			if lossPercentage, err := strconv.Atoi(loss); err == nil && lossPercentage >= 50 {
+				status = "failed"
+			}
+
+			result := Result{
+				Loss:   loss + "%",
+				Min:    min,
+				Avg:    avg,
+				Max:    max,
+				Status: status,
+				IP:     ip,
+				ID:     ids[i],
+			}
+
+			resultMap[ip] = result
+			successfulOutput = true
+			break
 		}
 
-		_ = matches[1]
-		loss := matches[3]
-		min := matches[6]
-		avg := matches[7]
-		max := matches[8]
+		if !successfulOutput {
+			result := Result{
+				Loss:   "0%",
+				Min:    "0",
+				Avg:    "0",
+				Max:    "0",
+				Status: "failed",
+				IP:     ip,
+				ID:     ids[i],
+			}
 
-		status := "success"
-
-		if lossPercentage, err := strconv.Atoi(loss); err == nil && lossPercentage >= 50 {
-			status = "failed"
-		}
-
-		return Result{
-			Loss:   loss + "%",
-			Min:    min,
-			Avg:    avg,
-			Max:    max,
-			Status: status,
-			IP:     ip,
+			resultMap[ip] = result
 		}
 	}
 
-	return Result{
-		Loss:   "100%",
-		Min:    "0",
-		Avg:    "0",
-		Max:    "0",
-		Status: "failed",
-		IP:     ip,
-	}
+	return resultMap, nil
 }
