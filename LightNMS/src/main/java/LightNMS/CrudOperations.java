@@ -8,6 +8,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,11 +19,17 @@ public class CrudOperations extends AbstractVerticle {
   private String updatedRow;
   private Connectionpool connectionPool = new Connectionpool();
   private int id;
-  private String status;
+  private String discoveryStatus;
+
+  private ArrayList<String> monitorStatus;
+
+  private ArrayList<Integer> monitorIds;
 
   private String type;
 
   private String table;
+
+  private String pollingData;
 
   private String fieldValue;
   private HashMap<Integer, JsonObject> discoveryDataTable = new HashMap<>();
@@ -107,36 +114,81 @@ public class CrudOperations extends AbstractVerticle {
     {
       try
       {
-        preparedStatement = connection.prepareStatement(query);
-
-        preparedStatement.setString(1, jsonObject.getString("DEVICENAME"));
-
-        preparedStatement.setString(2, jsonObject.getString("IP"));
-
-        preparedStatement.setString(3, jsonObject.getString("DEVICETYPE"));
-
-        preparedStatement.setString(4, "Unknown");
-
-        if(table.equals("MonitorTable"))
+        if(pollingData != null)
         {
-          preparedStatement.setObject(5, jsonObject.getString("CREDENTIAL").toString());
+          System.out.println(pollingData);
+
+          preparedStatement = connection.prepareStatement(query);
+
+          System.out.println(query);
+
+          JsonObject jsonDataObj = new JsonObject(pollingData);
+
+          for (String id : jsonDataObj.fieldNames())
+          {
+            JsonObject metricData = jsonDataObj.getJsonObject(id);
+
+            String pollingIp = metricData.getString("IP");
+
+            for (String metric : metricData.fieldNames())
+            {
+              if (!metric.equals("ID") && !metric.equals("IP"))
+              {
+                String value = metricData.getString(metric);
+
+                preparedStatement.setString(1, metric);
+
+                preparedStatement.setString(2, value);
+
+                preparedStatement.setString(3, pollingIp);
+
+                preparedStatement.addBatch();
+              }
+            }
+          }
+          preparedStatement.executeBatch();
+
+          System.out.println("Records inserted Successfully ");
+
+          blockingPromise.complete();
         }
 
         else
         {
-          preparedStatement.setObject(5, jsonObject.getJsonObject("CREDENTIAL").toString());
+          preparedStatement = connection.prepareStatement(query);
+
+          preparedStatement.setString(1, jsonObject.getString("DEVICENAME"));
+
+          preparedStatement.setString(2, jsonObject.getString("IP"));
+
+          preparedStatement.setString(3, jsonObject.getString("DEVICETYPE"));
+
+          preparedStatement.setString(4, "Unknown");
+
+          if(table.equals("MonitorTable"))
+          {
+            preparedStatement.setObject(5, jsonObject.getString("CREDENTIAL").toString());
+          }
+
+          else
+          {
+            preparedStatement.setObject(5, jsonObject.getJsonObject("CREDENTIAL").toString());
+          }
+
+          int updatedRow = preparedStatement.executeUpdate();
+
+          System.out.println("Records inserted Successfully " + updatedRow);
+
+          blockingPromise.complete(updatedRow);
         }
-
-        int updatedRow = preparedStatement.executeUpdate();
-
-        System.out.println("Records inserted Successfully " + updatedRow);
-
-        blockingPromise.complete(updatedRow);
-
       }
 
       catch (Exception exception)
       {
+        System.out.println(exception);
+
+        exception.printStackTrace();
+
         blockingPromise.fail(exception);
       }
 
@@ -146,9 +198,17 @@ public class CrudOperations extends AbstractVerticle {
       {
         connectionPool.removeConnection(connection);
 
-        updatedRow = result.result().toString();
+        if(updatedRow == null)
+        {
+          promise.complete();
+        }
 
-        promise.complete(updatedRow);
+        else
+        {
+          updatedRow = result.result().toString();
+
+          promise.complete(updatedRow);
+        }
 
       }
 
@@ -448,20 +508,40 @@ public class CrudOperations extends AbstractVerticle {
     {
       try
       {
-        System.out.println(query);
+        if(table.equals("MonitorTable"))
+        {
+          preparedStatement = connection.prepareStatement(query);
 
-        preparedStatement = connection.prepareStatement(query);
+          for (int i = 0; i < monitorIds.size(); i++)
+          {
+            preparedStatement.setString(1, monitorStatus.get(i));
 
-        preparedStatement.setString(1, status);
+            preparedStatement.setInt(2,monitorIds.get(i));
 
-        preparedStatement.setInt(2,id);
+            preparedStatement.addBatch();
+          }
 
-        int updatedRow = preparedStatement.executeUpdate();
+          preparedStatement.executeBatch();
 
-        System.out.println("Records update Successfully " + updatedRow);
+          System.out.println("Monitor Record Succesfull Updated");
 
-        blockingPromise.complete(updatedRow);
+          blockingPromise.complete();
+        }
 
+        else
+        {
+          preparedStatement = connection.prepareStatement(query);
+
+          preparedStatement.setString(1, discoveryStatus);
+
+          preparedStatement.setInt(2,id);
+
+          int updatedRow = preparedStatement.executeUpdate();
+
+          System.out.println("Records update Successfully " + updatedRow);
+
+          blockingPromise.complete(updatedRow);
+        }
       }
 
       catch (Exception exception)
@@ -477,9 +557,17 @@ public class CrudOperations extends AbstractVerticle {
       {
         connectionPool.removeConnection(connection);
 
-        updatedRow = result.result().toString();
+        if(result.result() == null)
+        {
+          promise.complete();
+        }
 
-        promise.complete(updatedRow);
+        else
+        {
+          updatedRow = result.result().toString();
+
+          promise.complete(updatedRow);
+        }
       }
 
       else
@@ -553,6 +641,34 @@ public class CrudOperations extends AbstractVerticle {
             String reply = result.result().toString();
 
             message.reply(reply);
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Add operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
+      vertx.eventBus().consumer("add_PollingTable", message ->
+      {
+        String address = message.address();
+
+        pollingData = message.body().toString();
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            System.out.println("Data is added Successfully");
           }
 
           else
@@ -787,7 +903,7 @@ public class CrudOperations extends AbstractVerticle {
 
         String[] splitMsg = message.body().toString().split("_");
 
-        status = splitMsg[0];
+        discoveryStatus = splitMsg[0];
 
         String number = splitMsg[1].trim();
 
@@ -822,6 +938,52 @@ public class CrudOperations extends AbstractVerticle {
 
         connectionConfig(address, promise);
       });
+
+      vertx.eventBus().consumer("update_MonitorTable", message ->
+      {
+        String address = message.address();
+
+        String[] splitAddress = address.split("_");
+
+        table = splitAddress[1];
+
+        JsonObject updateStatusResult = (JsonObject) message.body();
+
+        monitorIds = new ArrayList<>();
+
+        monitorStatus = new ArrayList<>();
+
+        for (String key : updateStatusResult.fieldNames())
+        {
+          monitorIds.add(Integer.parseInt(key));
+
+          JsonObject targetObject = updateStatusResult.getJsonObject(key);
+
+          monitorStatus.add(targetObject.getString("Status"));
+        }
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            System.out.println("Success_Fully Updated MonitorTable");
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Update operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
 
       startPromise.complete();
     }

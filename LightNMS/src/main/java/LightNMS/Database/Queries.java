@@ -23,6 +23,8 @@ public class Queries
 
       case "PollingTable":
       {
+        query = "INSERT INTO " + tableName + " (metrics, data, ip, timestamp) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+        
         break;
       }
     }
@@ -130,6 +132,8 @@ public class Queries
 
       case "MonitorTable":
       {
+        query = "update " + tableName + " set Status = ? where id = ?";
+
         break;
       }
 

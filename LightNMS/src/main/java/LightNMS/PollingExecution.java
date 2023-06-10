@@ -6,8 +6,6 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-
-import java.io.StringReader;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +51,39 @@ public class PollingExecution extends AbstractVerticle
               System.out.println("Process executed successfully");
 
               System.out.println("Output:\n" + exeResult.result());
+
+              String[] lines = exeResult.result().split("\\r?\\n");
+
+              JsonObject finalResult = new JsonObject();
+
+              for (String line : lines)
+              {
+                String[] keyValuePairs = line.replace("{", "")
+                  .replace("}", "")
+                  .split(" ");
+
+                JsonObject entryObject = new JsonObject();
+
+                for (String pair : keyValuePairs)
+                {
+                  String[] parts = pair.split(":");
+
+                  String key = parts[0];
+
+                  String value = parts[1];
+
+                  entryObject.put(key, value);
+                }
+
+                String id = entryObject.getString("ID");
+
+                finalResult.put(id, entryObject);
+              }
+
+              vertx.eventBus().send("update_MonitorTable", finalResult);
+
+              vertx.eventBus().send("add_PollingTable", finalResult);
+
             }
             else
             {
