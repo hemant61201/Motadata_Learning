@@ -330,6 +330,41 @@
 
     </section>
 
+    <style>
+      .small-box {
+        height: 250px;
+        padding: 10px;
+      }
+
+      .small-box .inner {
+        padding: 10px;
+      }
+    </style>
+
+    <div class="row">
+      <div class="col">
+        <div class="small-box bg-gradient-success">
+          <div class="inner">
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="small-box bg-gradient-red">
+          <div class="inner">
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="small-box bg-gray-dark">
+          <div class="inner">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 
   <div class="content-wrapper hidden" id="monitorDiv">
@@ -381,9 +416,32 @@
   </div>
 
   <div class="content-wrapper hidden" id="viewMonitorDiv">
-    <div id="availabilityBox" style="background-color: lightgreen;"></div>
-    <div id="lossBox" style="background-color: deeppink;"></div>
-    <div id="rttBox" style="background-color: aqua;"></div>
+    <div class="row">
+      <div class="col">
+        <div class="small-box bg-success">
+          <div class="inner">
+            <div id="availabilityBox" style="background-color: limegreen; color: black;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="small-box bg-danger">
+          <div class="inner">
+            <div id="lossBox" style="background-color: red; color: black;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="small-box bg-info">
+          <div class="inner">
+            <div id="rttBox" style="background-color: dodgerblue; color: black;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <canvas id="metricChart"></canvas>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </div>

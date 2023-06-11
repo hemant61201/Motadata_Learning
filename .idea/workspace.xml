@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="11 June LightNMS">
-      <change afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/Monitor.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/CrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/CrudOperations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Database/Queries.java" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Database/Queries.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Visualization.java" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Visualization.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/api/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/api/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/Discovery.js" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/Discovery.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/ajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/ajax.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/divShow.js" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/divShow.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/tableButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/tableButton.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,21 +85,7 @@
       <workItem from="1685979101737" duration="191000" />
       <workItem from="1686035103439" duration="9040000" />
       <workItem from="1686169133867" duration="2040000" />
-      <workItem from="1686286632617" duration="6718000" />
-    </task>
-    <task id="LOCAL-00006" summary="Collection FrameWork Programmes">
-      <created>1677843278120</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1677843278120</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Collection FrameWork Programmes">
-      <created>1677843672230</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1677843672230</updated>
+      <workItem from="1686286632617" duration="8024000" />
     </task>
     <task id="LOCAL-00008" summary="Collection FrameWork Programmes">
       <created>1677843820339</created>
@@ -438,7 +416,21 @@
       <option name="project" value="LOCAL" />
       <updated>1686471290778</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="11 June LightNMS">
+      <created>1686493893724</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1686493893724</updated>
+    </task>
+    <task id="LOCAL-00056" summary="11 June LightNMS">
+      <created>1686504237937</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1686504237938</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
