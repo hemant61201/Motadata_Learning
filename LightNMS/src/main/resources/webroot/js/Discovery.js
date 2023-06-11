@@ -1,4 +1,4 @@
-$(document).ready(function ()
+$(document).ready( function ()
 {
   let config = getConfig();
 
@@ -6,6 +6,13 @@ $(document).ready(function ()
 
   ajax.get(config);
 })
+
+function myFunction()
+{
+  let config = getConfig();
+  console.log("config: " + config);
+  ajax.get(config);
+}
 
 var discovery =
   {

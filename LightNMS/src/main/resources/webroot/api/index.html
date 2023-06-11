@@ -37,6 +37,11 @@
 
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 
+  <link rel="stylesheet" href="http://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css" />
+
+  <script src="http://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
+
+
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
@@ -97,6 +102,10 @@
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
     <script src="../js/tableButton.js"></script>
+
+    <script src="../js/validation.js"></script>
+
+    <script src="../js/divShow.js"></script>
 </head>
 
 <body>
@@ -234,7 +243,7 @@
 
             <li class="nav-item">
 
-              <a href="index.html" class="nav-link active">
+              <a href="#" class="nav-link active" onclick="showDiv('dashboardDiv')">
 
                 <i class="fa fa-dashboard"></i>
 
@@ -250,7 +259,7 @@
 
         <li class="nav-item">
 
-          <a href="index.html" class="nav-link">
+          <a href="#" onclick="showDiv('monitorDiv')" class="nav-link">
 
             <i class="fa fa-desktop"></i>
 
@@ -264,7 +273,7 @@
 
         <li class="nav-item">
 
-          <a href="index.html" class="nav-link">
+          <a href="#" onclick="showDiv('discoveyDiv')" class="nav-link">
 
             <i class="fa fa-binoculars menu-grid-fa-size"></i>
 
@@ -282,7 +291,75 @@
 
   </aside>
 
-  <div class="content-wrapper">
+  <div class="content-wrapper hidden" id="dashboardDiv">
+
+    <section class="content-header">
+
+      <div class="container-fluid">
+
+        <div class="row mb-2">
+
+          <div class="col-sm-6">
+
+            <h1><i class="fa fa-dashboard"></i>Dashboard</h1>
+
+          </div>
+
+          <div class="col-sm-6">
+
+            <ol class="breadcrumb float-sm-right">
+
+              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+
+              <li class="breadcrumb-item active">Dashboard</li>
+
+            </ol>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="content-wrapper hidden" id="monitorDiv">
+
+    <section class="content-header">
+
+      <div class="container-fluid">
+
+        <div class="row mb-2">
+
+          <div class="col-sm-6">
+
+            <h1><i class="fa fa-desktop"></i>Monitor</h1>
+
+          </div>
+
+          <div class="col-sm-6">
+
+            <ol class="breadcrumb float-sm-right">
+
+              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+
+              <li class="breadcrumb-item active">Monitor</li>
+
+            </ol>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="content-wrapper hidden" id="discoveyDiv">
 
     <section class="content-header">
 
@@ -354,7 +431,7 @@
 
                     <label for="name">Monitor Name</label>
 
-                    <input type="text" id="name" class="form-control" name="name">
+                    <input type="text" id="name" class="form-control" name="name" required>
 
                   </div>
 
@@ -362,7 +439,7 @@
 
                     <label for="ip">Monitor IP</label>
 
-                    <input type="text" id="ip" class="form-control" name="ip" placeholder="e.g 10.20.40.156">
+                    <input type="text" id="ip" class="form-control" name="ip" placeholder="e.g 10.20.40.156" required>
 
                   </div>
 
@@ -370,7 +447,7 @@
 
                     <label for="type">Type</label>
 
-                    <select id="type" class="form-control custom-select" name="type">
+                    <select id="type" class="form-control custom-select" name="type" required>
 
                       <option disabled>Select one</option>
 
@@ -386,13 +463,13 @@
 
                     <label for="credential_username">UserName</label>
 
-                    <input type="text" id="credential_username" class="form-control" name="credential">
+                    <input type="text" id="credential_username" class="form-control" name="credential" required>
 
                     <br>
 
                     <label for="credential_passwd">Password</label>
 
-                    <input type="password" id="credential_passwd" class="form-control" name="credential">
+                    <input type="password" id="credential_passwd" class="form-control" name="credential" required>
 
                   </div>
 
@@ -449,7 +526,7 @@
 
                     <label for="update_deviceName">Device Name:</label>
 
-                    <input type="text" id="update_deviceName">
+                    <input type="text" id="update_deviceName" required>
 
                   </div>
 
@@ -457,7 +534,7 @@
 
                     <label for="update_ip">IP:</label>
 
-                    <input type="text" id="update_ip">
+                    <input type="text" id="update_ip" required>
 
                   </div>
 
@@ -465,7 +542,7 @@
 
                     <label for="update_deviceType">Device Type:</label>
 
-                    <input type="text" id="update_deviceType">
+                    <input type="text" id="update_deviceType" required>
 
                   </div>
 
@@ -473,13 +550,13 @@
 
                     <label for="update_username">Username:</label>
 
-                    <input type="text" id="update_username">
+                    <input type="text" id="update_username" required>
 
                     <br><br>
 
                     <label for="update_password">Password:</label>
 
-                    <input type="password" id="update_password">
+                    <input type="password" id="update_password" required>
 
                   </div>
 

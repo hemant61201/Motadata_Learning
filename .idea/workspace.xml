@@ -5,19 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="10 June LightNMS">
+      <change afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/divShow.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/validation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LightNMS/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/.idea/jsLibraryMappings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/CrudOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/CrudOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Database/Queries.java" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Database/Queries.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Discovery.java" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Discovery.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/PollingExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/PollingExecution.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Visualization.java" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/java/LightNMS/Visualization.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/plugins/BootStrap" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/plugins/BootStrap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/plugins/BootStrap.go" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/plugins/BootStrap.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/plugins/functions/Discovery.go" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/plugins/functions/Discovery.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/plugins/functions/PingCommands.go" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/plugins/functions/PingCommands.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/BootStrap" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/BootStrap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/api/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/api/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/Discovery.js" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/Discovery.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/ajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/ajax.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/tableButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/LightNMS/src/main/resources/webroot/js/tableButton.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +51,7 @@
     "WebServerToolWindowFactoryState": "false",
     "jdk.selected.JAVA_MODULE": "1.8",
     "last_directory_selection": "/home/hemant/Desktop/Motadata_Learning/Networking_System/Admin_Module/src/Networking",
-    "last_opened_file_path": "/home/hemant/Motadata_Learning/LightNMS/src/main",
+    "last_opened_file_path": "/home/hemant/Motadata_Learning",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -64,8 +61,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/LightNMS/src/main" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/LightNMS/src/main" />
       <recent name="$PROJECT_DIR$/awesomeProject/EdgeCases" />
       <recent name="$PROJECT_DIR$/awesomeProject" />
       <recent name="$PROJECT_DIR$/vertx-starter" />
@@ -96,21 +93,7 @@
       <workItem from="1685979101737" duration="191000" />
       <workItem from="1686035103439" duration="9040000" />
       <workItem from="1686169133867" duration="2040000" />
-      <workItem from="1686286632617" duration="4123000" />
-    </task>
-    <task id="LOCAL-00003" summary="Collection FrameWork Programmes">
-      <created>1677842968835</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1677842968835</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Collection FrameWork Programmes">
-      <created>1677843067014</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1677843067014</updated>
+      <workItem from="1686286632617" duration="6072000" />
     </task>
     <task id="LOCAL-00005" summary="Collection FrameWork Programmes">
       <created>1677843146005</created>
@@ -441,7 +424,21 @@
       <option name="project" value="LOCAL" />
       <updated>1686389554723</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="10 June LightNMS">
+      <created>1686413516816</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1686413516816</updated>
+    </task>
+    <task id="LOCAL-00053" summary="10 June LightNMS">
+      <created>1686429913597</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1686429913597</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

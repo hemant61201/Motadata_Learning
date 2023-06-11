@@ -15,7 +15,7 @@ public class PollingExecution extends AbstractVerticle
   @Override
   public void start(Promise<Void> startPromise)
   {
-    vertx.setPeriodic(20000, timerId ->
+    vertx.setPeriodic(120_000, timerId ->
     {
       String deviceType = "Ping";
 

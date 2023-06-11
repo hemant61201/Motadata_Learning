@@ -31,6 +31,8 @@ public class CrudOperations extends AbstractVerticle {
 
   private String pollingData;
 
+  private String addTable;
+
   private String fieldValue;
   private HashMap<Integer, JsonObject> discoveryDataTable = new HashMap<>();
 
@@ -114,7 +116,7 @@ public class CrudOperations extends AbstractVerticle {
     {
       try
       {
-        if(pollingData != null)
+        if(pollingData != null && addTable.equals("PollingTable"))
         {
           System.out.println(pollingData);
 
@@ -198,7 +200,7 @@ public class CrudOperations extends AbstractVerticle {
       {
         connectionPool.removeConnection(connection);
 
-        if(updatedRow == null)
+        if(result.result() == null)
         {
           promise.complete();
         }
@@ -557,6 +559,7 @@ public class CrudOperations extends AbstractVerticle {
       {
         connectionPool.removeConnection(connection);
 
+
         if(result.result() == null)
         {
           promise.complete();
@@ -592,6 +595,10 @@ public class CrudOperations extends AbstractVerticle {
       {
         String address = message.address();
 
+        String[] splitAddress = address.split("_");
+
+        addTable = splitAddress[1];
+
         jsonObject = (JsonObject) message.body();
 
         System.out.println("hi" + jsonObject.getString("ip"));
@@ -626,6 +633,8 @@ public class CrudOperations extends AbstractVerticle {
 
         String[] splitAddress = address.split("_");
 
+        addTable = splitAddress[1];
+
         table = splitAddress[1];
 
         jsonObject = (JsonObject) message.body();
@@ -659,6 +668,10 @@ public class CrudOperations extends AbstractVerticle {
       vertx.eventBus().consumer("add_PollingTable", message ->
       {
         String address = message.address();
+
+        String[] splitAddress = address.split("_");
+
+        addTable = splitAddress[1];
 
         pollingData = message.body().toString();
 

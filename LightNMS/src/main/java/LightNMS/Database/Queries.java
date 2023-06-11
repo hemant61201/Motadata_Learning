@@ -24,7 +24,7 @@ public class Queries
       case "PollingTable":
       {
         query = "INSERT INTO " + tableName + " (metrics, data, ip, timestamp) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
-        
+
         break;
       }
     }

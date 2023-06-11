@@ -95,8 +95,16 @@ var ajax = {
 
           if (ajaxResponse !== null)
           {
-            location.reload();
+            let dataTable = $('#discoveryTable').DataTable();
+
+            dataTable.destroy();
+
+            myFunction();
           }
+        },
+        error: function ()
+        {
+          showAlert('error', 'Error', 'Data Not Inserted')
         }
       })
     }
@@ -119,8 +127,17 @@ var ajax = {
 
           if (ajaxResponse !== null)
           {
-            location.reload();
+            // myFunction();
+            let dataTable = $('#discoveryTable').DataTable();
+
+            dataTable.destroy();
+
+            myFunction();
           }
+        },
+        error: function ()
+        {
+
         }
       })
     }
@@ -143,8 +160,16 @@ var ajax = {
 
           if (ajaxResponse !== null)
           {
-            location.reload();
+            let dataTable = $('#discoveryTable').DataTable();
+
+            dataTable.destroy();
+
+            myFunction();
           }
+        },
+        error: function ()
+        {
+
         }
       })
     }
@@ -167,8 +192,16 @@ var ajax = {
 
           if (ajaxResponse !== null)
           {
-            location.reload();
+            let dataTable = $('#discoveryTable').DataTable();
+
+            dataTable.destroy();
+
+            myFunction();
           }
+        },
+        error: function ()
+        {
+
         }
       })
     }
@@ -193,6 +226,10 @@ var ajax = {
           // {
           //   location.reload();
           // }
+        },
+        error: function ()
+        {
+
         }
       })
     }
@@ -246,8 +283,23 @@ var ajax = {
               }
             ]
           });
+        },
+        error: function ()
+        {
+
         }
       });
     }
   }
+}
+
+function showAlert(type, title, message) {
+  Swal.fire({
+    icon: type,
+    title: title,
+    text: message,
+    timer: 10000,
+    timerProgressBar: true,
+    showConfirmButton: false
+  });
 }
