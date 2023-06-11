@@ -141,6 +141,41 @@ var tableButton =
           }
         }
 
+var monitorTableBtn =
+  {
+    onclick(button) {
+      var dataTable = $(button).closest('table').DataTable();
+
+      var row = dataTable.row($(button).closest('tr'));
+
+      var data = row.data();
+
+      var id = data.ID;
+
+      let btnConf = deleteMonitorConfig(id);
+
+      ajax.post(btnConf);
+    }
+  }
+
+  var viewBtn =
+    {
+      onclick(button)
+      {
+        var dataTable = $(button).closest('table').DataTable();
+
+        var row = dataTable.row($(button).closest('tr'));
+
+        var data = row.data();
+
+        var ip = data.IP;
+
+        let btnConf = viewMonitorConfig(ip);
+
+        ajax.post(btnConf);
+      }
+    }
+
   function deleteConfig(id_no)
   {
     const method = "POST";
@@ -162,6 +197,28 @@ var tableButton =
 
     return config;
   }
+
+function deleteMonitorConfig(id_no)
+{
+  const method = "POST";
+
+  const url = "/deleteMonitorTable";
+
+  const id = {
+    id: id_no
+  }
+
+  var config =
+    {
+      method: method,
+
+      url: url,
+
+      id: id,
+    }
+
+  return config;
+}
 
   function runConfig(id_no)
   {
@@ -205,6 +262,28 @@ var tableButton =
       }
 
     return config;
+  }
+
+  function viewMonitorConfig(ip_no)
+  {
+    const method = "POST"
+
+    const url = "/viewMonitor"
+
+    const ip = {
+      ip: ip_no,
+    }
+
+    var viewConf =
+      {
+        method: method,
+
+        url: url,
+
+        ip: ip,
+      };
+
+    return viewConf;
   }
 
   function provisonConfig(tableValue)

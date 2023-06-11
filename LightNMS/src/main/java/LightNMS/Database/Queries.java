@@ -9,14 +9,15 @@ public class Queries
     {
       case "DiscoveryTable":
       {
-        query = "insert into " + tableName + " (DEVICENAME, IP, DEVICETYPE, STATUS, CREDENTIAL) values(?,?,?,?,?)";
+        query = "INSERT INTO " + tableName + " (DEVICENAME, IP, DEVICETYPE, STATUS, CREDENTIAL) SELECT ?, ?, ?, ?, ? FROM dual WHERE NOT EXISTS ( SELECT 1 FROM DiscoveryTable WHERE IP = ? AND DEVICETYPE = ?)";
 
         break;
       }
 
       case "MonitorTable":
       {
-        query = "insert into " + tableName + " (DEVICENAME, IP, DEVICETYPE, STATUS, CREDENTIAL) values(?,?,?,?,?)";
+        query = "INSERT INTO " + tableName + " (DEVICENAME, IP, DEVICETYPE, STATUS, CREDENTIAL) SELECT ?, ?, ?, ?, ? FROM dual WHERE NOT EXISTS ( SELECT 1 FROM MonitorTable WHERE IP = ? AND DEVICETYPE = ?)";
+
 
         break;
       }
@@ -71,10 +72,18 @@ public class Queries
 
     if(flag)
     {
-      query = "select * from " + tableName + " where id = ?";
+      if(tableName.equals("MonitorTable"))
+      {
+        query = "select id,deviceName,ip,deviceType,status from " + tableName;
 
-      System.out.println(query);
+        System.out.println(query);
+      }
+      else
+      {
+        query = "select * from " + tableName + " where id = ?";
 
+        System.out.println(query);
+      }
       return query;
     }
 
@@ -94,6 +103,8 @@ public class Queries
 
       case "MonitorTable":
       {
+        query = "delete from " + tableName + " where id = ?";
+
         break;
       }
 

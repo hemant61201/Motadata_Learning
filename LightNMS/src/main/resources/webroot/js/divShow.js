@@ -11,6 +11,22 @@ function showDiv(divId) {
   div.classList.remove('hidden');
 
   localStorage.setItem('selectedDiv', divId);
+
+  if (divId === 'monitorDiv') {
+    $(div).ready(function() {
+      let config = getmonitorConfig();
+      console.log("config : " + config);
+      ajax.get(config);
+    });
+  }
+
+  else if (divId === 'discoveyDiv') {
+    $(div).ready(function() {
+      let config = getdiscoveryConfig();
+      console.log("config : " + config);
+      ajax.get(config);
+    });
+  }
 }
 
 window.addEventListener('load', function() {

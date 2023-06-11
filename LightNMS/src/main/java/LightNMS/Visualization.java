@@ -58,6 +58,31 @@ public class Visualization extends AbstractVerticle
         });
       });
 
+      router.post("/addMonitorTable").handler(routingContext ->
+      {
+        String message = routingContext.request().getParam("id");
+
+        System.out.println("message :" + message);
+
+        vertx.eventBus().request("get_DiscoveryTable_id", message, rowResult ->
+        {
+          if (rowResult.succeeded())
+          {
+            System.out.println("response" + rowResult.result().body().toString());
+
+            vertx.eventBus().request("add_MonitorTable", rowResult.result().body(), runResult ->
+            {
+              if(runResult.succeeded())
+              {
+                System.out.println("response  " + runResult.result().body().toString());
+
+                routingContext.response().end("success");
+              }
+            });
+          }
+        });
+      });
+
       router.get("/getDiscoveryTable").handler(routingContext ->
       {
         String message = "get";
@@ -74,6 +99,22 @@ public class Visualization extends AbstractVerticle
         });
       });
 
+      router.get("/getMonitorTable").handler(routingContext ->
+      {
+        String message = "monitorGet";
+
+        System.out.println(message);
+
+        vertx.eventBus().request("get_MonitorTable_data", message, databaseResult ->
+        {
+          if(databaseResult.succeeded())
+          {
+            System.out.println("response" + databaseResult.result().body().toString());
+            routingContext.response().end(databaseResult.result().body().toString());
+          }
+        });
+      });
+
       router.post("/deleteDiscoveryTable").handler(routingContext ->
       {
         String message = routingContext.request().getParam("id");
@@ -81,6 +122,21 @@ public class Visualization extends AbstractVerticle
         System.out.println("message : " + message);
 
         vertx.eventBus().request("delete_DiscoveryTable", message, deleteResult ->
+        {
+          if(deleteResult.succeeded())
+          {
+            routingContext.response().end("success");
+          }
+        });
+      });
+
+      router.post("/deleteMonitorTable").handler(routingContext ->
+      {
+        String message = routingContext.request().getParam("id");
+
+        System.out.println("message : " + message);
+
+        vertx.eventBus().request("delete_MonitorTable", message, deleteResult ->
         {
           if(deleteResult.succeeded())
           {
@@ -123,27 +179,17 @@ public class Visualization extends AbstractVerticle
         });
       });
 
-      router.post("/addMonitorTable").handler(routingContext ->
+      router.post("/viewMonitor").handler(routingContext ->
       {
-        String message = routingContext.request().getParam("id");
+        String message = routingContext.request().getParam("ip");
 
-        System.out.println("message :" + message);
+        System.out.println("message : " + message);
 
-        vertx.eventBus().request("get_DiscoveryTable_id", message, rowResult ->
+        vertx.eventBus().request("view_PollingTable", message, viewResult ->
         {
-          if (rowResult.succeeded())
+          if(viewResult.succeeded())
           {
-            System.out.println("response" + rowResult.result().body().toString());
-
-            vertx.eventBus().request("add_MonitorTable", rowResult.result().body(), runResult ->
-            {
-              if(runResult.succeeded())
-              {
-                System.out.println("response  " + runResult.result().body().toString());
-
-                routingContext.response().end("success");
-              }
-            });
+            routingContext.response().end("success");
           }
         });
       });

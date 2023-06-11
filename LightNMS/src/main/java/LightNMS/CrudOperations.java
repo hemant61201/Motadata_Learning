@@ -34,9 +34,6 @@ public class CrudOperations extends AbstractVerticle {
   private String addTable;
 
   private String fieldValue;
-  private HashMap<Integer, JsonObject> discoveryDataTable = new HashMap<>();
-
-  private HashMap<Integer, JsonObject> monitorDataTable = new HashMap<>();
 
   private void connectionConfig(String message, Promise<Object> promise)
   {
@@ -64,7 +61,15 @@ public class CrudOperations extends AbstractVerticle {
           {
             query = Queries.getQuery(queryAddress[1] + "_" + queryAddress[2]);
 
-            getSingleData(connection, query, promise);
+            if(queryAddress[1].equals("MonitorTable"))
+            {
+              selectData(connection, query,promise);
+            }
+
+            else
+            {
+              getSingleData(connection, query, promise);
+            }
           }
 
           else
@@ -177,6 +182,10 @@ public class CrudOperations extends AbstractVerticle {
             preparedStatement.setObject(5, jsonObject.getJsonObject("CREDENTIAL").toString());
           }
 
+          preparedStatement.setString(6,jsonObject.getString("IP"));
+
+          preparedStatement.setString(7, jsonObject.getString("DEVICETYPE"));
+
           int updatedRow = preparedStatement.executeUpdate();
 
           System.out.println("Records inserted Successfully " + updatedRow);
@@ -229,14 +238,14 @@ public class CrudOperations extends AbstractVerticle {
   {
     vertx.<HashMap<Integer, JsonObject>>executeBlocking(blockingPromise ->
     {
-      JsonObject discoveryData;
-
-      JsonObject monitorData;
-
       try
       {
         if(table.equals("MonitorTable"))
         {
+          HashMap<Integer, JsonObject> monitorDataTable = new HashMap<>();
+
+          JsonObject monitorData;
+
           Connection connection1 = connectionPool.getConnection();
 
           PreparedStatement prepareStatement = connection1.prepareStatement(query);
@@ -279,41 +288,87 @@ public class CrudOperations extends AbstractVerticle {
 
         else
         {
-          preparedStatement = connection.prepareStatement(query);
-
-          ResultSet getDiscoveryTableSet = preparedStatement.executeQuery();
-
-          ResultSetMetaData discoveryTableSetMetaData = getDiscoveryTableSet.getMetaData();
-
-          int columnCount = discoveryTableSetMetaData.getColumnCount();
-
-          Integer rows = 1;
-
-          while (getDiscoveryTableSet.next())
+          if(table.equals("DiscoveryTable"))
           {
-            discoveryData = new JsonObject();
+            HashMap<Integer, JsonObject> discoveryDataTable = new HashMap<>();
 
-            for (int i = 1; i <= columnCount; i++)
+            JsonObject discoveryData;
+
+            preparedStatement = connection.prepareStatement(query);
+
+            ResultSet getDiscoveryTableSet = preparedStatement.executeQuery();
+
+            ResultSetMetaData discoveryTableSetMetaData = getDiscoveryTableSet.getMetaData();
+
+            int columnCount = discoveryTableSetMetaData.getColumnCount();
+
+            Integer rows = 1;
+
+            while (getDiscoveryTableSet.next())
             {
-              String columnName = discoveryTableSetMetaData.getColumnName(i);
+              discoveryData = new JsonObject();
 
-              Object columnValue = getDiscoveryTableSet.getObject(i);
+              for (int i = 1; i <= columnCount; i++)
+              {
+                String columnName = discoveryTableSetMetaData.getColumnName(i);
 
-              discoveryData.put(columnName, columnValue);
+                Object columnValue = getDiscoveryTableSet.getObject(i);
+
+                discoveryData.put(columnName, columnValue);
+              }
+
+              discoveryDataTable.put(rows, discoveryData);
+
+              rows++;
             }
 
-            discoveryDataTable.put(rows, discoveryData);
-
-            rows++;
+            blockingPromise.complete(discoveryDataTable);
           }
 
-          blockingPromise.complete(discoveryDataTable);
+          else
+          {
+            HashMap<Integer, JsonObject> monitorData = new HashMap<>();
+
+            JsonObject discoveryData;
+
+            preparedStatement = connection.prepareStatement(query);
+
+            ResultSet getDiscoveryTableSet = preparedStatement.executeQuery();
+
+            ResultSetMetaData discoveryTableSetMetaData = getDiscoveryTableSet.getMetaData();
+
+            int columnCount = discoveryTableSetMetaData.getColumnCount();
+
+            Integer rows = 1;
+
+            while (getDiscoveryTableSet.next())
+            {
+              discoveryData = new JsonObject();
+
+              for (int i = 1; i <= columnCount; i++)
+              {
+                String columnName = discoveryTableSetMetaData.getColumnName(i);
+
+                Object columnValue = getDiscoveryTableSet.getObject(i);
+
+                discoveryData.put(columnName, columnValue);
+              }
+
+              monitorData.put(rows, discoveryData);
+
+              rows++;
+            }
+
+            blockingPromise.complete(monitorData);
+          }
+
         }
 
       }
 
       catch (Exception exception)
       {
+        exception.printStackTrace();
         System.out.println(exception);
 
         blockingPromise.fail(exception);
@@ -783,6 +838,49 @@ public class CrudOperations extends AbstractVerticle {
         connectionConfig(address, promise);
       });
 
+      vertx.eventBus().consumer("get_MonitorTable_data", message ->
+      {
+        String address = message.address();
+
+        table = address;
+
+        System.out.println(address);
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) result.result();
+
+            JsonArray jsonArray = new JsonArray();
+
+            for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+            {
+              Integer key = entry.getKey();
+
+              JsonObject jsonObject = entry.getValue();
+
+              jsonArray.add(jsonObject.encode());
+            }
+
+            message.reply(jsonArray);
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Get operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
       vertx.eventBus().consumer("get_MonitorTable", message ->
       {
         String address = message.address();
@@ -827,6 +925,38 @@ public class CrudOperations extends AbstractVerticle {
       });
 
       vertx.eventBus().consumer("delete_DiscoveryTable", message ->
+      {
+        String address = message.address();
+
+        id = Integer.parseInt(message.body().toString());
+
+        System.out.println("id : " + id);
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            String reply = result.result().toString();
+
+            message.reply(reply);
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Delete operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
+      vertx.eventBus().consumer("delete_MonitorTable", message ->
       {
         String address = message.address();
 

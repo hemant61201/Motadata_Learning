@@ -220,12 +220,16 @@ var ajax = {
 
         success: function (ajaxResponse)
         {
-          console.log(ajaxResponse)
+          console.log("added monitor table" + ajaxResponse)
 
-          // if (ajaxResponse !== null)
-          // {
-          //   location.reload();
-          // }
+          if(ajaxResponse != null)
+          {
+            let dataTable = $('#monitorTable').DataTable();
+
+            dataTable.destroy();
+
+            myMonitorFunction();
+          }
         },
         error: function ()
         {
@@ -234,6 +238,67 @@ var ajax = {
       })
     }
 
+    else if (data.url === "/deleteMonitorTable")
+    {
+      console.log("delete Monitor id " + data.id)
+
+      $.ajax({
+
+        method: data.method,
+
+        url: data.url,
+
+        data: data.id,
+
+        success: function (ajaxResponse)
+        {
+          console.log(ajaxResponse)
+
+          if (ajaxResponse !== null)
+          {
+            let dataTable = $('#monitorTable').DataTable();
+
+            dataTable.destroy();
+
+            myMonitorFunction();
+          }
+        },
+        error: function ()
+        {
+
+        }
+      })
+    }
+
+    else if (data.url === "/viewMonitor")
+    {
+      $.ajax({
+
+        method: data.method,
+
+        url: data.url,
+
+        data: data.ip,
+
+        success: function (ajaxResponse)
+        {
+          console.log(ajaxResponse)
+
+          // if (ajaxResponse !== null)
+          // {
+          //   let dataTable = $('#monitorTable').DataTable();
+          //
+          //   dataTable.destroy();
+          //
+          //   myMonitorFunction();
+          // }
+        },
+        error: function ()
+        {
+
+        }
+      })
+    }
   },
 
   get: function (data)
@@ -286,6 +351,53 @@ var ajax = {
         },
         error: function ()
         {
+
+        }
+      });
+    }
+
+    else if (data.url === "/getMonitorTable")
+    {
+      console.log("get Monitor");
+      $.ajax({
+
+        method: data.method,
+
+        url: data.url,
+
+        success: function (ajaxResponse)
+        {
+          const jsonArray = JSON.parse(ajaxResponse);
+
+          const resultArray = jsonArray.map(jsonString => JSON.parse(jsonString));
+
+          const monitorTable = resultArray.map(obj => Object.values(obj));
+
+          console.log(monitorTable);
+
+          var monitor_Table = $('#monitorTable').DataTable({
+            data: resultArray,
+            columns: [
+              {title: 'id', data: 'ID'},
+              {title: 'DeviceName', data: 'DEVICENAME'},
+              {title: 'IP', data: 'IP'},
+              {title: 'DeviceType', data: 'DEVICETYPE'},
+              {title: 'Status', data: 'STATUS'},
+              {
+                title: 'Actions',
+                data: null,
+                render: function (data, type, row) {
+                  var editButton = '<button class="edit-button" onclick="#">Edit</button>';
+                  var viewButton = '<button class="view-button" onclick="viewBtn.onclick(this)">View</button>';
+                  var deleteButton = '<button class="delete-button" onclick="monitorTableBtn.onclick(this)">Delete</button>';
+
+                  return editButton + ' ' + viewButton + ' ' + deleteButton;
+                }
+              }
+            ]
+          });
+        },
+        error: function () {
 
         }
       });

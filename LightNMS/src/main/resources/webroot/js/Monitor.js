@@ -1,4 +1,4 @@
-// $("#discoveyDiv").ready( function ()
+// $("#monitorDiv").ready( function ()
 // {
 //   let config = getConfig();
 //
@@ -7,14 +7,16 @@
 //   ajax.get(config);
 // })
 
-function myFunction()
+function myMonitorFunction()
 {
-  let config = getdiscoveryConfig();
+  let config = getmonitorConfig();
+
   console.log("config: " + config);
+
   ajax.get(config);
 }
 
-var discovery =
+var monitor =
   {
     onclick()
     {
@@ -73,24 +75,18 @@ function fetchData()
   return myData;
 }
 
-function getdiscoveryConfig()
+function getmonitorConfig()
 {
   const method = "GET";
 
-  const url = "/getDiscoveryTable"
+  const url = "/getMonitorTable"
 
-  var config =
+  let config =
     {
       method: method,
 
       url: url
     }
 
-    return config;
+  return config;
 }
-
-
-
-
-
-
