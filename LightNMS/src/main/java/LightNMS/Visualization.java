@@ -185,11 +185,13 @@ public class Visualization extends AbstractVerticle
 
         System.out.println("message : " + message);
 
-        vertx.eventBus().request("view_PollingTable", message, viewResult ->
+        vertx.eventBus().request("get_PollingTable", message, viewResult ->
         {
           if(viewResult.succeeded())
           {
-            routingContext.response().end("success");
+//            System.out.println("view result " + viewResult.result().toString());
+
+            routingContext.response().end(viewResult.result().body().toString());
           }
         });
       });

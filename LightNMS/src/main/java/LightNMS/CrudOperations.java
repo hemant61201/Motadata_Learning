@@ -6,6 +6,8 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class CrudOperations extends AbstractVerticle {
   private String addTable;
 
   private String fieldValue;
+
+  private String viewip;
 
   private void connectionConfig(String message, Promise<Object> promise)
   {
@@ -284,6 +288,45 @@ public class CrudOperations extends AbstractVerticle {
           connectionPool.removeConnection(connection1);
 
           blockingPromise.complete(monitorDataTable);
+        }
+
+        else if(table.equals("PollingTable"))
+        {
+          HashMap<Integer, JsonObject> pollingData = new HashMap<>();
+
+          preparedStatement = connection.prepareStatement(query);
+
+          preparedStatement.setString(1,viewip);
+
+          ResultSet resultSet = preparedStatement.executeQuery();
+
+          ObjectMapper objectMapper = new ObjectMapper();
+
+          ObjectNode jsonNode = objectMapper.createObjectNode();
+
+          while (resultSet.next())
+          {
+            String metrics = resultSet.getString("metrics");
+
+            String data = resultSet.getString("data");
+
+            if (metrics.equals("Max") || metrics.equals("Min") || metrics.equals("Avg"))
+            {
+              jsonNode.withArray(metrics).add(data);
+            }
+            else if (metrics.equals("Status") || metrics.equals("Loss"))
+            {
+              jsonNode.put(metrics, data);
+            }
+          }
+
+          String jsonString = objectMapper.writeValueAsString(jsonNode);
+
+          JsonObject viewObject = new JsonObject(jsonString);
+
+          pollingData.put(1,viewObject);
+
+          blockingPromise.complete(pollingData);
         }
 
         else
@@ -923,6 +966,52 @@ public class CrudOperations extends AbstractVerticle {
 
         connectionConfig(address, promise);
       });
+
+      vertx.eventBus().consumer("get_PollingTable", message ->
+      {
+        String address = message.address();
+
+        String[] splitAddress = address.split("_");
+
+        table = splitAddress[1];
+
+        viewip = message.body().toString();
+
+        type = message.body().toString();
+
+        System.out.println(address);
+
+        Promise<Object> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) result.result();
+
+            JsonObject rowData = new JsonObject();
+
+            for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+            {
+              rowData = entry.getValue();
+            }
+
+            message.reply(rowData);
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Get operation failed: " + cause.getMessage());
+
+            message.fail(500, cause.getMessage());
+          }
+        });
+
+        connectionConfig(address, promise);
+      });
+
 
       vertx.eventBus().consumer("delete_DiscoveryTable", message ->
       {

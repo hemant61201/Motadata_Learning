@@ -284,14 +284,12 @@ var ajax = {
         {
           console.log(ajaxResponse)
 
-          // if (ajaxResponse !== null)
-          // {
-          //   let dataTable = $('#monitorTable').DataTable();
-          //
-          //   dataTable.destroy();
-          //
-          //   myMonitorFunction();
-          // }
+          if (ajaxResponse !== null)
+          {
+            viewMonitor(ajaxResponse);
+
+            showDiv('viewMonitorDiv');
+          }
         },
         error: function ()
         {

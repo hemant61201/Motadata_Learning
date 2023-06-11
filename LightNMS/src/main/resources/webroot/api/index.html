@@ -27,6 +27,8 @@
 
     <link rel="stylesheet" href="../css/rotating-icon.css">
 
+<!--  <link rel="stylesheet" href="../css/viewMonitor.css">-->
+
   <link rel="stylesheet" href="../css/hidden.css">
 
     <link
@@ -41,6 +43,9 @@
 
   <script src="http://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
 
+  <script src="../js/storeData.js"></script>
+
+  <script src="../js/viewMonitor.js"></script>
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -103,7 +108,7 @@
 
     <script src="../js/tableButton.js"></script>
 
-    <script src="../js/validation.js"></script>
+  <script src="../js/validation.js"></script>
 
     <script src="../js/divShow.js"></script>
 
@@ -373,6 +378,14 @@
 
     </div>
 
+  </div>
+
+  <div class="content-wrapper hidden" id="viewMonitorDiv">
+    <div id="availabilityBox" style="background-color: lightgreen;"></div>
+    <div id="lossBox" style="background-color: deeppink;"></div>
+    <div id="rttBox" style="background-color: aqua;"></div>
+    <canvas id="metricChart"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </div>
 
   <div class="content-wrapper hidden" id="discoveyDiv">

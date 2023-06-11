@@ -27,6 +27,10 @@ function showDiv(divId) {
       ajax.get(config);
     });
   }
+
+  // else if (divId === 'viewMonitorDiv') {
+  //   $("#metricChart").destroy();
+  // }
 }
 
 window.addEventListener('load', function() {

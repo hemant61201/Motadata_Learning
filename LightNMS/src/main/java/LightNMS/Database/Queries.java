@@ -66,6 +66,8 @@ public class Queries
 
       case "PollingTable":
       {
+        query = "SELECT p.metrics, p.data, p.ip, p.timestamp FROM pollingtable p WHERE (metrics = 'Loss' OR metrics = 'Status') AND timestamp = (SELECT MAX(timestamp) FROM pollingtable WHERE metrics = p.metrics) OR (metrics = 'Min' OR metrics = 'Max' OR metrics = 'Avg') AND timestamp >= NOW() - INTERVAL '360000' SECOND AND ip = ? ORDER BY p.metrics";
+
         break;
       }
     }
