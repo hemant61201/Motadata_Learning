@@ -6,8 +6,11 @@ import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import io.vertx.ext.auth.properties.PropertyFileAuthentication;
+import io.vertx.ext.bridge.PermittedOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.*;
+import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
+import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 
 import java.util.List;
@@ -195,6 +198,14 @@ public class Visualization extends AbstractVerticle
           }
         });
       });
+
+      SockJSHandler jsHandler = SockJSHandler.create(vertx);
+
+      SockJSBridgeOptions bridgeOptions = new SockJSBridgeOptions()
+        .addInboundPermitted(new PermittedOptions().setAddressRegex("updates.*"))
+        .addOutboundPermitted(new PermittedOptions().setAddressRegex("updates.*"));
+
+      router.mountSubRouter("/eventbus",jsHandler.bridge(bridgeOptions));
 
       vertx.createHttpServer(new HttpServerOptions()
           .setMaxHeaderSize(32 * 1024)

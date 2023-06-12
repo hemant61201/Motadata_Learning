@@ -1,14 +1,25 @@
 package LightNMS;
 
 import LightNMS.Database.Connectionpool;
+import LightNMS.Database.MetricsData;
 import LightNMS.Database.Queries;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.vertx.ext.bridge.PermittedOptions;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.CorsHandler;
+import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
+import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 
+import java.security.PrivilegedExceptionAction;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -296,13 +307,19 @@ public class CrudOperations extends AbstractVerticle {
 
           preparedStatement = connection.prepareStatement(query);
 
-          preparedStatement.setString(1,viewip);
+          preparedStatement.setString(1, viewip);
+
+          preparedStatement.setString(2, viewip);
 
           ResultSet resultSet = preparedStatement.executeQuery();
 
           ObjectMapper objectMapper = new ObjectMapper();
 
           ObjectNode jsonNode = objectMapper.createObjectNode();
+
+          int successCount = 0;
+
+          int failedCount = 0;
 
           while (resultSet.next())
           {
@@ -314,17 +331,41 @@ public class CrudOperations extends AbstractVerticle {
             {
               jsonNode.withArray(metrics).add(data);
             }
-            else if (metrics.equals("Status") || metrics.equals("Loss"))
+
+            else if (metrics.equals("Loss"))
             {
               jsonNode.put(metrics, data);
             }
+
+            else if (metrics.equals("Status"))
+            {
+              if (data.equals("success"))
+              {
+                successCount++;
+              }
+
+              else if (data.equals("failed"))
+              {
+                failedCount++;
+              }
+            }
           }
+
+          ObjectNode statusNode = objectMapper.createObjectNode();
+
+          statusNode.put("success", successCount);
+
+          statusNode.put("failed", failedCount);
+
+          jsonNode.set("Status", statusNode);
 
           String jsonString = objectMapper.writeValueAsString(jsonNode);
 
+          System.out.println(jsonString);
+
           JsonObject viewObject = new JsonObject(jsonString);
 
-          pollingData.put(1,viewObject);
+          pollingData.put(1, viewObject);
 
           blockingPromise.complete(pollingData);
         }
@@ -682,12 +723,125 @@ public class CrudOperations extends AbstractVerticle {
     });
   }
 
+  private void dashBoardData(Promise<JsonObject> promise)
+  {
+    Connection connection = connectionPool.getConnection();
+
+    String query = Queries.livePollingData();
+
+    vertx.executeBlocking(blockingPromise ->
+      {
+        JsonObject pollingData;
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY))
+        {
+          ResultSet queryResult = preparedStatement.executeQuery();
+
+          ObjectMapper mapper = new ObjectMapper();
+
+          MetricsData metricsData = new MetricsData();
+
+          metricsData.setMax(new HashMap<>());
+
+          metricsData.setMin(new HashMap<>());
+
+          while (queryResult.next())
+          {
+            String metric = queryResult.getString("metric");
+
+            String ip = queryResult.getString("ip");
+
+            String value = queryResult.getString("data");
+
+            if (metric.equals("Max"))
+            {
+              Map<String, String> maxMap = metricsData.getMax().getOrDefault(metric, new HashMap<>());
+
+              maxMap.put(ip, value);
+
+              metricsData.getMax().put(metric, maxMap);
+            }
+
+            else if (metric.equals("Min"))
+            {
+              Map<String, String> minMap = metricsData.getMin().getOrDefault(metric, new HashMap<>());
+
+              minMap.put(ip, value);
+
+              metricsData.getMin().put(metric, minMap);
+            }
+          }
+
+          if (queryResult.last())
+          {
+            metricsData.setSuccess(Integer.toString(queryResult.getInt("success_count")));
+
+            metricsData.setFailed(Integer.toString(queryResult.getInt("failed_count")));
+
+            metricsData.setUnknown(Integer.toString(queryResult.getInt("unknown_count")));
+          }
+
+          String jsonData = mapper.writeValueAsString(metricsData);
+
+          pollingData = new JsonObject(jsonData);
+
+          blockingPromise.complete(pollingData);
+        }
+
+        catch (Exception exception)
+        {
+          exception.printStackTrace();
+        }
+
+      }, false).onComplete(result ->
+    {
+      if(result.succeeded())
+      {
+        connectionPool.removeConnection(connection);
+
+        promise.complete((JsonObject) result.result());
+      }
+      else
+      {
+        connectionPool.removeConnection(connection);
+
+        Throwable cause = result.cause();
+
+        promise.fail(cause);
+      }
+    });
+  }
+
   @Override
   public void start(Promise<Void> startPromise)
   {
     try
     {
       connectionPool.createConnection();
+
+      vertx.setPeriodic(5000, id -> {
+
+        Promise<JsonObject> promise = Promise.promise();
+
+        promise.future().onComplete(result ->
+        {
+          if (result.succeeded())
+          {
+            System.out.println(result.result().toString());
+
+            vertx.eventBus().publish("updates.pollingdata",result.result());
+          }
+
+          else
+          {
+            Throwable cause = result.cause();
+
+            System.out.println("Add operation failed: " + cause.getMessage());
+          }
+        });
+
+        dashBoardData(promise);
+      });
 
       vertx.eventBus().consumer("add_DiscoveryTable", message ->
       {

@@ -97,6 +97,7 @@ public class PollingExecution extends AbstractVerticle
     });
 
     startPromise.complete();
+//    return null;
   }
 
   private void executeCommand(String command, String input, io.vertx.core.Handler<io.vertx.core.AsyncResult<String>> handler)

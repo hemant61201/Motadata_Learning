@@ -122,6 +122,7 @@ public class Discovery extends AbstractVerticle
 
       startPromise.fail(exception);
     }
+//    return null;
   }
 
   private void executeCommand(String command, String input, io.vertx.core.Handler<io.vertx.core.AsyncResult<String>> handler)

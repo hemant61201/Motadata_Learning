@@ -39,11 +39,11 @@
 
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
   <link rel="stylesheet" href="http://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css" />
 
   <script src="http://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
-
-  <script src="../js/storeData.js"></script>
 
   <script src="../js/viewMonitor.js"></script>
 
@@ -84,8 +84,6 @@
 
     <script src="../js/moment.min.js"></script>
 
-    <script src="../js/daterangepicker.js"></script>
-
     <script src="../js/tempusdominus-bootstrap-4.min.js"></script>
 
     <script src="../js/summernote-bs4.min.js"></script>
@@ -95,8 +93,6 @@
     <script src="../js/adminlte.js"></script>
 
     <script src="../js/demo.js"></script>
-
-    <script src="../js/dashboard.js"></script>
 
     <script src="../js/Discovery.js"></script>
 
@@ -108,11 +104,18 @@
 
     <script src="../js/tableButton.js"></script>
 
-  <script src="../js/validation.js"></script>
-
     <script src="../js/divShow.js"></script>
 
     <script src="../js/Monitor.js"></script>
+
+  <script src="../js/pollingData.js"></script>
+
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script src="//cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js"></script>
+
+  <script src="https://unpkg.io/@vertx/eventbus-bridge-client.js@1.0.0-1/vertx-eventbus.js"></script>
+
 </head>
 
 <body>
@@ -330,16 +333,16 @@
 
     </section>
 
-    <style>
-      .small-box {
-        height: 250px;
-        padding: 10px;
-      }
+<!--    <style>-->
+<!--      .small-box {-->
+<!--        height: 250px;-->
+<!--        padding: 10px;-->
+<!--      }-->
 
-      .small-box .inner {
-        padding: 10px;
-      }
-    </style>
+<!--      .small-box .inner {-->
+<!--        padding: 10px;-->
+<!--      }-->
+<!--    </style>-->
 
     <div class="row">
       <div class="col">
@@ -416,35 +419,37 @@
   </div>
 
   <div class="content-wrapper hidden" id="viewMonitorDiv">
-    <div class="row">
-      <div class="col">
-        <div class="small-box bg-success">
-          <div class="inner">
-            <div id="availabilityBox" style="background-color: limegreen; color: black;"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="small-box bg-danger">
-          <div class="inner">
-            <div id="lossBox" style="background-color: red; color: black;"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="small-box bg-info">
-          <div class="inner">
-            <div id="rttBox" style="background-color: dodgerblue; color: black;"></div>
-          </div>
-        </div>
+  <div class="row">
+    <div class="col">
+      <div class="small-box" id="lossBox" style="background-color: red; height: 100px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: bold;">
+        <div id="lossLabel">Loss</div>
+        <div id="lossValue"></div>
       </div>
     </div>
 
-    <canvas id="metricChart"></canvas>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="col">
+      <div class="small-box" id="rttBox" style="background-color: blue; height: 100px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: bold;">
+        <div id="rttLabel"></div>
+        <div id="rttValue"></div>
+      </div>
+    </div>
   </div>
+
+  <div class="row">
+    <div class="col">
+      <canvas id="availabilityChart" style="height: 100px; width: 150px;"></canvas>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <canvas id="metricChart" style="height: 100px; width: 150px;"></canvas>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../js/viewMonitor.js"></script>
+</div>
 
   <div class="content-wrapper hidden" id="discoveyDiv">
 

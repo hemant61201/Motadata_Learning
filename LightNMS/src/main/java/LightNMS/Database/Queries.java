@@ -66,7 +66,7 @@ public class Queries
 
       case "PollingTable":
       {
-        query = "SELECT p.metrics, p.data, p.ip, p.timestamp FROM pollingtable p WHERE (metrics = 'Loss' OR metrics = 'Status') AND timestamp = (SELECT MAX(timestamp) FROM pollingtable WHERE metrics = p.metrics) OR (metrics = 'Min' OR metrics = 'Max' OR metrics = 'Avg') AND timestamp >= NOW() - INTERVAL '360000' SECOND AND ip = ? ORDER BY p.metrics";
+        query = "SELECT p.metrics, p.data, p.ip, p.timestamp FROM pollingtable p WHERE (metrics IN ('Loss', 'Status') AND timestamp = (SELECT MAX(timestamp) FROM pollingtable WHERE metrics = p.metrics)) OR (metrics IN ('Min', 'Max', 'Avg') AND timestamp >= NOW() - INTERVAL '86400' SECOND AND ip = ?) OR (metrics = 'Status' AND timestamp >= NOW() - INTERVAL '86400' SECOND AND ip = ?) ORDER BY p.metrics";
 
         break;
       }
@@ -109,11 +109,6 @@ public class Queries
 
         break;
       }
-
-      case "PollingTable":
-      {
-        break;
-      }
     }
 
     return query;
@@ -150,10 +145,6 @@ public class Queries
         break;
       }
 
-      case "PollingTable":
-      {
-        break;
-      }
     }
 
     if(flag)
@@ -166,5 +157,12 @@ public class Queries
     }
 
     return query;
+  }
+
+  public static String livePollingData()
+  {
+    String pollingQuery = "SELECT m.metric, m.data, m.ip, n.success_count, n.failed_count, n.unknown_count FROM (( SELECT 'Max' AS metric, p.data, p.ip FROM pollingtable p WHERE p.metrics = 'Max' AND p.timestamp >= NOW() - INTERVAL '86400' SECOND ORDER BY p.data DESC LIMIT 10) UNION ALL ( SELECT 'Min' AS metric, p.data, p.ip FROM pollingtable p WHERE p.metrics = 'Min' AND p.timestamp >= NOW() - INTERVAL '86400' SECOND ORDER BY p.data ASC LIMIT 10)) AS m CROSS JOIN ( SELECT COUNT(CASE WHEN status = 'success' THEN 1 END) AS success_count, COUNT(CASE WHEN status = 'failed' THEN 1 END) AS failed_count, COUNT(CASE WHEN status = 'Unknown' THEN 1 END) AS unknown_count FROM monitortable) AS n";
+
+    return pollingQuery;
   }
 }
