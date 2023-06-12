@@ -27,32 +27,6 @@ function showDiv(divId) {
       ajax.get(config);
     });
   }
-
-  // else if (divId === 'dashboardDiv') {
-  //   $(div).ready(function ()
-  //   {
-  //     var eventBus = new EventBus('http://localhost:8080/eventbus/');
-  //
-  //     eventBus.onopen = () => {
-  //       eventBus.registerHandler('updates.pollingdata', (error, message) => {
-  //         console.log(`received a message: ${JSON.stringify(message)}`);
-  //       });
-  //     }
-  //
-  //     eventBus.onerror = function (e) {
-  //       console.log('General error: ', e);
-  //     };
-  //     var eventBus = new EventBus('/eventbus/');
-  //
-  //     eventBus.onopen = function ()
-  //     {
-  //       eventBus.registerHandler('pollingdata', function (error, message)
-  //       {
-  //         console.log(`received a message: ${JSON.stringify(message)}`);
-  //       });
-  //     }
-  //   });
-  // }
 }
 
 window.addEventListener('load', function() {

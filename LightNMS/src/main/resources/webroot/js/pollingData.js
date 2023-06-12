@@ -1,4 +1,4 @@
-$(function ()
+$('dashboardDiv').ready(function ()
 {
   var eventBus = new EventBus('/eventbus/');
 
@@ -6,7 +6,7 @@ $(function ()
   {
     eventBus.registerHandler('updates.pollingdata', function (error, message)
     {
-      console.log(`received a message: ${JSON.stringify(message)}`);
+      updateData(JSON.stringify(message.body));
     });
   }
 

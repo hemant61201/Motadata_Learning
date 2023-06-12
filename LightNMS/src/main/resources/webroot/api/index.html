@@ -303,6 +303,9 @@
 
   <div class="content-wrapper hidden" id="dashboardDiv">
 
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+
     <section class="content-header">
 
       <div class="container-fluid">
@@ -333,21 +336,12 @@
 
     </section>
 
-<!--    <style>-->
-<!--      .small-box {-->
-<!--        height: 250px;-->
-<!--        padding: 10px;-->
-<!--      }-->
-
-<!--      .small-box .inner {-->
-<!--        padding: 10px;-->
-<!--      }-->
-<!--    </style>-->
-
     <div class="row">
       <div class="col">
         <div class="small-box bg-gradient-success">
           <div class="inner">
+            <div class="big-text">Up</div>
+            <div class="value" id="successValue"></div>
           </div>
         </div>
       </div>
@@ -355,6 +349,8 @@
       <div class="col">
         <div class="small-box bg-gradient-red">
           <div class="inner">
+            <div class="big-text">Down</div>
+            <div class="value" id="failedValue"></div>
           </div>
         </div>
       </div>
@@ -362,11 +358,36 @@
       <div class="col">
         <div class="small-box bg-gray-dark">
           <div class="inner">
+            <div class="big-text">Unknown</div>
+            <div class="value" id="unknownValue"></div>
           </div>
         </div>
       </div>
     </div>
 
+    <div class="row">
+      <div class="col">
+        <table class="table" id="maxTable">
+          <caption>Max 10 Rtt</caption>
+          <tr>
+            <th>IP</th>
+            <th>Value</th>
+          </tr>
+        </table>
+      </div>
+
+      <div class="col">
+        <table class="table" id="minTable">
+          <caption>Min 10 Rtt</caption>
+          <tr>
+            <th>IP</th>
+            <th>Value</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <script src="../js/dashbord.js"></script>
 
   </div>
 
