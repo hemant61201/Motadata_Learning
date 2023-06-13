@@ -18,7 +18,6 @@ public class Queries
       {
         query = "INSERT INTO " + tableName + " (DEVICENAME, IP, DEVICETYPE, STATUS, CREDENTIAL) SELECT ?, ?, ?, ?, ? FROM dual WHERE NOT EXISTS ( SELECT 1 FROM MonitorTable WHERE IP = ? AND DEVICETYPE = ?)";
 
-
         break;
       }
 

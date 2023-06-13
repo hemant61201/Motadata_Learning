@@ -23,8 +23,6 @@ public class PollingExecution extends AbstractVerticle
       {
         if(runResult.succeeded())
         {
-          System.out.println("response  " + runResult.result().body().toString());
-
           JsonObject getData = (JsonObject) runResult.result().body();
 
           JsonArray ipArray = new JsonArray(getData.getString("ip"));
@@ -42,16 +40,10 @@ public class PollingExecution extends AbstractVerticle
               .put("port", 22)
               .put("id", idArray));
 
-          System.out.println(requestData);
-
           executeCommand("/home/hemant/Music/LightNMS/src/main/resources/BootStrap", requestData.encode(), exeResult ->
           {
             if (exeResult.succeeded())
             {
-              System.out.println("Process executed successfully");
-
-              System.out.println("Output:\n" + exeResult.result());
-
               String[] lines = exeResult.result().split("\\r?\\n");
 
               JsonObject finalResult = new JsonObject();
@@ -97,7 +89,6 @@ public class PollingExecution extends AbstractVerticle
     });
 
     startPromise.complete();
-//    return null;
   }
 
   private void executeCommand(String command, String input, io.vertx.core.Handler<io.vertx.core.AsyncResult<String>> handler)

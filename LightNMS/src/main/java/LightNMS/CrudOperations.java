@@ -127,11 +127,7 @@ public class CrudOperations extends AbstractVerticle {
       {
         if(pollingData != null && addTable.equals("PollingTable"))
         {
-          System.out.println(pollingData);
-
           preparedStatement = connection.prepareStatement(query);
-
-          System.out.println(query);
 
           JsonObject jsonDataObj = new JsonObject(pollingData);
 
@@ -158,8 +154,6 @@ public class CrudOperations extends AbstractVerticle {
             }
           }
           preparedStatement.executeBatch();
-
-          System.out.println("Records inserted Successfully ");
 
           blockingPromise.complete();
         }
@@ -191,8 +185,6 @@ public class CrudOperations extends AbstractVerticle {
           preparedStatement.setString(7, jsonObject.getString("DEVICETYPE"));
 
           int updatedRow = preparedStatement.executeUpdate();
-
-          System.out.println("Records inserted Successfully " + updatedRow);
 
           blockingPromise.complete(updatedRow);
         }
@@ -281,8 +273,6 @@ public class CrudOperations extends AbstractVerticle {
 
           monitorData.put("id", idArray);
 
-          System.out.println("crudResult : " + monitorData.toString());
-
           monitorDataTable.put(1, monitorData);
 
           connectionPool.removeConnection(connection1);
@@ -349,8 +339,6 @@ public class CrudOperations extends AbstractVerticle {
           jsonNode.set("Status", statusNode);
 
           String jsonString = objectMapper.writeValueAsString(jsonNode);
-
-          System.out.println(jsonString);
 
           JsonObject viewObject = new JsonObject(jsonString);
 
@@ -442,7 +430,6 @@ public class CrudOperations extends AbstractVerticle {
       catch (Exception exception)
       {
         exception.printStackTrace();
-        System.out.println(exception);
 
         blockingPromise.fail(exception);
       }
@@ -550,8 +537,6 @@ public class CrudOperations extends AbstractVerticle {
 
         int updatedRow = preparedStatement.executeUpdate();
 
-        System.out.println("Records deleted Successfully " + updatedRow);
-
         blockingPromise.complete(updatedRow);
 
       }
@@ -598,8 +583,6 @@ public class CrudOperations extends AbstractVerticle {
         preparedStatement.setInt(3, id);
 
         int updatedRow = preparedStatement.executeUpdate();
-
-        System.out.println("Records Updated Successfully " + updatedRow);
 
         blockingPromise.complete(updatedRow);
 
@@ -653,8 +636,6 @@ public class CrudOperations extends AbstractVerticle {
 
           preparedStatement.executeBatch();
 
-          System.out.println("Monitor Record Succesfull Updated");
-
           blockingPromise.complete();
         }
 
@@ -667,8 +648,6 @@ public class CrudOperations extends AbstractVerticle {
           preparedStatement.setInt(2,id);
 
           int updatedRow = preparedStatement.executeUpdate();
-
-          System.out.println("Records update Successfully " + updatedRow);
 
           blockingPromise.complete(updatedRow);
         }
@@ -686,7 +665,6 @@ public class CrudOperations extends AbstractVerticle {
       if (result.succeeded())
       {
         connectionPool.removeConnection(connection);
-
 
         if(result.result() == null)
         {
@@ -816,8 +794,6 @@ public class CrudOperations extends AbstractVerticle {
         {
           if (result.succeeded())
           {
-            System.out.println(result.result().toString());
-
             vertx.eventBus().publish("updates.pollingdata",result.result());
           }
 
@@ -842,9 +818,9 @@ public class CrudOperations extends AbstractVerticle {
 
         jsonObject = (JsonObject) message.body();
 
-        System.out.println("hi" + jsonObject.getString("ip"));
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -864,8 +840,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("add_MonitorTable", message ->
@@ -880,9 +854,9 @@ public class CrudOperations extends AbstractVerticle {
 
         jsonObject = (JsonObject) message.body();
 
-        System.out.println("hi" + jsonObject.getString("CREDENTIAL"));
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -902,8 +876,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("add_PollingTable", message ->
@@ -917,6 +889,8 @@ public class CrudOperations extends AbstractVerticle {
         pollingData = message.body().toString();
 
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -934,8 +908,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("get_DiscoveryTable", message ->
@@ -946,9 +918,9 @@ public class CrudOperations extends AbstractVerticle {
 
         table = splitAddress[1];
 
-        System.out.println(address);
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -979,8 +951,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("get_DiscoveryTable_id", message ->
@@ -991,9 +961,9 @@ public class CrudOperations extends AbstractVerticle {
 
         id = Integer.parseInt(message.body().toString());
 
-        System.out.println(address);
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -1020,8 +990,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("get_MonitorTable_data", message ->
@@ -1030,9 +998,9 @@ public class CrudOperations extends AbstractVerticle {
 
         table = address;
 
-        System.out.println(address);
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -1063,8 +1031,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("get_MonitorTable", message ->
@@ -1077,9 +1043,9 @@ public class CrudOperations extends AbstractVerticle {
 
         type = message.body().toString();
 
-        System.out.println(address);
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -1106,8 +1072,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("get_PollingTable", message ->
@@ -1122,9 +1086,9 @@ public class CrudOperations extends AbstractVerticle {
 
         type = message.body().toString();
 
-        System.out.println(address);
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -1151,8 +1115,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
 
@@ -1162,9 +1124,9 @@ public class CrudOperations extends AbstractVerticle {
 
         id = Integer.parseInt(message.body().toString());
 
-        System.out.println("id : " + id);
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -1184,8 +1146,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("delete_MonitorTable", message ->
@@ -1194,9 +1154,9 @@ public class CrudOperations extends AbstractVerticle {
 
         id = Integer.parseInt(message.body().toString());
 
-        System.out.println("id : " + id);
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -1216,8 +1176,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("update_Discovery", message ->
@@ -1230,8 +1188,6 @@ public class CrudOperations extends AbstractVerticle {
 
         if(splitMsg[1].equals("credential"))
         {
-          System.out.println(splitMsg[2]);
-
           String[] credentialValue = splitMsg[2].split("\\.");
 
           fieldValue = "{\"credential_userName\":" + "\"" + credentialValue[0] + "\"" + ",\"credential_password\":" + "\"" +credentialValue[1] + "\"}";
@@ -1242,11 +1198,11 @@ public class CrudOperations extends AbstractVerticle {
           fieldValue = splitMsg[2];
         }
 
-        System.out.println("id : " + id);
-
         address += "Table_" + splitMsg[1];
 
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -1266,15 +1222,11 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("update_DiscoveryTable", message ->
       {
         String address = message.address();
-
-        System.out.println(message.body().toString());
 
         String[] splitMsg = message.body().toString().split("_");
 
@@ -1284,13 +1236,11 @@ public class CrudOperations extends AbstractVerticle {
 
         String numberString = number.substring(1, number.length() - 1);
 
-        System.out.println(numberString);
-
         id = Integer.parseInt(numberString);
 
-        System.out.println("id : " + id);
-
         Promise<Object> promise = Promise.promise();
+
+        connectionConfig(address, promise);
 
         promise.future().onComplete(result ->
         {
@@ -1310,8 +1260,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
       vertx.eventBus().consumer("update_MonitorTable", message ->
@@ -1339,6 +1287,8 @@ public class CrudOperations extends AbstractVerticle {
 
         Promise<Object> promise = Promise.promise();
 
+        connectionConfig(address, promise);
+
         promise.future().onComplete(result ->
         {
           if (result.succeeded())
@@ -1355,8 +1305,6 @@ public class CrudOperations extends AbstractVerticle {
             message.fail(500, cause.getMessage());
           }
         });
-
-        connectionConfig(address, promise);
       });
 
 

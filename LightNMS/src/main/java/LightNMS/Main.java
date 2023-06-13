@@ -6,7 +6,6 @@ public class Main {
 
   public static void main(String[] args)
   {
-
     //TODO add Future Cordinations and also introduce Promise in all the verticles
     Vertx vertx = Vertx.vertx();
 
@@ -18,7 +17,7 @@ public class Main {
 
     Promise<String> pollingExecutionDeployment = Promise.promise();
 
-    vertx.deployVerticle(Visualization.class.getName(), visualizationDeployment);
+    vertx.deployVerticle(VisualPublicAPI.class.getName(), visualizationDeployment);
 
     vertx.deployVerticle(Discovery.class.getName(), discoveryDeployment);
 

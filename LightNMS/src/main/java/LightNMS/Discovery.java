@@ -26,8 +26,6 @@ public class Discovery extends AbstractVerticle
 
         id = message.body().toString();
 
-        System.out.println("id : " + id);
-
         Promise<Object> promise = Promise.promise();
 
         promise.future().onComplete(result ->
@@ -53,8 +51,6 @@ public class Discovery extends AbstractVerticle
         {
           if (rowResult.succeeded())
           {
-            System.out.println("response" + rowResult.result().body().toString());
-
             JsonObject getData = (JsonObject) rowResult.result().body();
 
             String credentialData = getData.getString("CREDENTIAL");
@@ -63,13 +59,12 @@ public class Discovery extends AbstractVerticle
 
             JsonArray ipArray = new JsonArray();
 
-            for (String value : values) {
+            for (String value : values)
+            {
               ipArray.add(value);
             }
 
             JsonObject credentialObject = new JsonObject(credentialData);
-
-            System.out.println(credentialObject.getString("credential_userName"));
 
             requestData.put("Method", "Discovery")
               .put("Operation", getData.getString("DEVICETYPE"))
@@ -85,10 +80,6 @@ public class Discovery extends AbstractVerticle
             {
               if (exeResult.succeeded())
               {
-                System.out.println("Process executed successfully");
-
-                System.out.println("Output:\n" + exeResult.result());
-
                 vertx.eventBus().request("update_DiscoveryTable", exeResult.result(), updateResult ->
                 {
                   if(updateResult.succeeded())
@@ -120,7 +111,6 @@ public class Discovery extends AbstractVerticle
 
       startPromise.fail(exception);
     }
-//    return null;
   }
 
   private void executeCommand(String command, String input, io.vertx.core.Handler<io.vertx.core.AsyncResult<String>> handler)
@@ -135,7 +125,6 @@ public class Discovery extends AbstractVerticle
 
     vertx.<String>executeBlocking(future ->
     {
-      System.out.println(Thread.currentThread().getName());
       try
       {
         NuProcess process = pb.start();
