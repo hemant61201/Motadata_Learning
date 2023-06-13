@@ -23,7 +23,7 @@ function fetchData()
   const method = "POST";
 
   const url = "/login"
-
+  // is contentType actually required
   const contentType = "application/x-www-form-urlencoded";
 
   const formData = new URLSearchParams();

@@ -1,27 +1,47 @@
 package LightNMS;
 
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 
 public class Main {
 
   public static void main(String[] args)
   {
+
+    //TODO add Future Cordinations and also introduce Promise in all the verticles
     Vertx vertx = Vertx.vertx();
 
-    vertx.deployVerticle(Visualization.class.getName()).onSuccess(res -> {
-      System.out.println("deploy succede visual" + res);
-    });
+    Promise<String> visualizationDeployment = Promise.promise();
 
-    vertx.deployVerticle(Discovery.class.getName()).onSuccess(res -> {
-      System.out.println("deploy succede discovery" + res);
-    });
+    Promise<String> discoveryDeployment = Promise.promise();
 
-    vertx.deployVerticle(CrudOperations.class.getName()).onSuccess(res -> {
-      System.out.println("deploy succede crud" + res);
-    });
+    Promise<String> crudOperationsDeployment = Promise.promise();
 
-    vertx.deployVerticle(PollingExecution.class.getName()).onSuccess(res -> {
-      System.out.println("deploy succede crud" + res);
-    });
+    Promise<String> pollingExecutionDeployment = Promise.promise();
+
+    vertx.deployVerticle(Visualization.class.getName(), visualizationDeployment);
+
+    vertx.deployVerticle(Discovery.class.getName(), discoveryDeployment);
+
+    vertx.deployVerticle(CrudOperations.class.getName(), crudOperationsDeployment);
+
+    vertx.deployVerticle(PollingExecution.class.getName(), pollingExecutionDeployment);
+
+    CompositeFuture.all(visualizationDeployment.future(), discoveryDeployment.future(), crudOperationsDeployment.future(), pollingExecutionDeployment.future())
+      .onComplete(ar ->
+      {
+        if (ar.succeeded())
+        {
+          System.out.println("All verticles deployed successfully");
+        }
+
+        else
+        {
+          System.out.println("One or more verticles failed to deploy");
+
+          ar.cause().printStackTrace();
+
+          System.exit(1);
+        }
+      });
   }
 }

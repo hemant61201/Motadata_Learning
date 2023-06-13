@@ -1,10 +1,9 @@
 package LightNMS;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.http.HttpMethod;
+import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.auth.authentication.AuthenticationProvider;
 import io.vertx.ext.auth.properties.PropertyFileAuthentication;
 import io.vertx.ext.bridge.PermittedOptions;
 import io.vertx.ext.web.Router;
@@ -13,13 +12,10 @@ import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class Visualization extends AbstractVerticle
 {
   @Override
-  public void start()
+  public void start(Promise<Void> startPromise)
   {
     try
     {
@@ -31,19 +27,19 @@ public class Visualization extends AbstractVerticle
 
       PropertyFileAuthentication authenticate = PropertyFileAuthentication.create(vertx,"user.properties");
 
-      router.route("/api/*").handler(RedirectAuthHandler.create(authenticate, "login.html"));
+      router.route("/api/*").handler(RedirectAuthHandler.create(authenticate, "/login.html"));
 
       router.post("/login").handler(FormLoginHandler.create(authenticate));
+     // This is for Login
+      router.route().handler(StaticHandler.create());
 
       router.route("/api/*").handler(StaticHandler.create("api").setCachingEnabled(false));
 
-      router.route().handler(StaticHandler.create());
-
       router.route("/api/logout").handler(context -> {
-
+        // to check the clearUSer Usecase
         context.clearUser();
 
-        context.redirect("/api/");
+        context.redirect("/api/login.html");
       });
 
       router.post("/addDiscovery").handler(routingContext -> {
@@ -205,18 +201,23 @@ public class Visualization extends AbstractVerticle
         .addInboundPermitted(new PermittedOptions().setAddressRegex("updates.*"))
         .addOutboundPermitted(new PermittedOptions().setAddressRegex("updates.*"));
 
-      router.mountSubRouter("/eventbus",jsHandler.bridge(bridgeOptions));
-
+      router.mountSubRouter("/api/eventbus",jsHandler.bridge(bridgeOptions));
+      // is setMaxHeaderSize actually  required -- > no
+      // is TCP keep alive required then why?
       vertx.createHttpServer(new HttpServerOptions()
-          .setMaxHeaderSize(32 * 1024)
           .setTcpKeepAlive(true))
         .requestHandler(router)
         .listen(8080);
+
+      // write a handler to check whether deployment is complete or not
+      startPromise.complete();
     }
 
-    catch (Exception e)
+    catch (Exception exception)
     {
-      System.out.println(e.getMessage());
+      System.out.println(exception.getMessage());
+
+      startPromise.fail(exception);
     }
   }
 }

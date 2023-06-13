@@ -385,11 +385,11 @@ var ajax = {
                 title: 'Actions',
                 data: null,
                 render: function (data, type, row) {
-                  var editButton = '<button class="edit-button" onclick="#">Edit</button>';
+                  // var editButton = '<button class="edit-button" onclick="#">Edit</button>';
                   var viewButton = '<button class="view-button" onclick="viewBtn.onclick(this)">View</button>';
                   var deleteButton = '<button class="delete-button" onclick="monitorTableBtn.onclick(this)">Delete</button>';
 
-                  return editButton + ' ' + viewButton + ' ' + deleteButton;
+                  return viewButton + ' ' + deleteButton;
                 }
               }
             ]

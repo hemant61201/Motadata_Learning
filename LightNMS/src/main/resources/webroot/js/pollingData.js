@@ -1,6 +1,6 @@
 $('dashboardDiv').ready(function ()
 {
-  var eventBus = new EventBus('/eventbus/');
+  var eventBus = new EventBus('/api/eventbus/');
 
   eventBus.onopen = function ()
   {

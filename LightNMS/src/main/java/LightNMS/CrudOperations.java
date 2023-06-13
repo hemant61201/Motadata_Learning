@@ -5,26 +5,15 @@ import LightNMS.Database.MetricsData;
 import LightNMS.Database.Queries;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.vertx.ext.bridge.PermittedOptions;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.CorsHandler;
-import io.vertx.ext.web.handler.sockjs.SockJSBridgeOptions;
-import io.vertx.ext.web.handler.sockjs.SockJSHandler;
-
-import java.security.PrivilegedExceptionAction;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
+//TODO remove unused imports
 public class CrudOperations extends AbstractVerticle {
   private PreparedStatement preparedStatement = null;
   private String[] queryAddress = new String[2];

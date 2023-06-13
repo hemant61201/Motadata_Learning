@@ -49,7 +49,7 @@ function updateData(data) {
     var value = jsonData.min.Min[ip];
 
     var row = `<tr><td>${ip}</td><td>${value}</td></tr>`;
-    
+
     minTable.innerHTML += row;
   }
 }
