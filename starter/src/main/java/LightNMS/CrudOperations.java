@@ -675,7 +675,9 @@ public class CrudOperations extends AbstractVerticle
       }
       else
       {
-        vertx.undeploy(CrudOperations.class.getName());
+        startPromise.fail("Crud operation verticle failed due to not able to create connection pool");
+
+//        vertx.undeploy(CrudOperations.class.getName());
       }
     }
 

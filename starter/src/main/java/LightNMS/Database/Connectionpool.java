@@ -20,12 +20,14 @@ public class Connectionpool
   private static final int POOLCAPACITY = 10;
 
   // private
-  public static Properties authentication()
+  private static Properties authentication()
   {
-    Properties auth_Properties = new Properties();
+    Properties auth_Properties = null;
 
     try(FileInputStream fileInputStream = new FileInputStream("src/main/resources/jdbcAuthentication"))
     {
+      auth_Properties = new Properties();
+
       auth_Properties.load(fileInputStream);
     }
 
@@ -48,12 +50,7 @@ public class Connectionpool
     // null check for properties
     Properties auth_Properties = authentication();
 
-    if(auth_Properties == null)
-    {
-      isCreateConnectionSucess = false;
-    }
-
-    if(isCreateConnectionSucess)
+    if(auth_Properties != null)
     {
       try
       {
@@ -71,12 +68,11 @@ public class Connectionpool
 
         exception.printStackTrace();
       }
-
-      return isCreateConnectionSucess;
     }
-
     else
     {
+      isCreateConnectionSucess = false;
+
       LOGGER.error("Create Connection Failed");
     }
 
@@ -126,11 +122,11 @@ public class Connectionpool
 
   public static void closeConnections()
   {
-    for(int index=0; index<ACTIVECONNECTION.size(); index++)
+    for (Connection connection : ACTIVECONNECTION)
     {
       try
       {
-        ACTIVECONNECTION.get(index).close();
+        connection.close();
       }
       catch (Exception exception)
       {
