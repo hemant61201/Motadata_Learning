@@ -254,9 +254,7 @@ public class DatabaseOperations extends AbstractVerticle
           {
             Connectionpool.removeConnection(connection);
 
-            Throwable cause = result.cause();
-
-            promise.fail(cause);
+            promise.fail(result.cause());
           }
         });
       }
@@ -604,9 +602,7 @@ public class DatabaseOperations extends AbstractVerticle
 
             else
             {
-              Throwable cause = result.cause();
-
-              System.out.println("Add operation failed: " + cause.getMessage());
+              System.out.println("Add operation failed: " + result.cause());
             }
           });
         });
