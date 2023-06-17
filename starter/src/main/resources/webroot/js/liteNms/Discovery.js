@@ -1,3 +1,4 @@
+// Naming
 function myFunction()
 {
   let config = getdiscoveryConfig();
@@ -57,7 +58,7 @@ function myFunction()
 
 var discovery =
   {
-    onclick()
+    onclick : function ()
     {
       let myData = fetchData();
 
@@ -92,9 +93,9 @@ function fetchData()
 
   const deviceType = document.getElementById("type").value;
 
-  const credential_userName = document.getElementById("credential_username").value;
+  var credential_userName = document.getElementById("credential_username").value;
 
-  const credential_password = document.getElementById("credential_passwd").value;
+  var credential_password = document.getElementById("credential_passwd").value;
 
   var credential = {
 
@@ -104,10 +105,12 @@ function fetchData()
   };
 
   var data = JSON.stringify({
-    DEVICENAME: deviceName,
-    DEVICETYPE: deviceType,
-    IP: ip,
-    CREDENTIAL: credential
+    deviceName: deviceName,
+    ip: ip,
+    deviceType: deviceType,
+    status: "unknown",
+    credential: credential,
+    tableName: "discovery_table"
   })
 
   myData =
@@ -124,15 +127,19 @@ function fetchData()
 
 function getdiscoveryConfig()
 {
-  const method = "GET";
+  const method = "POST";
 
-  const url = "/getDiscoveryTable"
+  const url = "/getDiscovery"
+
+  const data = JSON.stringify({tableName: "discovery_table"})
 
   var config =
     {
       method: method,
 
-      url: url
+      url: url,
+
+      data: data,
     }
 
     return config;

@@ -228,15 +228,13 @@ var viewBtn =
       }
     };
 
-function deleteConfig(id_no)
+function deleteConfig(id)
   {
     const method = "POST";
 
     const url = "/deleteDiscoveryTable";
 
-    const id = {
-      id: id_no
-    }
+    const data = JSON.stringify({tableName: "discovery_table", id: id})
 
     var config =
       {
@@ -244,21 +242,20 @@ function deleteConfig(id_no)
 
         url: url,
 
-        id: id,
+        data: data,
       }
 
     return config;
   };
 
-function deleteMonitorConfig(id_no)
+function deleteMonitorConfig(id)
 {
   const method = "POST";
 
   const url = "/deleteMonitorTable";
 
-  const id = {
-    id: id_no
-  }
+  const data = JSON.stringify({tableName: "monitor_table", id: id})
+
 
   var config =
     {
@@ -266,21 +263,19 @@ function deleteMonitorConfig(id_no)
 
       url: url,
 
-      id: id,
+      data: data,
     }
 
   return config;
 };
 
-function runConfig(id_no)
+function runConfig(id)
   {
     const method = "POST";
 
     const url = "/runDiscovery";
 
-    const id = {
-      id: id_no
-    }
+    const data = JSON.stringify({tableName: "discovery_table", id: id});
 
     var config =
       {
@@ -288,7 +283,7 @@ function runConfig(id_no)
 
         url: url,
 
-        id: id,
+        data: data,
       }
 
     return config;
@@ -300,9 +295,7 @@ function updateConfig(updateValue)
 
     const url = "/updateDiscovery";
 
-    const id = {
-      id: updateValue
-    }
+    const data = JSON.stringify({tableName: "discovery_table", id: updateValue})
 
     var config =
       {
@@ -310,21 +303,19 @@ function updateConfig(updateValue)
 
         url: url,
 
-        id: id,
+        data: data,
       }
 
     return config;
   };
 
-function viewMonitorConfig(ip_no)
+function viewMonitorConfig(ip)
   {
     const method = "POST"
 
     const url = "/viewMonitor"
 
-    const ip = {
-      ip: ip_no,
-    }
+    const data = JSON.stringify({tableName: "polling_table", ip: ip})
 
     var viewConf =
       {
@@ -332,7 +323,7 @@ function viewMonitorConfig(ip_no)
 
         url: url,
 
-        ip: ip,
+        data: data,
       };
 
     return viewConf;
@@ -340,15 +331,13 @@ function viewMonitorConfig(ip_no)
 
 function provisonConfig(tableValue)
   {
-    var data = tableValue.data();
+    var tableData = tableValue.data();
 
     const method = "POST"
 
     const url = "/addMonitorTable"
 
-    const id = {
-      id: data.ID,
-    }
+    const data = JSON.stringify({tableName:"discovery_table", id: tableData.ID});
 
     var provConf =
       {
@@ -356,7 +345,7 @@ function provisonConfig(tableValue)
 
         url: url,
 
-        id: id,
+        data: data,
       };
 
     return provConf;

@@ -23,33 +23,40 @@ public class Discovery extends AbstractVerticle
   {
     try
     {
-      vertx.eventBus().consumer("run_discovery", message ->
+      vertx.eventBus().consumer("runDiscovery", message ->
       {
         JsonObject requestData = new JsonObject();
 
         Promise<Object> promise = Promise.promise();
 
-        JsonObject json = new JsonObject(message.body().toString());
+        JsonObject discoveryData = new JsonObject(message.body().toString());
 
-        JsonArray paramJsonArray = json.getJsonArray("param");
+        JsonObject getDiscoveryData = new JsonObject();
 
-        Object[] param = new Object[paramJsonArray.size()];
+        JsonArray paramValues = new JsonArray();
 
-        for (int i = 0; i < paramJsonArray.size(); i++)
-        {
-          param[i] = paramJsonArray.getValue(i);
-        }
+        paramValues.add(discoveryData.getString("id"));
 
-        Future<Object> future = CrudOperations.executeGetQuery(vertx, "get_DiscoveryTable_id",param);
+        getDiscoveryData.put("action", "get");
+
+        getDiscoveryData.put("tableName", discoveryData.getString("tableName"));
+
+        getDiscoveryData.put("columns", "*");
+
+        getDiscoveryData.put("paramValues", paramValues);
+
+        getDiscoveryData.put("condition", " where id = ?");
+
+        Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getDiscoveryData);
 
         if (future != null)
         {
-          future.onComplete(asyncResult ->
+          future.onComplete(getResult ->
           {
-            if (asyncResult.succeeded())
+            if (getResult.succeeded())
             {
               @SuppressWarnings("unchecked")
-              HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) asyncResult.result();
+              HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) getResult.result();
 
               JsonObject getData = new JsonObject();
 
@@ -81,29 +88,39 @@ public class Discovery extends AbstractVerticle
                   .put("port", 22)
                   .put("id", new JsonArray().add(getData.getInteger("ID"))));
 
-              executeCommand("src/main/resources/BootStrap", requestData.encode(), exeResult ->
+              String workingDir = System.getProperty("user.dir");
+
+              String bootStrapPath = workingDir + "/src/main/resources/BootStrap";
+
+              executeCommand(bootStrapPath, requestData.encode(), exeResult ->
               {
                 if (exeResult.succeeded())
                 {
                   String[] result = exeResult.result().split("_");
 
-                  String number = result[1].trim();
+                  String id = result[1].trim();
 
-                  String numberString = number.substring(1, number.length() - 1);
+                  String idString = id.substring(1, id.length() - 1);
 
-                  Object[] parm = new Object[2];
+                  JsonObject updateStatus = new JsonObject();
 
-                  parm[0] = result[0];
+                  JsonArray paramValue = new JsonArray();
 
-                  parm[1] = Integer.parseInt(numberString);
+                  paramValue.add(result[0]);
 
-                  JsonObject msges = new JsonObject();
+                  paramValue.add(idString);
 
-                  msges.put("action", "update_DiscoveryTable");
+                  updateStatus.put("action","update");
 
-                  msges.put("param", parm);
+                  updateStatus.put("tableName", discoveryData.getString("tableName"));
 
-                  vertx.eventBus().request("database", msges.encode(), updateResult ->
+                  updateStatus.put("columns", "status");
+
+                  updateStatus.put("paramValues", paramValue);
+
+                  updateStatus.put("condition", " = ? where id = ?");
+
+                  vertx.eventBus().request("database", updateStatus, updateResult ->
                   {
                     if(updateResult.succeeded())
                     {
@@ -118,7 +135,7 @@ public class Discovery extends AbstractVerticle
                 }
                 else
                 {
-                  System.err.println("Process execution failed: " + exeResult.cause().getMessage());
+                  LOGGER.info("Process execution failed: " + exeResult.cause().getMessage());
 
                   startPromise.fail(exeResult.cause());
                 }
@@ -126,9 +143,7 @@ public class Discovery extends AbstractVerticle
             }
             else
             {
-              Throwable cause = asyncResult.cause();
-
-              LOGGER.error(cause.getMessage());
+              LOGGER.error(getResult.cause().getMessage());
             }
           });
         }
@@ -148,11 +163,9 @@ public class Discovery extends AbstractVerticle
 
           else
           {
-            Throwable cause = result.cause();
+            LOGGER.error("Discovery operation failed: " + result.cause());
 
-            LOGGER.error("Discovery operation failed: " + cause.getMessage());
-
-            message.fail(500, cause.getMessage());
+            message.fail(500, result.cause().getMessage());
           }
         });
       });

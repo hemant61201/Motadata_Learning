@@ -22,22 +22,36 @@ public class PollingExecution extends AbstractVerticle
   @Override
   public void start(Promise<Void> startPromise)
   {
-    vertx.setPeriodic(120_000, timerId ->
+    vertx.setPeriodic(20_000, timerId ->
     {
-      Object[] param = new Object[1];
+      JsonObject getMonitorData = new JsonObject();
 
-      param[0] = "Ping";
+      JsonArray paramValues = new JsonArray();
 
-      Future<Object> GetMonitor = CrudOperations.executeGetQuery(vertx, "get_MonitorTable_data",param);
+      paramValues.add("Ping");
+
+      getMonitorData.put("action", "get");
+
+      getMonitorData.put("tableName", "monitor_table");
+
+      getMonitorData.put("columns", "ip,id");
+
+      getMonitorData.put("address", "allIp");
+
+      getMonitorData.put("paramValues", paramValues);
+
+      getMonitorData.put("condition", " WHERE deviceType = ?");
+
+      Future<Object> GetMonitor = DatabaseOperations.executeGetQuery(vertx, getMonitorData);
 
       if (GetMonitor != null)
       {
-        GetMonitor.onComplete(asyncResult ->
+        GetMonitor.onComplete(getResult ->
         {
-          if (asyncResult.succeeded())
+          if (getResult.succeeded())
           {
             @SuppressWarnings("unchecked")
-            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) asyncResult.result();
+            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) getResult.result();
 
             JsonObject getData = new JsonObject();
 
@@ -61,7 +75,11 @@ public class PollingExecution extends AbstractVerticle
                 .put("port", 22)
                 .put("id", idArray));
 
-            executeCommand("src/main/resources/BootStrap", requestData.encode(), exeResult ->
+            String workingDir = System.getProperty("user.dir");
+
+            String bootStrapPath = workingDir + "/src/main/resources/BootStrap";
+
+            executeCommand(bootStrapPath, requestData.encode(), exeResult ->
             {
               if (exeResult.succeeded())
               {
@@ -93,36 +111,46 @@ public class PollingExecution extends AbstractVerticle
                   finalResult.put(id, entryObject);
                 }
 
-                List<Object[]> batchParam = new ArrayList<>();
+                JsonArray batchParam = new JsonArray();
 
                 for (String id : finalResult.fieldNames())
                 {
                   JsonObject metricData = finalResult.getJsonObject(id);
 
-                  Object[] parameter = new Object[2];
+                  JsonArray paramValue = new JsonArray();
 
-                  parameter[0] = metricData.getString("Status");
+                  paramValue.add(metricData.getString("Status"));
 
-                  parameter[1] = Integer.parseInt(metricData.getString("ID"));
+                  paramValue.add(Integer.parseInt(metricData.getString("ID")));
 
-                  batchParam.add(parameter);
+                  batchParam.add(paramValue);
                 }
 
-                Future<Object> updateMonitor = CrudOperations.executeBatchQuery(vertx, "update_MonitorTable", batchParam);
+                JsonObject updateStatus = new JsonObject();
+
+                updateStatus.put("action","update");
+
+                updateStatus.put("tableName", "monitor_table");
+
+                updateStatus.put("columns", "status");
+
+                updateStatus.put("paramValues", batchParam);
+
+                updateStatus.put("condition", " = ? where id = ?");
+
+                Future<Object> updateMonitor = DatabaseOperations.executeBatchQuery(vertx, updateStatus);
 
                 if (updateMonitor != null)
                 {
-                  updateMonitor.onComplete(result ->
+                  updateMonitor.onComplete(updateResult ->
                   {
-                    if (result.succeeded())
+                    if (updateResult.succeeded())
                     {
-                      LOGGER.info("Execution Successful Completed");
+                      LOGGER.info("Execution of Update Monitor Table Successful Completed");
                     }
                     else
                     {
-                      Throwable cause = result.cause();
-
-                      LOGGER.error("Error: " + cause.getMessage());
+                      LOGGER.error("Error: " + updateResult.cause());
                     }
                   });
                 }
@@ -131,7 +159,7 @@ public class PollingExecution extends AbstractVerticle
                   LOGGER.error("Error: UpdateMonitor is null");
                 }
 
-                List<Object[]> batchParam1 = new ArrayList<>();
+                JsonArray batchParam1 = new JsonArray();
 
                 for (String id : finalResult.fieldNames())
                 {
@@ -141,34 +169,44 @@ public class PollingExecution extends AbstractVerticle
                   {
                     if (!key.equals("IP") && !key.equals("ID"))
                     {
-                      Object[] parameter = new Object[3];
+                      JsonArray parameter = new JsonArray();
 
-                      parameter[0] = key;
+                      parameter.add(key);
 
-                      parameter[1] = metricData.getString(key);
+                      parameter.add(metricData.getString(key));
 
-                      parameter[2] = metricData.getString("IP");
+                      parameter.add(metricData.getString("IP"));
 
                       batchParam1.add(parameter);
                     }
                   }
                 }
 
-                Future<Object> AddPolling = CrudOperations.executeBatchQuery(vertx, "add_PollingTable",batchParam1);
+                JsonObject addData = new JsonObject();
+
+                addData.put("action","add");
+
+                addData.put("tableName", "polling_table");
+
+                addData.put("columns", "metrics, data, ip, timestamp");
+
+                addData.put("paramValues", batchParam1);
+
+                addData.put("condition", "VALUES (?, ?, ?, CURRENT_TIMESTAMP)");
+
+                Future<Object> AddPolling = DatabaseOperations.executeBatchQuery(vertx, addData);
 
                 if (AddPolling != null)
                 {
-                  AddPolling.onComplete(result ->
+                  AddPolling.onComplete(addResult ->
                   {
-                    if (result.succeeded())
+                    if (addResult.succeeded())
                     {
-                      LOGGER.info("Execution Successful Completed");
+                      LOGGER.info("Execution of add PollingTable Successful Completed");
                     }
                     else
                     {
-                      Throwable cause = result.cause();
-
-                      LOGGER.error("Error: " + cause.getMessage());
+                      LOGGER.error("Error: " + addResult.cause());
                     }
                   });
                 }
@@ -188,9 +226,7 @@ public class PollingExecution extends AbstractVerticle
           }
           else
           {
-            Throwable cause = asyncResult.cause();
-
-            LOGGER.error("Error: " + cause.getMessage());
+            LOGGER.error("Error: " + getResult.cause());
           }
         });
       }

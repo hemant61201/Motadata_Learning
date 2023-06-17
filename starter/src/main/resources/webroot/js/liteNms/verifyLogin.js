@@ -1,6 +1,6 @@
 var login =
 {
-  onclick()
+  onclick : function ()
   {
     let myData = fetchData();
 
@@ -11,6 +11,8 @@ var login =
     var alertIcon = document.getElementById("hemant-icon");
 
     console.log("login call gone"),
+
+      // var ajaxData = {url : 'login', param : '', type :'', callback : ''}
 
     genricajax.post(
       myData,

@@ -5,7 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="16 June LightNMS">
+      <change afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/DatabaseOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/ConstVariables.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/ConstVariables.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/Connectionpool.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/Connectionpool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/GenricQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/GenricQuery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Discovery.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Discovery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/PollingExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/PollingExecution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/VisualPublicAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/VisualPublicAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Discovery.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Discovery.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Genricajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Genricajax.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Monitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Monitor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/tableButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/tableButton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/verifyLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/verifyLogin.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,14 +98,7 @@
       <workItem from="1686035103439" duration="9040000" />
       <workItem from="1686169133867" duration="2040000" />
       <workItem from="1686286632617" duration="8024000" />
-      <workItem from="1686521054080" duration="11942000" />
-    </task>
-    <task id="LOCAL-00015" summary="April 1 WebSocket">
-      <created>1680363859038</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1680363859038</updated>
+      <workItem from="1686521054080" duration="17431000" />
     </task>
     <task id="LOCAL-00016" summary="April 3 WebSocket">
       <created>1680529370396</created>
@@ -430,7 +436,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686871623358</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="16 June LightNMS">
+      <created>1686894870885</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1686894870885</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

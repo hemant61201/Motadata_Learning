@@ -10,24 +10,9 @@ var genricajax =
 
         console.log(sendData);
       }
-
-      else if(data.url === "/addDiscovery")
-      {
-        sendData = data.data
-
-        console.log(sendData);
-      }
-
-      else if(data.url === "/viewMonitor")
-      {
-        sendData = data.ip
-
-        console.log(sendData);
-      }
-
       else
       {
-        sendData = data.id
+        sendData = data.data
 
         console.log(sendData);
       }
@@ -58,6 +43,8 @@ var genricajax =
           method: data.method,
 
           url: data.url,
+
+          data: data.data,
 
           success: function (ajaxResponse)
           {

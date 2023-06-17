@@ -1,5 +1,6 @@
 package LightNMS.Database;
 
+import LightNMS.ConstVariables;
 import LightNMS.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +18,18 @@ public class Connectionpool
 
   private static final ArrayList<Connection> ACTIVECONNECTION = new ArrayList<>();
 
-  private static final int POOLCAPACITY = 10;
+  private static final int POOLCAPACITY = ConstVariables.POOLCAPACITY;
 
   // private
   private static Properties authentication()
   {
     Properties auth_Properties = null;
 
-    try(FileInputStream fileInputStream = new FileInputStream("src/main/resources/jdbcAuthentication"))
+    String workingDir = System.getProperty("user.dir");
+
+    String jdbcPath = workingDir + "/src/main/resources/jdbcAuthentication";
+
+    try(FileInputStream fileInputStream = new FileInputStream(jdbcPath))
     {
       auth_Properties = new Properties();
 
@@ -116,21 +121,23 @@ public class Connectionpool
 
     catch (Exception exception)
     {
-      exception.printStackTrace();
+      LOGGER.error(exception.getMessage());
     }
   }
 
   public static void closeConnections()
   {
-    for (Connection connection : ACTIVECONNECTION)
+    for (Connection connection : connectionQueue)
     {
       try
       {
         connection.close();
+
+        LOGGER.info("Connection Closed");
       }
       catch (Exception exception)
       {
-        exception.printStackTrace();
+        LOGGER.error(exception.getMessage());
       }
     }
   }

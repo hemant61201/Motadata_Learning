@@ -48,15 +48,19 @@ function myMonitorFunction()
 
 function getmonitorConfig()
 {
-  const method = "GET";
+  const method = "POST";
 
   const url = "/getMonitorTable"
+
+  const data = JSON.stringify({tableName: "monitor_table"})
 
   let config =
     {
       method: method,
 
-      url: url
+      url: url,
+
+      data: data,
     }
 
   return config;

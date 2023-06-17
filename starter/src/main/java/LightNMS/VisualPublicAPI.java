@@ -18,76 +18,101 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class VisualPublicAPI extends AbstractVerticle
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-  private void handleEventBusRequest(RoutingContext routingContext, String action, Object[] param)
+  private void eventBusRequestHandler(RoutingContext routingContext, JsonObject message)
   {
-    JsonObject message = new JsonObject();
-
-    message.put("action", action);
-
-    if (param != null)
+    if(message.containsKey("address"))
     {
-      message.put("param", param);
-    }
-
-    if(action.equals("run_Discovery"))
-    {
-      vertx.eventBus().request("run_discovery", message.encode(), result ->
+      vertx.eventBus().request("runDiscovery", message, discoveryResult ->
       {
-        if (result.succeeded())
+        if (discoveryResult.succeeded())
         {
-          routingContext.response().end(result.result().body().toString());
+          routingContext.response().end(discoveryResult.result().body().toString());
         }
         else
         {
-          routingContext.response().setStatusCode(500).end("Error occurred");
+          routingContext.response().setStatusCode(500).end("Error occurred in discoveryResult");
         }
       });
     }
 
     else
     {
-      vertx.eventBus().request("database", message.encode(), result ->
+      vertx.eventBus().request("database", message, databaseResult ->
       {
-        if (result.succeeded())
+        if (databaseResult.succeeded())
         {
-            routingContext.response().end(result.result().body().toString());
+            routingContext.response().end(databaseResult.result().body().toString());
         }
         else
         {
-          routingContext.response().setStatusCode(500).end("Error occurred");
+          routingContext.response().setStatusCode(500).end("Error occurred in databaseResult");
         }
       });
     }
   }
 
-  private void handleAddDiscovery(RoutingContext routingContext)
+  private void addDiscoveryHandler(RoutingContext routingContext)
   {
-    JsonObject json = routingContext.body().asJsonObject();
+    JsonObject message = routingContext.body().asJsonObject();
 
-    if(json != null)
+    if(message != null)
     {
-      Object[] param = new Object[7];
+      JsonObject addData = new JsonObject();
 
-      param[0] = json.getString("DEVICENAME");
+      JsonArray paramValues = new JsonArray();
 
-      param[1] = json.getString("IP");
+      StringBuilder keyString = new StringBuilder();
 
-      param[2] = json.getString("DEVICETYPE");
+      Set<String> keys = message.fieldNames();
 
-      param[3] = "Unknown";
+      for (String key : keys)
+      {
+        if (key.equals("tableName"))
+        {
+          continue;
+        }
 
-      param[4] = json.getJsonObject("CREDENTIAL").toString();
+        if (keyString.length() > 0)
+        {
+          keyString.append(", ");
+        }
 
-      param[5] = json.getString("IP");
+        keyString.append(key);
 
-      param[6] = json.getString("DEVICETYPE");
+        if(key.equals("credential"))
+        {
+          paramValues.add("{\"credential_userName\":\"\",\"credential_password\":\"\"}");
+        }
 
-      handleEventBusRequest(routingContext, "add_DiscoveryTable", param);
+        else
+        {
+          paramValues.add(message.getString(key));
+        }
+      }
+
+      paramValues.add(message.getString("ip"));
+
+      paramValues.add(message.getString("deviceType"));
+
+      String columns = keyString.toString();
+
+      addData.put("action", "add");
+
+      addData.put("tableName", message.getString("tableName"));
+
+      addData.put("columns", columns);
+
+      addData.put("paramValues", paramValues);
+
+      addData.put("condition", "SELECT ?, ?, ?, ?, ? FROM dual WHERE NOT EXISTS ( SELECT 1 FROM " + message.getString("tableName") + " WHERE ip = ? AND deviceType = ?)");
+
+      eventBusRequestHandler(routingContext, addData);
     }
     else
     {
@@ -95,15 +120,29 @@ public class VisualPublicAPI extends AbstractVerticle
     }
   }
 
-  private void handleAddMonitorTable(RoutingContext routingContext)
+  private void addMonitorHandler(RoutingContext routingContext)
   {
-    String id = routingContext.request().getParam("id");
+    JsonObject message = routingContext.body().asJsonObject();
 
-    if(id != null)
+    if(message != null)
     {
-      Object[] param = new Object[]{id};
+      JsonObject getData = new JsonObject();
 
-      Future<Object> future = CrudOperations.executeGetQuery(vertx, "get_DiscoveryTable_id",param);
+      JsonArray paramValues = new JsonArray();
+
+      paramValues.add(message.getString("id"));
+
+      getData.put("action", "get");
+
+      getData.put("tableName", message.getString("tableName"));
+
+      getData.put("columns", "*");
+
+      getData.put("paramValues", paramValues);
+
+      getData.put("condition", " where id = ?");
+
+      Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getData);
 
       if (future != null)
       {
@@ -114,36 +153,59 @@ public class VisualPublicAPI extends AbstractVerticle
             @SuppressWarnings("unchecked")
             HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) asyncResult.result();
 
-            JsonObject getData = new JsonObject();
+            JsonObject addData = new JsonObject();
 
             for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
             {
-              getData = entry.getValue();
+              addData = entry.getValue();
             }
 
-            Object[] parm = new Object[7];
+            JsonArray paramValue = new JsonArray();
 
-            parm[0] = getData.getString("DEVICENAME");
+            StringBuilder keyString = new StringBuilder();
 
-            parm[1] = getData.getString("IP");
+            Set<String> keys = addData.fieldNames();
 
-            parm[2] = getData.getString("DEVICETYPE");
+            for (String key : keys)
+            {
+              if (key.equals("tableName") || key.equals("ID"))
+              {
+                continue;
+              }
 
-            parm[3] = "Unknown";
+              if (keyString.length() > 0)
+              {
+                keyString.append(", ");
+              }
 
-            parm[4] = getData.getString("CREDENTIAL");
+              keyString.append(key);
 
-            parm[5] = getData.getString("IP");
+              paramValue.add(addData.getString(key));
+            }
 
-            parm[6] = getData.getString("DEVICETYPE");
+            paramValue.add(addData.getString("IP"));
 
-            handleEventBusRequest(routingContext, "add_MonitorTable", parm);
+            paramValue.add(addData.getString("DEVICETYPE"));
+
+            String columns = keyString.toString();
+
+            String tableName = "monitor_table";
+
+            addData.put("action", "add");
+
+            addData.put("tableName", tableName);
+
+            addData.put("columns", columns);
+
+            addData.put("paramValues", paramValue);
+
+            addData.put("condition", "SELECT ?, ?, ?, ?, ? FROM dual WHERE NOT EXISTS ( SELECT 1 FROM " + tableName + " WHERE ip = ? AND deviceType = ?)");
+
+            eventBusRequestHandler(routingContext, addData);
           }
           else
           {
-            Throwable cause = asyncResult.cause();
-
-            LOGGER.error(cause.getMessage());
+            LOGGER.error(asyncResult.cause().getMessage());
           }
         });
       }
@@ -155,103 +217,95 @@ public class VisualPublicAPI extends AbstractVerticle
 
     else
     {
-      LOGGER.error("Message is null");
+      LOGGER.error("Message is null in addMonitorHandler");
     }
   }
 
-  private void handleGetDiscoveryTable(RoutingContext routingContext)
+  private void getHandler(RoutingContext routingContext)
   {
-    Object[] param = new Object[0];
+    JsonObject tableName = routingContext.body().asJsonObject();
 
-    Future<Object> future = CrudOperations.executeGetQuery(vertx, "get_DiscoveryTable",param);
-
-    if (future != null)
+    if(tableName != null)
     {
-      future.onComplete(asyncResult ->
+      JsonObject getData = new JsonObject();
+
+      JsonArray paramValues = new JsonArray(){};
+
+      getData.put("action", "get");
+
+      getData.put("tableName", tableName.getString("tableName"));
+
+      getData.put("columns", "id,deviceName,ip,deviceType,status");
+
+      getData.put("paramValues", paramValues);
+
+      getData.put("condition", "");
+
+      Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getData);
+
+      if (future != null)
       {
-        if (asyncResult.succeeded())
+        future.onComplete(getResult ->
         {
-          @SuppressWarnings("unchecked")
-          HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) asyncResult.result();
-
-          JsonArray jsonArray = new JsonArray();
-
-          for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+          if (getResult.succeeded())
           {
-            JsonObject jsonObject = entry.getValue();
+            @SuppressWarnings("unchecked")
+            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) getResult.result();
 
-            jsonArray.add(jsonObject.encode());
+            JsonArray jsonArray = new JsonArray();
+
+            for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+            {
+              JsonObject jsonObject = entry.getValue();
+
+              jsonArray.add(jsonObject.encode());
+            }
+
+            routingContext.response().end(String.valueOf(jsonArray));
           }
+          else
+          {
+            routingContext.response().setStatusCode(500).end("Error: " + getResult.cause());
+          }
+        });
+      }
+      else
+      {
+        LOGGER.error("Error: Future is null");
 
-          routingContext.response().end(String.valueOf(jsonArray));
-        }
-        else
-        {
-          Throwable cause = asyncResult.cause();
-
-          routingContext.response().setStatusCode(500).end("Error: " + cause.getMessage());
-        }
-      });
+        routingContext.response().setStatusCode(500).end("Error: Future is null");
+      }
     }
+
     else
     {
-      LOGGER.error("Error: Future is null");
-
-      routingContext.response().setStatusCode(500).end("Error: Future is null");
+      LOGGER.error("tableName is null");
     }
   }
 
-  private void handleGetMonitorTable(RoutingContext routingContext)
+  private void deleteHandler(RoutingContext routingContext)
   {
-    Object[] param = new Object[0];
+    JsonObject message = routingContext.body().asJsonObject();
 
-    Future<Object> future = CrudOperations.executeGetQuery(vertx, "get_MonitorTable",param);
-
-    if (future != null)
+    if(message != null)
     {
-      future.onComplete(asyncResult ->
-      {
-        if (asyncResult.succeeded())
-        {
-          @SuppressWarnings("unchecked")
-          HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) asyncResult.result();
+      JsonObject deleteData = new JsonObject();
 
-          JsonArray jsonArray = new JsonArray();
+      JsonArray paramValues = new JsonArray();
 
-          for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
-          {
-            JsonObject jsonObject = entry.getValue();
+      paramValues.add(message.getString("id"));
 
-            jsonArray.add(jsonObject.encode());
-          }
+      deleteData.put("action", "delete");
 
-          routingContext.response().end(String.valueOf(jsonArray));
-        }
-        else
-        {
-          Throwable cause = asyncResult.cause();
+      deleteData.put("tableName", message.getString("tableName"));
 
-          routingContext.response().setStatusCode(500).end("Error: " + cause.getMessage());
-        }
-      });
-    }
-    else
-    {
-      LOGGER.error("Error: Future is null");
+      deleteData.put("columns", "id,deviceName,ip,deviceType,status");
 
-      routingContext.response().setStatusCode(500).end("Error: Future is null");
-    }
-  }
+      deleteData.put("paramValues", paramValues);
 
-  private void handleDeleteDiscoveryTable(RoutingContext routingContext)
-  {
-    String id = routingContext.request().getParam("id");
+      deleteData.put("condition", " where id = ?");
 
-    if(id != null)
-    {
-      Object[] param = new Object[]{id};
-
-      handleEventBusRequest(routingContext, "delete_DiscoveryTable", param);
+      eventBusRequestHandler(routingContext, deleteData);
     }
 
     else
@@ -261,85 +315,104 @@ public class VisualPublicAPI extends AbstractVerticle
 
   }
 
-  private void handleDeleteMonitorTable(RoutingContext routingContext)
+  private void updateHandler(RoutingContext routingContext)
   {
-    String id = routingContext.request().getParam("id");
+    JsonObject message = routingContext.body().asJsonObject();
 
-    if(id != null)
+    if(message != null)
     {
-      Object[] param = new Object[]{id};
+      String[] data = message.getString("id").split("_");
 
-      handleEventBusRequest(routingContext, "delete_MonitorTable", param);
+      JsonObject updateData = new JsonObject();
+
+      JsonArray paramValues = new JsonArray();
+
+      if(data[1].equals("credential"))
+      {
+        String[] credentialValue = data[2].split("\\.");
+
+        paramValues.add("{\"credential_userName\":" + "\"" + credentialValue[0] + "\"" + ",\"credential_password\":" + "\"" +credentialValue[1] + "\"}");
+      }
+      else
+      {
+        paramValues.add(data[2]);
+      }
+
+      paramValues.add("unknown");
+
+      paramValues.add(data[0]);
+
+      updateData.put("action", "update");
+
+      updateData.put("tableName", message.getString("tableName"));
+
+      updateData.put("columns", data[1]);
+
+      updateData.put("paramValues", paramValues);
+
+      updateData.put("condition", " = ?, status = ? where id = ?");
+
+      eventBusRequestHandler(routingContext, updateData);
     }
 
     else
     {
-      LOGGER.error("id is null in DeleteMonitorTable");
+      LOGGER.error("Message is Null in updateHandler");
     }
-
 
   }
 
-  private void handleUpdateDiscovery(RoutingContext routingContext)
+  private void runDiscoveryHandler(RoutingContext routingContext)
   {
-    String[] message = routingContext.request().getParam("id").split("_");
+    JsonObject message = routingContext.body().asJsonObject();
 
-    Object[] param = new Object[3];
-
-    if(message[1].equals("credential"))
+    if(message != null)
     {
-      String[] credentialValue = message[2].split("\\.");
+      message.put("address", "runDiscovery");
 
-      param[0] = "{\"credential_userName\":" + "\"" + credentialValue[0] + "\"" + ",\"credential_password\":" + "\"" +credentialValue[1] + "\"}";
+      eventBusRequestHandler(routingContext, message);
     }
 
     else
     {
-      param[0] = message[2];
-    }
-
-    param[1] = "Unknown";
-
-    param[2] = message[0];
-
-    handleEventBusRequest(routingContext, "update_DiscoveryTable_" + message[1], param);
-  }
-
-  private void handleRunDiscovery(RoutingContext routingContext)
-  {
-    String id = routingContext.request().getParam("id");
-
-    if(id != null)
-    {
-      Object[] param = new Object[]{id};
-
-      handleEventBusRequest(routingContext, "run_Discovery", param);
-    }
-
-    else
-    {
-      LOGGER.error("id is null in RunDiscovery");
+      LOGGER.error("id is null in runDiscoveryHandler");
     }
   }
 
-  private void handleViewMonitor(RoutingContext routingContext)
+  private void viewMonitorHandler(RoutingContext routingContext)
   {
-    String ip = routingContext.request().getParam("ip");
+    JsonObject message = routingContext.body().asJsonObject();
 
-    if(ip != null)
+    if(message != null)
     {
-      Object[] param = new Object[]{ip,ip};
+      JsonObject getMonitor = new JsonObject();
 
-      Future<Object> future = CrudOperations.executeGetQuery(vertx, "get_PollingTable",param);
+      JsonArray paramValues = new JsonArray();
+
+      paramValues.add(message.getString("ip"));
+
+      paramValues.add(message.getString("ip"));
+
+      getMonitor.put("action", "get");
+
+      getMonitor.put("tableName", message.getString("tableName"));
+
+      getMonitor.put("columns", "p.metrics, p.data, p.ip, p.timestamp");
+
+      getMonitor.put("paramValues", paramValues);
+
+      getMonitor.put("condition", " p WHERE (metrics IN ('Loss', 'Status') AND timestamp = (SELECT MAX(timestamp) FROM " + message.getString("tableName") + " WHERE metrics = p.metrics)) OR (metrics IN ('Min', 'Max', 'Avg') AND timestamp >= NOW() - INTERVAL '86400' SECOND AND ip = ?) OR (metrics = 'Status' AND timestamp >= NOW() - INTERVAL '86400' SECOND AND ip = ?) ORDER BY p.metrics");
+
+      Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getMonitor);
 
       if (future != null)
       {
-        future.onComplete(asyncResult ->
+        future.onComplete(viewResult ->
         {
-          if (asyncResult.succeeded())
+          if (viewResult.succeeded())
           {
             @SuppressWarnings("unchecked")
-            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) asyncResult.result();
+            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) viewResult.result();
 
             JsonObject rowData = new JsonObject();
 
@@ -352,9 +425,7 @@ public class VisualPublicAPI extends AbstractVerticle
           }
           else
           {
-            Throwable cause = asyncResult.cause();
-
-            routingContext.response().setStatusCode(500).end("Error: " + cause.getMessage());
+            routingContext.response().setStatusCode(500).end("Error: " + viewResult.cause());
           }
         });
       }
@@ -366,7 +437,7 @@ public class VisualPublicAPI extends AbstractVerticle
 
     else
     {
-      LOGGER.error("ip is null in run discovery");
+      LOGGER.error("Message is null in run discovery");
     }
   }
 
@@ -399,23 +470,23 @@ public class VisualPublicAPI extends AbstractVerticle
         context.redirect("/api/login.html");
       });
 
-      router.post("/addDiscovery").handler(this::handleAddDiscovery);
+      router.post("/addDiscovery").handler(this::addDiscoveryHandler);
 
-      router.post("/addMonitorTable").handler(this::handleAddMonitorTable);
+      router.post("/addMonitorTable").handler(this::addMonitorHandler);
 
-      router.get("/getDiscoveryTable").handler(this::handleGetDiscoveryTable);
+      router.post("/getDiscovery").handler(this::getHandler);
 
-      router.get("/getMonitorTable").handler(this::handleGetMonitorTable);
+      router.post("/getMonitorTable").handler(this::getHandler);
 
-      router.post("/deleteDiscoveryTable").handler(this::handleDeleteDiscoveryTable);
+      router.post("/deleteDiscoveryTable").handler(this::deleteHandler);
 
-      router.post("/deleteMonitorTable").handler(this::handleDeleteMonitorTable);
+      router.post("/deleteMonitorTable").handler(this::deleteHandler);
 
-      router.post("/updateDiscovery").handler(this::handleUpdateDiscovery);
+      router.post("/updateDiscovery").handler(this::updateHandler);
 
-      router.post("/runDiscovery").handler(this::handleRunDiscovery);
+      router.post("/runDiscovery").handler(this::runDiscoveryHandler);
 
-      router.post("/viewMonitor").handler(this::handleViewMonitor);
+      router.post("/viewMonitor").handler(this::viewMonitorHandler);
 
       SockJSHandler jsHandler = SockJSHandler.create(vertx);
 
@@ -435,7 +506,7 @@ public class VisualPublicAPI extends AbstractVerticle
             }
             else
             {
-              vertx.undeploy(VisualPublicAPI.class.getName());
+              startPromise.fail("VisualPublicAPi failed due to HttpServer Problem");
             }
           });
     }

@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class Main
 {
-  private static final Logger logger = LoggerFactory.getLogger(Main.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
   public static void main(String[] args)
   {
@@ -25,7 +25,7 @@ public class Main
 
     vertx.deployVerticle(Discovery.class.getName(), discoveryDeployment);
 
-    vertx.deployVerticle(CrudOperations.class.getName(), crudOperationsDeployment);
+    vertx.deployVerticle(DatabaseOperations.class.getName(), crudOperationsDeployment);
 
     vertx.deployVerticle(PollingExecution.class.getName(), pollingExecutionDeployment);
 
@@ -34,12 +34,12 @@ public class Main
       {
         if (ar.succeeded())
         {
-          logger.info("All verticles deployed successfully");
+          LOGGER.info("All verticles deployed successfully");
         }
 
         else
         {
-          logger.info("One or more verticles failed to deploy");
+          LOGGER.info("One or more verticles failed to deploy");
 
           ar.cause().printStackTrace();
 
@@ -52,17 +52,17 @@ public class Main
         try
         {
           // Undeploy the verticles
-          vertx.undeploy(visualizationDeployment.future().result());
+          vertx.undeploy(VisualPublicAPI.class.getName());
 
-          vertx.undeploy(discoveryDeployment.future().result());
+          vertx.undeploy(Discovery.class.getName());
 
-          vertx.undeploy(crudOperationsDeployment.future().result());
+          vertx.undeploy(DatabaseOperations.class.getName());
 
-          vertx.undeploy(pollingExecutionDeployment.future().result());
+          vertx.undeploy(PollingExecution.class.getName());
         }
         catch (Exception exception)
         {
-          logger.error(String.valueOf(exception));
+          LOGGER.error(String.valueOf(exception));
         }
       }));
   }
