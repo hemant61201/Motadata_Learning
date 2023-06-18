@@ -4,21 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="16 June LightNMS">
-      <change afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/DatabaseOperations.java" afterDir="false" />
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="17 June LightNMS">
+      <change afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/OnePageDiv.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/dataTable.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/genricAjax.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/loginAlert.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/ConstVariables.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/ConstVariables.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/Connectionpool.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/Connectionpool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/GenricQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/GenricQuery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/MetricsData.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Database/MetricsData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/DatabaseOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/DatabaseOperations.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Discovery.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Discovery.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/PollingExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/PollingExecution.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/java/LightNMS/VisualPublicAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/java/LightNMS/VisualPublicAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/api/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/api/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/css/adminlte.css" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/css/adminlte.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Discovery.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Discovery.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Genricajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Genricajax.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Monitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/Monitor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/dashbord.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/dashbord.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/dialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/dialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/pollingData.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/pollingData.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/tableButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/tableButton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/toggle.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/toggle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/verifyLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/verifyLogin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/viewMonitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms/viewMonitor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter/src/main/resources/webroot/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/starter/src/main/resources/webroot/login.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +45,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -66,10 +78,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/starter/src/main/java/LightNMS" />
       <recent name="$PROJECT_DIR$/LightNMS/src/main/plugins" />
       <recent name="$PROJECT_DIR$/LightNMS/src/main/plugins/functions" />
       <recent name="$PROJECT_DIR$/LightNMS/src/main" />
-      <recent name="$PROJECT_DIR$/awesomeProject/EdgeCases" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/Networking_System/Networking_System/src" />
@@ -98,21 +110,7 @@
       <workItem from="1686035103439" duration="9040000" />
       <workItem from="1686169133867" duration="2040000" />
       <workItem from="1686286632617" duration="8024000" />
-      <workItem from="1686521054080" duration="17431000" />
-    </task>
-    <task id="LOCAL-00016" summary="April 3 WebSocket">
-      <created>1680529370396</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1680529370397</updated>
-    </task>
-    <task id="LOCAL-00017" summary="April 4 WebSocket">
-      <created>1680620552189</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1680620552189</updated>
+      <workItem from="1686521054080" duration="18655000" />
     </task>
     <task id="LOCAL-00018" summary="April 5 WebSocket">
       <created>1680708380386</created>
@@ -443,16 +441,40 @@
       <option name="project" value="LOCAL" />
       <updated>1686894870885</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="17 June LightNMS">
+      <created>1687015551783</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1687015551783</updated>
+    </task>
+    <task id="LOCAL-00066" summary="17 June LightNMS">
+      <created>1687016056068</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1687016056068</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="29 April JQuery" />
     <MESSAGE value="4 May JQuery" />
     <MESSAGE value="12 May Vertex" />
     <MESSAGE value="13 May Vertex" />
@@ -477,6 +499,7 @@
     <MESSAGE value="13 June LightNMS" />
     <MESSAGE value="15 June LightNMS" />
     <MESSAGE value="16 June LightNMS" />
-    <option name="LAST_COMMIT_MESSAGE" value="16 June LightNMS" />
+    <MESSAGE value="17 June LightNMS" />
+    <option name="LAST_COMMIT_MESSAGE" value="17 June LightNMS" />
   </component>
 </project>

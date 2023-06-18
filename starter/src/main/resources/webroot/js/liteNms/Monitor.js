@@ -1,67 +1,40 @@
-function myMonitorFunction()
-{
-  let config = getmonitorConfig();
-
-  console.log("config: " + config);
-
-  genricajax.get(
-    config,
-    function (ajaxResponse)
+var monitorConfig =
+  {
+    getmonitorConfig : function ()
     {
-      const jsonArray = JSON.parse(ajaxResponse);
+      const method = "POST";
 
-      const resultArray = jsonArray.map(jsonString => JSON.parse(jsonString));
+      const url = "/getMonitorTable"
 
-      const monitorTable = resultArray.map(obj => Object.values(obj));
+      const data = JSON.stringify({tableName: "monitor_table"})
 
-      console.log(monitorTable);
+      let config =
+        {
+          method: method,
 
-      var monitor_Table = $('#monitorTable').DataTable({
+          url: url,
 
-        data: resultArray,
+          data: data,
 
-        destroy: true,
+          callbacks: {
 
-        columns: [
-          {title: 'id', data: 'ID'},
-          {title: 'DeviceName', data: 'DEVICENAME'},
-          {title: 'IP', data: 'IP'},
-          {title: 'DeviceType', data: 'DEVICETYPE'},
-          {title: 'Status', data: 'STATUS'},
-          {
-            title: 'Actions',
-            data: null,
-            render: function (data, type, row)
+            success: function (ajaxResponse)
             {
-              var viewButton = '<button class="view-button" onclick="viewBtn.onclick(this)">View</button>';
+              const jsonArray = JSON.parse(ajaxResponse);
 
-              var deleteButton = '<button class="delete-button" onclick="monitorTableBtn.onclick(this)">Delete</button>';
+              const resultArray = jsonArray.map(jsonString => JSON.parse(jsonString));
 
-              return viewButton + ' ' + deleteButton;
+              dataTable.loadDataTable("#monitorTable", resultArray)
+            },
+
+            fail: function (ajaxResponse)
+            {
+              console.log(ajaxResponse)
             }
           }
-        ]
-      });
+        }
+
+      return config;
     }
-    );
-}
+  }
 
-function getmonitorConfig()
-{
-  const method = "POST";
-
-  const url = "/getMonitorTable"
-
-  const data = JSON.stringify({tableName: "monitor_table"})
-
-  let config =
-    {
-      method: method,
-
-      url: url,
-
-      data: data,
-    }
-
-  return config;
-}

@@ -10,42 +10,43 @@ public class Main
 
   public static void main(String[] args)
   {
+    try
+    {
+      Vertx vertx = Vertx.vertx();
 
-    Vertx vertx = Vertx.vertx();
+      Promise<String> visualizationDeployment = Promise.promise();
 
-    Promise<String> visualizationDeployment = Promise.promise();
+      Promise<String> discoveryDeployment = Promise.promise();
 
-    Promise<String> discoveryDeployment = Promise.promise();
+      Promise<String> crudOperationsDeployment = Promise.promise();
 
-    Promise<String> crudOperationsDeployment = Promise.promise();
+      Promise<String> pollingExecutionDeployment = Promise.promise();
 
-    Promise<String> pollingExecutionDeployment = Promise.promise();
+      vertx.deployVerticle(VisualPublicAPI.class.getName(), visualizationDeployment);
 
-    vertx.deployVerticle(VisualPublicAPI.class.getName(), visualizationDeployment);
+      vertx.deployVerticle(Discovery.class.getName(), discoveryDeployment);
 
-    vertx.deployVerticle(Discovery.class.getName(), discoveryDeployment);
+      vertx.deployVerticle(DatabaseOperations.class.getName(), crudOperationsDeployment);
 
-    vertx.deployVerticle(DatabaseOperations.class.getName(), crudOperationsDeployment);
+      vertx.deployVerticle(PollingExecution.class.getName(), pollingExecutionDeployment);
 
-    vertx.deployVerticle(PollingExecution.class.getName(), pollingExecutionDeployment);
-
-    CompositeFuture.all(visualizationDeployment.future(), discoveryDeployment.future(), crudOperationsDeployment.future(), pollingExecutionDeployment.future())
-      .onComplete(ar ->
-      {
-        if (ar.succeeded())
+      CompositeFuture.all(visualizationDeployment.future(), discoveryDeployment.future(), crudOperationsDeployment.future(), pollingExecutionDeployment.future())
+        .onComplete(ar ->
         {
-          LOGGER.info("All verticles deployed successfully");
-        }
+          if (ar.succeeded())
+          {
+            LOGGER.info("All verticles deployed successfully");
+          }
 
-        else
-        {
-          LOGGER.info("One or more verticles failed to deploy");
+          else
+          {
+            LOGGER.info("One or more verticles failed to deploy");
 
-          ar.cause().printStackTrace();
+            ar.cause().printStackTrace();
 
-          System.exit(1);
-        }
-      });
+            System.exit(1);
+          }
+        });
 
       Runtime.getRuntime().addShutdownHook(new Thread(() ->
       {
@@ -65,5 +66,11 @@ public class Main
           LOGGER.error(String.valueOf(exception));
         }
       }));
+    }
+
+    catch (Exception exception)
+    {
+      LOGGER.error(exception.getMessage());
+    }
   }
 }

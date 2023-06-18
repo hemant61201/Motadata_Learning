@@ -2,92 +2,65 @@ var login =
 {
   onclick : function ()
   {
-    let myData = fetchData();
+    let myData = fetchData.fetchData();
 
-    var alertBox = document.getElementById("hemant-alert");
-
-    var alertText = document.getElementById("hemant-text");
-
-    var alertIcon = document.getElementById("hemant-icon");
-
-    console.log("login call gone"),
-
-      // var ajaxData = {url : 'login', param : '', type :'', callback : ''}
-
-    genricajax.post(
-      myData,
-      function (ajaxResponse)
-      {
-        console.log("login successful");
-
-        alertText.innerHTML = "Login Success";
-
-        alertIcon.innerHTML = " <i class='fa fa-check' style='font-size:18px;color:#fff'></i>";
-
-        alertBox.style.backgroundColor = "#00cc44";
-
-        alertBox.style.color = "#fff";
-
-        setTimeout(async () =>
-        {
-          alertIcon.innerHTML = "";
-
-          alertBox.style.backgroundColor = "black";
-
-          alertBox.style.color = "black";
-
-          window.location.href = "/api/index.html";
-        }, 300);
-      },
-      function (ajaxResponse)
-      {
-        alertText.innerHTML = "Login Failed";
-
-        alertIcon.innerHTML = " <i class='fa fa-close' style='font-size:18px;color:#fff'></i>";
-
-        alertBox.style.backgroundColor = "#f11";
-
-        alertBox.style.color = "#fff";
-
-        setTimeout(async () =>
-        {
-          alertIcon.innerHTML = "";
-
-          alertBox.style.backgroundColor = "black";
-
-          alertBox.style.color = "black";
-        }, 5000);
-      }
-    );
+    genricAjax.ajaxCall(myData);
   }
 }
 
-function fetchData()
-{
-  const username = document.getElementById("username").value;
-
-  const password = document.getElementById("password").value;
-
-  const method = "POST";
-
-  const url = "/login"
-
-  const formData = new URLSearchParams();
-
-  formData.append("username", username);
-
-  formData.append("password", password);
-
-  const myData =
+var fetchData =
+  {
+    fetchData : function ()
     {
-    method: method,
+      var alertBox = $("#alert").get(0);
 
-    url: url,
+      var alertText = $("#text").get(0);
 
-    formData: formData,
-  };
+      var alertIcon = $("#icon").get(0);
 
-  return myData;
+      const username = $("#username").val();
+
+      const password = $("#password").val();
+
+      const method = "POST";
+
+      const url = "/login"
+
+      const formData = new URLSearchParams();
+
+      formData.append("username", username);
+
+      formData.append("password", password);
+
+      const alertName = "login";
+
+      const alertData = "";
+
+      const myData =
+        {
+          method: method,
+
+          url: url,
+
+          data: formData.toString(),
+
+          callbacks: {
+
+            success: function (ajaxResponse)
+            {
+              successAlert.success(alertBox, alertIcon, alertText, alertName, alertData);
+            },
+
+            fail: function (ajaxResponse)
+            {
+              failAlert.fail(alertBox, alertIcon, alertText, alertName, alertData);
+            }
+
+          }
+        };
+
+      return myData;
+  }
 }
 
 

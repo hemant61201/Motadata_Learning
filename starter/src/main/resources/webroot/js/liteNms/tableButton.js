@@ -1,35 +1,105 @@
 var tableButton =
   {
-    onclick(button)
+    showBtn: function (id, data)
     {
-      var dataTable = $(button).closest('table').DataTable();
-
-      var row = dataTable.row($(button).closest('tr'));
-
-      var data = row.data();
-
-      var id = data.ID;
-
-      let btnConf = deleteConfig(id);
-
-      genricajax.post(
-        btnConf,
-        function (ajaxResponse)
+      switch (id)
+      {
+        case "#discoveryTable":
         {
-          if (ajaxResponse !== null)
+          var editButton = '<button class="edit-button" onclick="updateBtn.openDialog(this)">Edit</button>';
+
+          var runButton = '<button class="run-button" onclick="runButton.onclick(this)">Run</button>';
+
+          var deleteButton = '<button class="delete-button" onclick="deleteBtn.onclick(this)">Delete</button>';
+
+          if (data.STATUS === "success")
           {
-            // myFunction();
-            let dataTable = $('#discoveryTable').DataTable();
+            var provisionButton = '<button class="provision-button" onclick="provisonButton.onclick(this)">Provision</button>';
 
-            dataTable.destroy();
+            return editButton + ' ' + runButton + ' ' + deleteButton + ' ' + provisionButton;
+          }
 
-            myFunction();
+          return editButton + ' ' + runButton + ' ' + deleteButton;
+        }
+
+        case "#monitorTable":
+        {
+          var viewButton = '<button class="view-button" onclick="viewBtn.onclick(this)">View</button>';
+
+          var deleteButton = '<button class="delete-button" onclick="monitorTableBtn.onclick(this)">Delete</button>';
+
+          return viewButton + ' ' + deleteButton;
+        }
+      }
+    }
+  };
+
+var runButton =
+    {
+      onclick : function (button)
+      {
+        var dataTable = $(button).closest('table').DataTable();
+
+        var row = dataTable.row($(button).closest('tr'));
+
+        var data = row.data();
+
+        var id = data.ID;
+
+        let btnConf = runConfig.runConfig(id);
+
+        genricAjax.ajaxCall(btnConf);
+      },
+    };
+
+var runConfig =
+  {
+    runConfig: function (id)
+    {
+      const method = "POST";
+
+      const url = "/runDiscovery";
+
+      const data = JSON.stringify({tableName: "discovery_table", id: id});
+
+      var config =
+        {
+          method: method,
+
+          url: url,
+
+          data: data,
+
+          callbacks:{
+
+            success: function (ajaxResponse)
+            {
+              if (ajaxResponse !== null)
+              {
+                let dataTable = $('#discoveryTable').DataTable();
+
+                dataTable.destroy();
+
+                discovery.loadDiscovery();
+              }
+            },
+
+            fail: function (ajaxResponse)
+            {
+              console.log(ajaxResponse);
+            }
           }
         }
-        );
-    },
 
-    openDialog(button)
+      return config;
+    }
+}
+
+var updateBtn =
+  {
+    id: "",
+
+    openDialog: function(button)
     {
       var dataTable = $(button).closest('table').DataTable();
 
@@ -41,54 +111,14 @@ var tableButton =
 
       updateBtn.id = id;
 
-      var dialog = document.getElementById('update-dialog');
+      var dialog = $('#update-dialog');
 
-      dialog.showModal();
+      dialog.get(0).showModal();
     },
-  };
 
-var runButton =
+    onclick: function ()
     {
-      onclick(button)
-      {
-        var dataTable = $(button).closest('table').DataTable();
-
-        var row = dataTable.row($(button).closest('tr'));
-
-        var data = row.data();
-
-        var id = data.ID;
-
-        let btnConf = runConfig(id);
-
-        genricajax.post(
-          btnConf,
-          function (ajaxResponse)
-          {
-            if (ajaxResponse !== null)
-            {
-              let dataTable = $('#discoveryTable').DataTable();
-
-              dataTable.destroy();
-
-              myFunction();
-            }
-          }
-          );
-      },
-    };
-
-var updateBtn =
-  {
-    id: "",
-
-    onclick()
-    {
-      const updateDialog = document.getElementById("update-dialog");
-
-      updateDialog.close();
-
-      const field = document.getElementById("deviceSelect").value;
+      const field = $("#deviceSelect").val();
 
       var updatefeild;
 
@@ -96,38 +126,59 @@ var updateBtn =
       {
         case "DeviceName":
         {
-          updatefeild = updateBtn.id + "_" + field + "_" +document.getElementById("update_deviceName").value;
+          updatefeild = updateBtn.id + "_" + field + "_" + $("#update_deviceName").val();
 
           break;
         }
 
         case "IP":
         {
-          updatefeild = updateBtn.id + "_" + field + "_" + document.getElementById("update_ip").value;
+          updatefeild = updateBtn.id + "_" + field + "_" + $("#update_ip").val();
 
           break;
         }
 
         case "DeviceType":
         {
-          updatefeild = updateBtn.id + "_" + field + "_" + document.getElementById("update_deviceType").value;
+          updatefeild = updateBtn.id + "_" + field + "_" + $("#update_deviceType").val();
 
           break;
         }
 
         case "credential":
         {
-          updatefeild = updateBtn.id + "_" + field + "_" + document.getElementById("update_username").value + "." + document.getElementById("update_password").value;
+          updatefeild = updateBtn.id + "_" + field + "_" + $("#update_username").val() + "." + $("#update_password").val();
 
           break;
         }
       }
 
-      let updateval = updateConfig(updatefeild);
+      let updatevalue = updateConfig.updateConfig(updatefeild);
 
-      genricajax.post(
-            updateval,
-            function (ajaxResponse)
+      genricAjax.ajaxCall(updatevalue);
+      },
+  };
+
+var updateConfig =
+  {
+    updateConfig : function (updateValue)
+    {
+      const method = "POST";
+
+      const url = "/updateDiscovery";
+
+      const data = JSON.stringify({tableName: "discovery_table", id: updateValue})
+
+      var config =
+        {
+          method: method,
+
+          url: url,
+
+          data: data,
+
+          callbacks:{
+            success: function (ajaxResponse)
             {
               if (ajaxResponse !== null)
               {
@@ -135,43 +186,84 @@ var updateBtn =
 
                 dataTable.destroy();
 
-                myFunction();
+                discovery.loadDiscovery();
               }
+            },
+
+            fail: function (ajaxResponse)
+            {
+              console.log(ajaxResponse)
             }
-          );
-      },
+          }
+
+        }
+
+      return config;
+    }
   };
 
 var provisonButton =
   {
-    onclick(button)
+    onclick: function (button)
     {
       var dataTable = $(button).closest('table').DataTable();
 
       var row = dataTable.row($(button).closest('tr'));
 
-      let provisonBtnConf = provisonConfig(row);
+      let provisonBtnConf = provisonConfig.provisonConfig(row);
 
-      genricajax.post(
-        provisonBtnConf,
-        function (ajaxResponse)
-        {
-          if(ajaxResponse != null)
-          {
-            let dataTable = $('#monitorTable').DataTable();
-
-            dataTable.destroy();
-
-            myMonitorFunction();
-          }
-        }
-        );
+      genricAjax.ajaxCall(provisonBtnConf);
     }
   };
 
+var provisonConfig =
+  {
+    provisonConfig: function (tableValue)
+    {
+      var tableData = tableValue.data();
+
+      const method = "POST"
+
+      const url = "/addMonitorTable"
+
+      const data = JSON.stringify({tableName:"discovery_table", id: tableData.ID});
+
+      var provConf =
+        {
+          method: method,
+
+          url: url,
+
+          data: data,
+
+          callbacks:{
+
+            success: function (ajaxResponse)
+            {
+              if(ajaxResponse != null)
+              {
+                let dataTable = $('#monitorTable').DataTable();
+
+                dataTable.destroy();
+
+                monitor.loadMonitor();
+              }
+            },
+
+            fail: function (ajaxResponse)
+            {
+              console.log(ajaxResponse);
+            }
+          }
+        };
+
+      return provConf;
+    }
+  }
+
 var monitorTableBtn =
   {
-    onclick(button)
+    onclick: function (button)
     {
       var dataTable = $(button).closest('table').DataTable();
 
@@ -181,172 +273,169 @@ var monitorTableBtn =
 
       var id = data.ID;
 
-      let btnConf = deleteMonitorConfig(id);
+      let btnConf = deleteMonitor.deleteMonitorConfig(id);
 
-      genricajax.post(
-        btnConf,
-        function (ajaxResponse)
+      genricAjax.ajaxCall(btnConf);
+    }
+  };
+
+var deleteMonitor =
+  {
+    deleteMonitorConfig: function (id)
+    {
+      const method = "POST";
+
+      const url = "/deleteMonitorTable";
+
+      const data = JSON.stringify({tableName: "monitor_table", id: id})
+
+      var config =
         {
-          if (ajaxResponse !== null)
-          {
-            let dataTable = $('#monitorTable').DataTable();
+          method: method,
 
-            dataTable.destroy();
+          url: url,
 
-            myMonitorFunction();
-          }        }
-        );
+          data: data,
+
+          callbacks:{
+
+            success: function (ajaxResponse)
+            {
+              if (ajaxResponse !== null)
+              {
+                let dataTable = $('#monitorTable').DataTable();
+
+                dataTable.destroy();
+
+                monitor.loadMonitor();
+              }
+            },
+
+            fail: function (ajaxResponse)
+            {
+              console.log(ajaxResponse);
+            }
+          }
+        }
+
+      return config;
+    }
+  }
+
+
+var deleteBtn =
+  {
+    onclick: function(button)
+    {
+      var dataTable = $(button).closest('table').DataTable();
+
+      var row = dataTable.row($(button).closest('tr'));
+
+      var data = row.data();
+
+      var id = data.ID;
+
+      let btnConf = deleteConfig.deleteConfig(id);
+
+      genricAjax.ajaxCall(btnConf);
+    },
+  }
+
+var deleteConfig =
+  {
+    deleteConfig : function (id)
+    {
+      const method = "POST";
+
+      const url = "/deleteDiscoveryTable";
+
+      const data = JSON.stringify({tableName: "discovery_table", id: id})
+
+      var config =
+        {
+          method: method,
+
+          url: url,
+
+          data: data,
+
+          callbacks: {
+
+            success: function (ajaxResponse)
+            {
+              if (ajaxResponse !== null)
+              {
+                let dataTable = $('#discoveryTable').DataTable();
+
+                dataTable.destroy();
+
+                discovery.loadDiscovery();
+              }
+            },
+
+            fail: function (ajaxResponse)
+            {
+              console.log(ajaxResponse);
+            }
+          }
+        }
+
+      return config;
     }
   };
 
 var viewBtn =
   {
     onclick(button)
-      {
-        var dataTable = $(button).closest('table').DataTable();
+    {
+      var dataTable = $(button).closest('table').DataTable();
 
-        var row = dataTable.row($(button).closest('tr'));
+      var row = dataTable.row($(button).closest('tr'));
 
-        var data = row.data();
+      var data = row.data();
 
-        var ip = data.IP;
+      var ip = data.IP;
 
-        let btnConf = viewMonitorConfig(ip);
+      let btnConf = viewMonitorConfig.viewMonitorConfig(ip);
 
-        genricajax.post(
-          btnConf,
-          function (ajaxResponse)
-          {
-            if (ajaxResponse !== null)
+      genricAjax.ajaxCall(btnConf);
+    }
+  };
+
+var viewMonitorConfig =
+  {
+    viewMonitorConfig: function (ip)
+    {
+      const method = "POST"
+
+      const url = "/viewMonitor"
+
+      const data = JSON.stringify({tableName: "polling_table", ip: ip})
+
+      var viewConf =
+        {
+          method: method,
+
+          url: url,
+
+          data: data,
+
+          callbacks: {
+
+            success: function (ajaxResponse)
             {
-              viewMonitor(ajaxResponse);
+              if (ajaxResponse !== null)
+              {
+                viewMonitor.viewMonitor();
 
-              showDiv('viewMonitorDiv');
+                monitorView.viewMonitor(ajaxResponse);
+              }
             }
           }
-          );
-      }
-    };
+        };
 
-function deleteConfig(id)
-  {
-    const method = "POST";
-
-    const url = "/deleteDiscoveryTable";
-
-    const data = JSON.stringify({tableName: "discovery_table", id: id})
-
-    var config =
-      {
-        method: method,
-
-        url: url,
-
-        data: data,
-      }
-
-    return config;
-  };
-
-function deleteMonitorConfig(id)
-{
-  const method = "POST";
-
-  const url = "/deleteMonitorTable";
-
-  const data = JSON.stringify({tableName: "monitor_table", id: id})
-
-
-  var config =
-    {
-      method: method,
-
-      url: url,
-
-      data: data,
+      return viewConf;
     }
+  }
 
-  return config;
-};
 
-function runConfig(id)
-  {
-    const method = "POST";
-
-    const url = "/runDiscovery";
-
-    const data = JSON.stringify({tableName: "discovery_table", id: id});
-
-    var config =
-      {
-        method: method,
-
-        url: url,
-
-        data: data,
-      }
-
-    return config;
-  };
-
-function updateConfig(updateValue)
-  {
-    const method = "POST";
-
-    const url = "/updateDiscovery";
-
-    const data = JSON.stringify({tableName: "discovery_table", id: updateValue})
-
-    var config =
-      {
-        method: method,
-
-        url: url,
-
-        data: data,
-      }
-
-    return config;
-  };
-
-function viewMonitorConfig(ip)
-  {
-    const method = "POST"
-
-    const url = "/viewMonitor"
-
-    const data = JSON.stringify({tableName: "polling_table", ip: ip})
-
-    var viewConf =
-      {
-        method: method,
-
-        url: url,
-
-        data: data,
-      };
-
-    return viewConf;
-  };
-
-function provisonConfig(tableValue)
-  {
-    var tableData = tableValue.data();
-
-    const method = "POST"
-
-    const url = "/addMonitorTable"
-
-    const data = JSON.stringify({tableName:"discovery_table", id: tableData.ID});
-
-    var provConf =
-      {
-        method: method,
-
-        url: url,
-
-        data: data,
-      };
-
-    return provConf;
-  };

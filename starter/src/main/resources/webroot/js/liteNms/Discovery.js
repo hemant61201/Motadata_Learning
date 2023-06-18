@@ -1,149 +1,134 @@
-// Naming
-function myFunction()
-{
-  let config = getdiscoveryConfig();
-
-  genricajax.get(
-    config,
-    function (ajaxResponse)
-    {
-      const jsonArray = JSON.parse(ajaxResponse);
-
-      const resultArray = jsonArray.map(jsonString => JSON.parse(jsonString));
-
-      const discoveryTable = resultArray.map(obj => Object.values(obj));
-
-      console.log(discoveryTable);
-
-      var discovery_Table = $('#discoveryTable').DataTable({
-
-        data: resultArray,
-
-        destroy: true,
-
-        columns: [
-          { title: 'id', data: 'ID' },
-          { title: 'DeviceName', data: 'DEVICENAME' },
-          { title: 'IP', data: 'IP' },
-          { title: 'DeviceType', data: 'DEVICETYPE' },
-          { title: 'Discovery_Status', data: 'STATUS' },
-          {
-            title: 'Actions',
-
-            data: null,
-
-            render: function (data, type, row)
-            {
-              var editButton = '<button class="edit-button" onclick="tableButton.openDialog(this)">Edit</button>';
-
-              var runButton = '<button class="run-button" onclick="runButton.onclick(this)">Run</button>';
-
-              var deleteButton = '<button class="delete-button" onclick="tableButton.onclick(this)">Delete</button>';
-
-              if (data.STATUS === "success")
-              {
-                var provisionButton = '<button class="provision-button" onclick="provisonButton.onclick(this)">Provision</button>';
-
-                return editButton + ' ' + runButton + ' ' + deleteButton + ' ' + provisionButton;
-              }
-
-              return editButton + ' ' + runButton + ' ' + deleteButton;
-            }
-          }
-        ]
-      });
-    }
-  );
-}
-
-var discovery =
+var addDiscovery =
   {
     onclick : function ()
     {
-      let myData = fetchData();
+      let myData = fetchData.fetchData();
 
-      genricajax.post(
-        myData,
-        function (ajaxResponse)
-        {
-          if (ajaxResponse !== null)
-          {
-            let dataTable = $('#discoveryTable').DataTable();
-
-            dataTable.destroy();
-
-            myFunction();
-          }
-        }
-      );
+      genricAjax.ajaxCall(myData);
     }
   }
 
-function fetchData()
-{
-  var myData;
-
-  const deviceName = document.getElementById("name").value;
-
-  const ip = document.getElementById("ip").value;
-
-  const method = "POST";
-
-  const url = "/addDiscovery"
-
-  const deviceType = document.getElementById("type").value;
-
-  var credential_userName = document.getElementById("credential_username").value;
-
-  var credential_password = document.getElementById("credential_passwd").value;
-
-  var credential = {
-
-    credential_userName: credential_userName,
-
-    credential_password: credential_password
-  };
-
-  var data = JSON.stringify({
-    deviceName: deviceName,
-    ip: ip,
-    deviceType: deviceType,
-    status: "unknown",
-    credential: credential,
-    tableName: "discovery_table"
-  })
-
-  myData =
+var fetchData =
+  {
+    fetchData: function ()
     {
-      method: method,
+      var alertBox = $("#alert").get(0);
 
-      url: url,
+      var alertText = $("#text").get(0);
 
-      data: data
-    };
+      var alertIcon = $("#icon").get(0);
 
-  return myData;
-}
+      var myData;
 
-function getdiscoveryConfig()
-{
-  const method = "POST";
+      const deviceName = $("#name").val();
 
-  const url = "/getDiscovery"
+      const ip = $("#ip").val();
 
-  const data = JSON.stringify({tableName: "discovery_table"})
+      const alertName = "addDiscovery";
 
-  var config =
-    {
-      method: method,
+      const method = "POST";
 
-      url: url,
+      const url = "/addDiscovery"
 
-      data: data,
+      const deviceType = $("#type").val();
+
+      var credential_userName = $("#credential_username").val();
+
+      var credential_password = $("#credential_passwd").val();
+
+      var credential = {
+
+        credential_userName: credential_userName,
+
+        credential_password: credential_password
+      };
+
+      var data = JSON.stringify({
+        deviceName: deviceName,
+        ip: ip,
+        deviceType: deviceType,
+        status: "unknown",
+        credential: credential,
+        tableName: "discovery_table"
+      })
+
+      myData =
+        {
+          method: method,
+
+          url: url,
+
+          data: data,
+
+          callbacks: {
+
+            success: function (ajaxResponse)
+            {
+              if (ajaxResponse !== null)
+              {
+                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+
+                let dataTable = $('#discoveryTable').DataTable();
+
+                dataTable.destroy();
+
+                discovery.loadDiscovery();
+              }
+            },
+
+            fail: function (ajaxResponse)
+            {
+              console.log(ajaxResponse)
+            }
+          }
+        };
+
+      return myData;
     }
+  }
 
-    return config;
-}
+
+var discoveryConfig =
+  {
+    getDiscoveryConfig: function ()
+    {
+      const method = "POST";
+
+      const url = "/getDiscovery"
+
+      const data = JSON.stringify({tableName: "discovery_table"})
+
+      var config =
+        {
+          method: method,
+
+          url: url,
+
+          data: data,
+
+          callbacks: {
+
+            success: function (ajaxResponse)
+            {
+              const jsonArray = JSON.parse(ajaxResponse);
+
+              const resultArray = jsonArray.map(jsonString => JSON.parse(jsonString));
+
+              dataTable.loadDataTable("#discoveryTable", resultArray)
+            },
+
+            fail: function (ajaxResponse)
+            {
+              console.log(ajaxResponse)
+            }
+
+          }
+        }
+
+      return config;
+    }
+  }
+
 
 
 

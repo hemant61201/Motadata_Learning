@@ -11,4 +11,14 @@ public class ConstVariables
 
   public static final int POOLCAPACITY = 10;
 
+  public static final String DISCOVERY = "runDiscovery";
+
+  public static final String DATABASE = "database";
+
+  public static String workingDir = System.getProperty("user.dir");
+
+  public static final String BOOTSTRAPPATH = workingDir + "/src/main/resources/BootStrap";
+
+  public static final String JDBCPATH = workingDir + "/src/main/resources/jdbcAuthentication";
+
 }

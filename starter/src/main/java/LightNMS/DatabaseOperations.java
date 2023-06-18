@@ -134,8 +134,6 @@ public class DatabaseOperations extends AbstractVerticle
       {
         String query = GenricQuery.getQuery(message);
 
-        LOGGER.info(query);
-
         if(query != null)
         {
           vertx.<Integer>executeBlocking(blockingPromise ->
@@ -470,8 +468,10 @@ public class DatabaseOperations extends AbstractVerticle
     return promise.future();
   }
 
-  private void dashBoardData(JsonObject message, Promise<JsonObject> promise)
+  public static Future<Object> dashBoardData(Vertx vertx, JsonObject message)
   {
+    Promise<Object> promise = Promise.promise();
+
     Connection connection = Connectionpool.getConnection();
 
     if(connection != null)
@@ -566,6 +566,7 @@ public class DatabaseOperations extends AbstractVerticle
       promise.fail("");
     }
 
+    return promise.future();
   }
 
   @Override
@@ -587,24 +588,30 @@ public class DatabaseOperations extends AbstractVerticle
 
         getPollingData.put("condition", "(( SELECT 'Max' AS metric, p.data, p.ip FROM polling_table p WHERE p.metrics = 'Max' AND p.timestamp >= NOW() - INTERVAL '86400' SECOND ORDER BY p.data DESC LIMIT 10) UNION ALL ( SELECT 'Min' AS metric, p.data, p.ip FROM polling_table p WHERE p.metrics = 'Min' AND p.timestamp >= NOW() - INTERVAL '86400' SECOND ORDER BY p.data ASC LIMIT 10)) AS m CROSS JOIN ( SELECT COUNT(CASE WHEN status = 'success' THEN 1 END) AS success_count, COUNT(CASE WHEN status = 'failed' THEN 1 END) AS failed_count, COUNT(CASE WHEN status = 'Unknown' THEN 1 END) AS unknown_count FROM monitor_table) AS n");
 
-        vertx.setPeriodic(5000, id -> {
+        vertx.setPeriodic(120_000, id -> {
 
-          Promise<JsonObject> promise = Promise.promise();
+          Future<Object> future = dashBoardData(vertx, getPollingData);
 
-          dashBoardData(getPollingData, promise);
-
-          promise.future().onComplete(result ->
+          if(future != null)
           {
-            if (result.succeeded())
+            future.onComplete(pollingResult ->
             {
-              vertx.eventBus().publish("updates.pollingdata",result.result());
-            }
+              if (pollingResult.succeeded())
+              {
+                vertx.eventBus().publish("updates.pollingdata", pollingResult.result());
+              }
 
-            else
-            {
-              System.out.println("Add operation failed: " + result.cause());
-            }
-          });
+              else
+              {
+                LOGGER.error("get operation failed on PollingData: " + pollingResult.cause());
+              }
+            });
+          }
+
+          else
+          {
+            LOGGER.error("Future is null in Polling Data");
+          }
         });
 
         vertx.eventBus().consumer("database",this::databaseHandler);
@@ -628,6 +635,14 @@ public class DatabaseOperations extends AbstractVerticle
   @Override
   public void stop(Promise<Void> stopPromise) throws Exception
   {
-    Connectionpool.closeConnections();
+    try
+    {
+      Connectionpool.closeConnections();
+    }
+
+    catch (Exception exception)
+    {
+      LOGGER.error(exception.getMessage());
+    }
   }
 }

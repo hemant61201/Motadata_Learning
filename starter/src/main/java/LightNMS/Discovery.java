@@ -23,7 +23,7 @@ public class Discovery extends AbstractVerticle
   {
     try
     {
-      vertx.eventBus().consumer("runDiscovery", message ->
+      vertx.eventBus().consumer(ConstVariables.DISCOVERY, message ->
       {
         JsonObject requestData = new JsonObject();
 
@@ -88,11 +88,7 @@ public class Discovery extends AbstractVerticle
                   .put("port", 22)
                   .put("id", new JsonArray().add(getData.getInteger("ID"))));
 
-              String workingDir = System.getProperty("user.dir");
-
-              String bootStrapPath = workingDir + "/src/main/resources/BootStrap";
-
-              executeCommand(bootStrapPath, requestData.encode(), exeResult ->
+              executeCommand(ConstVariables.BOOTSTRAPPATH, requestData.encode(), exeResult ->
               {
                 if (exeResult.succeeded())
                 {
@@ -181,32 +177,39 @@ public class Discovery extends AbstractVerticle
 
   private void executeCommand(String command, String input, Handler<AsyncResult<String>> handler)
   {
-    CompletableFuture<String> processOutputFuture = new CompletableFuture<>();
-
-    command += " " + input;
-
-    NuProcessBuilder pb = new NuProcessBuilder(Arrays.asList(command.split("\\s+")));
-
-    pb.setProcessListener(new NuProcessHandler(processOutputFuture));
-
-    vertx.executeBlocking(future ->
+    try
     {
-      try
+      CompletableFuture<String> processOutputFuture = new CompletableFuture<>();
+
+      command += " " + input;
+
+      NuProcessBuilder nuProcessBuilder = new NuProcessBuilder(Arrays.asList(command.split("\\s+")));
+
+      nuProcessBuilder.setProcessListener(new NuProcessHandler(processOutputFuture));
+
+      vertx.executeBlocking(future ->
       {
-        NuProcess process = pb.start();
+        try
+        {
+          NuProcess process = nuProcessBuilder.start();
 
-        process.waitFor(60, TimeUnit.SECONDS);
-      }
+          process.waitFor(60, TimeUnit.SECONDS);
+        }
 
-      catch (Exception e)
-      {
-        future.fail(e);
+        catch (Exception exception)
+        {
+          future.fail(exception);
 
-        return;
-      }
+          return;
+        }
 
-      future.complete(processOutputFuture.join());
+        future.complete(processOutputFuture.join());
+      },false, handler);
+    }
 
-    },false, handler);
+    catch (Exception exception)
+    {
+      LOGGER.error(exception.getMessage());
+    }
   }
 }

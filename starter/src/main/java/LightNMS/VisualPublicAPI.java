@@ -26,418 +26,549 @@ public class VisualPublicAPI extends AbstractVerticle
 
   private void eventBusRequestHandler(RoutingContext routingContext, JsonObject message)
   {
-    if(message.containsKey("address"))
+    try
     {
-      vertx.eventBus().request("runDiscovery", message, discoveryResult ->
+      if(message != null)
       {
-        if (discoveryResult.succeeded())
+        switch (message.getString("address"))
         {
-          routingContext.response().end(discoveryResult.result().body().toString());
+          case ConstVariables.DISCOVERY:
+          {
+            vertx.eventBus().request(message.getString("address"), message, discoveryResult ->
+            {
+              if (discoveryResult.succeeded())
+              {
+                routingContext.response().end(discoveryResult.result().body().toString());
+              }
+              else
+              {
+                routingContext.response().setStatusCode(500).end("Error occurred in discoveryResult");
+              }
+            });
+          }
+
+          case ConstVariables.DATABASE:
+          {
+            vertx.eventBus().request(message.getString("address"), message, databaseResult ->
+            {
+              if (databaseResult.succeeded())
+              {
+                routingContext.response().end(databaseResult.result().body().toString());
+              }
+              else
+              {
+                routingContext.response().setStatusCode(500).end("Error occurred in databaseResult");
+              }
+            });
+          }
         }
-        else
-        {
-          routingContext.response().setStatusCode(500).end("Error occurred in discoveryResult");
-        }
-      });
+      }
+
+      else
+      {
+        LOGGER.error("Message is null in eventbus handler");
+      }
     }
 
-    else
+    catch (Exception exception)
     {
-      vertx.eventBus().request("database", message, databaseResult ->
-      {
-        if (databaseResult.succeeded())
-        {
-            routingContext.response().end(databaseResult.result().body().toString());
-        }
-        else
-        {
-          routingContext.response().setStatusCode(500).end("Error occurred in databaseResult");
-        }
-      });
+      LOGGER.error(exception.getMessage());
     }
   }
 
   private void addDiscoveryHandler(RoutingContext routingContext)
   {
-    JsonObject message = routingContext.body().asJsonObject();
-
-    if(message != null)
+    try
     {
-      JsonObject addData = new JsonObject();
+      JsonObject message = routingContext.body().asJsonObject();
 
-      JsonArray paramValues = new JsonArray();
-
-      StringBuilder keyString = new StringBuilder();
-
-      Set<String> keys = message.fieldNames();
-
-      for (String key : keys)
+      if(message != null)
       {
-        if (key.equals("tableName"))
+        JsonObject addData = new JsonObject();
+
+        JsonArray paramValues = new JsonArray();
+
+        StringBuilder keyString = new StringBuilder();
+
+        Set<String> keys = message.fieldNames();
+
+        for (String key : keys)
         {
-          continue;
+          if (key.equals("tableName"))
+          {
+            continue;
+          }
+
+          if (keyString.length() > 0)
+          {
+            keyString.append(", ");
+          }
+
+          keyString.append(key);
+
+          if(key.equals("credential"))
+          {
+            paramValues.add("{\"credential_userName\":\"\",\"credential_password\":\"\"}");
+          }
+
+          else
+          {
+            paramValues.add(message.getString(key));
+          }
         }
 
-        if (keyString.length() > 0)
-        {
-          keyString.append(", ");
-        }
+        paramValues.add(message.getString("ip"));
 
-        keyString.append(key);
+        paramValues.add(message.getString("deviceType"));
 
-        if(key.equals("credential"))
-        {
-          paramValues.add("{\"credential_userName\":\"\",\"credential_password\":\"\"}");
-        }
+        String columns = keyString.toString();
 
-        else
-        {
-          paramValues.add(message.getString(key));
-        }
+        addData.put("address", "database");
+
+        addData.put("action", "add");
+
+        addData.put("tableName", message.getString("tableName"));
+
+        addData.put("columns", columns);
+
+        addData.put("paramValues", paramValues);
+
+        addData.put("condition", "SELECT ?, ?, ?, ?, ? FROM dual WHERE NOT EXISTS ( SELECT 1 FROM " + message.getString("tableName") + " WHERE ip = ? AND deviceType = ?)");
+
+        eventBusRequestHandler(routingContext, addData);
       }
-
-      paramValues.add(message.getString("ip"));
-
-      paramValues.add(message.getString("deviceType"));
-
-      String columns = keyString.toString();
-
-      addData.put("action", "add");
-
-      addData.put("tableName", message.getString("tableName"));
-
-      addData.put("columns", columns);
-
-      addData.put("paramValues", paramValues);
-
-      addData.put("condition", "SELECT ?, ?, ?, ?, ? FROM dual WHERE NOT EXISTS ( SELECT 1 FROM " + message.getString("tableName") + " WHERE ip = ? AND deviceType = ?)");
-
-      eventBusRequestHandler(routingContext, addData);
+      else
+      {
+        LOGGER.info("Null Value for Add Discovery");
+      }
     }
-    else
+
+    catch (Exception exception)
     {
-      LOGGER.info("Null Value for Add Discovery");
+      LOGGER.error(exception.getMessage());
     }
   }
 
   private void addMonitorHandler(RoutingContext routingContext)
   {
-    JsonObject message = routingContext.body().asJsonObject();
-
-    if(message != null)
+    try
     {
-      JsonObject getData = new JsonObject();
+      JsonObject message = routingContext.body().asJsonObject();
 
-      JsonArray paramValues = new JsonArray();
-
-      paramValues.add(message.getString("id"));
-
-      getData.put("action", "get");
-
-      getData.put("tableName", message.getString("tableName"));
-
-      getData.put("columns", "*");
-
-      getData.put("paramValues", paramValues);
-
-      getData.put("condition", " where id = ?");
-
-      Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getData);
-
-      if (future != null)
+      if(message != null)
       {
-        future.onComplete(asyncResult ->
+        JsonObject getData = new JsonObject();
+
+        JsonArray paramValues = new JsonArray();
+
+        paramValues.add(message.getString("id"));
+
+        getData.put("action", "get");
+
+        getData.put("tableName", message.getString("tableName"));
+
+        getData.put("columns", "*");
+
+        getData.put("paramValues", paramValues);
+
+        getData.put("condition", " where id = ?");
+
+        Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getData);
+
+        if (future != null)
         {
-          if (asyncResult.succeeded())
+          future.onComplete(asyncResult ->
           {
-            @SuppressWarnings("unchecked")
-            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) asyncResult.result();
-
-            JsonObject addData = new JsonObject();
-
-            for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+            if (asyncResult.succeeded())
             {
-              addData = entry.getValue();
-            }
+              @SuppressWarnings("unchecked")
+              HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) asyncResult.result();
 
-            JsonArray paramValue = new JsonArray();
+              JsonObject addData = new JsonObject();
 
-            StringBuilder keyString = new StringBuilder();
-
-            Set<String> keys = addData.fieldNames();
-
-            for (String key : keys)
-            {
-              if (key.equals("tableName") || key.equals("ID"))
+              for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
               {
-                continue;
+                addData = entry.getValue();
               }
 
-              if (keyString.length() > 0)
+              JsonArray paramValue = new JsonArray();
+
+              StringBuilder keyString = new StringBuilder();
+
+              Set<String> keys = addData.fieldNames();
+
+              for (String key : keys)
               {
-                keyString.append(", ");
+                if (key.equals("tableName") || key.equals("ID"))
+                {
+                  continue;
+                }
+
+                if (keyString.length() > 0)
+                {
+                  keyString.append(", ");
+                }
+
+                keyString.append(key);
+
+                paramValue.add(addData.getString(key));
               }
 
-              keyString.append(key);
+              paramValue.add(addData.getString("IP"));
 
-              paramValue.add(addData.getString(key));
+              paramValue.add(addData.getString("DEVICETYPE"));
+
+              String columns = keyString.toString();
+
+              String tableName = "monitor_table";
+
+              addData.put("address", "database");
+
+              addData.put("action", "add");
+
+              addData.put("tableName", tableName);
+
+              addData.put("columns", columns);
+
+              addData.put("paramValues", paramValue);
+
+              addData.put("condition", "SELECT ?, ?, ?, ?, ? FROM dual WHERE NOT EXISTS ( SELECT 1 FROM " + tableName + " WHERE ip = ? AND deviceType = ?)");
+
+              eventBusRequestHandler(routingContext, addData);
             }
-
-            paramValue.add(addData.getString("IP"));
-
-            paramValue.add(addData.getString("DEVICETYPE"));
-
-            String columns = keyString.toString();
-
-            String tableName = "monitor_table";
-
-            addData.put("action", "add");
-
-            addData.put("tableName", tableName);
-
-            addData.put("columns", columns);
-
-            addData.put("paramValues", paramValue);
-
-            addData.put("condition", "SELECT ?, ?, ?, ?, ? FROM dual WHERE NOT EXISTS ( SELECT 1 FROM " + tableName + " WHERE ip = ? AND deviceType = ?)");
-
-            eventBusRequestHandler(routingContext, addData);
-          }
-          else
-          {
-            LOGGER.error(asyncResult.cause().getMessage());
-          }
-        });
+            else
+            {
+              LOGGER.error(asyncResult.cause().getMessage());
+            }
+          });
+        }
+        else
+        {
+          LOGGER.error("Error: Future is null");
+        }
       }
+
       else
       {
-        LOGGER.error("Error: Future is null");
+        LOGGER.error("Message is null in addMonitorHandler");
       }
     }
 
-    else
+    catch (Exception exception)
     {
-      LOGGER.error("Message is null in addMonitorHandler");
+      LOGGER.error(exception.getMessage());
     }
   }
 
   private void getHandler(RoutingContext routingContext)
   {
-    JsonObject tableName = routingContext.body().asJsonObject();
-
-    if(tableName != null)
+    try
     {
-      JsonObject getData = new JsonObject();
+      JsonObject tableName = routingContext.body().asJsonObject();
 
-      JsonArray paramValues = new JsonArray(){};
-
-      getData.put("action", "get");
-
-      getData.put("tableName", tableName.getString("tableName"));
-
-      getData.put("columns", "id,deviceName,ip,deviceType,status");
-
-      getData.put("paramValues", paramValues);
-
-      getData.put("condition", "");
-
-      Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getData);
-
-      if (future != null)
+      if(tableName != null)
       {
-        future.onComplete(getResult ->
+        JsonObject getData = new JsonObject();
+
+        JsonArray paramValues = new JsonArray(){};
+
+        getData.put("action", "get");
+
+        getData.put("tableName", tableName.getString("tableName"));
+
+        getData.put("columns", "id,deviceName,ip,deviceType,status");
+
+        getData.put("paramValues", paramValues);
+
+        getData.put("condition", "");
+
+        Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getData);
+
+        if (future != null)
         {
-          if (getResult.succeeded())
+          future.onComplete(getResult ->
           {
-            @SuppressWarnings("unchecked")
-            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) getResult.result();
-
-            JsonArray jsonArray = new JsonArray();
-
-            for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+            if (getResult.succeeded())
             {
-              JsonObject jsonObject = entry.getValue();
+              @SuppressWarnings("unchecked")
+              HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) getResult.result();
 
-              jsonArray.add(jsonObject.encode());
+              JsonArray jsonArray = new JsonArray();
+
+              for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+              {
+                JsonObject jsonObject = entry.getValue();
+
+                jsonArray.add(jsonObject.encode());
+              }
+
+              routingContext.response().end(String.valueOf(jsonArray));
             }
+            else
+            {
+              routingContext.response().setStatusCode(500).end("Error: " + getResult.cause());
+            }
+          });
+        }
+        else
+        {
+          LOGGER.error("Error: Future is null");
 
-            routingContext.response().end(String.valueOf(jsonArray));
-          }
-          else
-          {
-            routingContext.response().setStatusCode(500).end("Error: " + getResult.cause());
-          }
-        });
+          routingContext.response().setStatusCode(500).end("Error: Future is null");
+        }
       }
+
       else
       {
-        LOGGER.error("Error: Future is null");
-
-        routingContext.response().setStatusCode(500).end("Error: Future is null");
+        LOGGER.error("tableName is null");
       }
     }
 
-    else
+    catch (Exception exception)
     {
-      LOGGER.error("tableName is null");
+      LOGGER.error(exception.getMessage());
     }
+
   }
 
   private void deleteHandler(RoutingContext routingContext)
   {
-    JsonObject message = routingContext.body().asJsonObject();
-
-    if(message != null)
+    try
     {
-      JsonObject deleteData = new JsonObject();
+      JsonObject message = routingContext.body().asJsonObject();
 
-      JsonArray paramValues = new JsonArray();
+      if(message != null)
+      {
+        JsonObject deleteData = new JsonObject();
 
-      paramValues.add(message.getString("id"));
+        JsonArray paramValues = new JsonArray();
 
-      deleteData.put("action", "delete");
+        paramValues.add(message.getString("id"));
 
-      deleteData.put("tableName", message.getString("tableName"));
+        deleteData.put("address", "database");
 
-      deleteData.put("columns", "id,deviceName,ip,deviceType,status");
+        deleteData.put("action", "delete");
 
-      deleteData.put("paramValues", paramValues);
+        deleteData.put("tableName", message.getString("tableName"));
 
-      deleteData.put("condition", " where id = ?");
+        deleteData.put("columns", "id,deviceName,ip,deviceType,status");
 
-      eventBusRequestHandler(routingContext, deleteData);
+        deleteData.put("paramValues", paramValues);
+
+        deleteData.put("condition", " where id = ?");
+
+        eventBusRequestHandler(routingContext, deleteData);
+      }
+
+      else
+      {
+        LOGGER.error("message is null in DeleteDiscoveryTable");
+      }
     }
 
-    else
+    catch (Exception exception)
     {
-      LOGGER.error("id is null in DeleteDiscoveryTable");
+      LOGGER.error(exception.getMessage());
     }
 
   }
 
   private void updateHandler(RoutingContext routingContext)
   {
-    JsonObject message = routingContext.body().asJsonObject();
-
-    if(message != null)
+    try
     {
-      String[] data = message.getString("id").split("_");
+      JsonObject message = routingContext.body().asJsonObject();
 
-      JsonObject updateData = new JsonObject();
-
-      JsonArray paramValues = new JsonArray();
-
-      if(data[1].equals("credential"))
+      if(message != null)
       {
-        String[] credentialValue = data[2].split("\\.");
+        String[] data = message.getString("id").split("_");
 
-        paramValues.add("{\"credential_userName\":" + "\"" + credentialValue[0] + "\"" + ",\"credential_password\":" + "\"" +credentialValue[1] + "\"}");
+        JsonObject updateData = new JsonObject();
+
+        JsonArray paramValues = new JsonArray();
+
+        if(data[1].equals("credential"))
+        {
+          String[] credentialValue = data[2].split("\\.");
+
+          paramValues.add("{\"credential_userName\":" + "\"" + credentialValue[0] + "\"" + ",\"credential_password\":" + "\"" +credentialValue[1] + "\"}");
+        }
+        else
+        {
+          paramValues.add(data[2]);
+        }
+
+        paramValues.add("unknown");
+
+        paramValues.add(data[0]);
+
+        updateData.put("address", "database");
+
+        updateData.put("action", "update");
+
+        updateData.put("tableName", message.getString("tableName"));
+
+        updateData.put("columns", data[1]);
+
+        updateData.put("paramValues", paramValues);
+
+        updateData.put("condition", " = ?, status = ? where id = ?");
+
+        eventBusRequestHandler(routingContext, updateData);
       }
+
       else
       {
-        paramValues.add(data[2]);
+        LOGGER.error("Message is Null in updateHandler");
       }
-
-      paramValues.add("unknown");
-
-      paramValues.add(data[0]);
-
-      updateData.put("action", "update");
-
-      updateData.put("tableName", message.getString("tableName"));
-
-      updateData.put("columns", data[1]);
-
-      updateData.put("paramValues", paramValues);
-
-      updateData.put("condition", " = ?, status = ? where id = ?");
-
-      eventBusRequestHandler(routingContext, updateData);
     }
 
-    else
+    catch (Exception exception)
     {
-      LOGGER.error("Message is Null in updateHandler");
+      LOGGER.error(exception.getMessage());
     }
 
   }
 
   private void runDiscoveryHandler(RoutingContext routingContext)
   {
-    JsonObject message = routingContext.body().asJsonObject();
-
-    if(message != null)
+    try
     {
-      message.put("address", "runDiscovery");
+      JsonObject message = routingContext.body().asJsonObject();
 
-      eventBusRequestHandler(routingContext, message);
+      if(message != null)
+      {
+        message.put("address", "runDiscovery");
+
+        eventBusRequestHandler(routingContext, message);
+      }
+
+      else
+      {
+        LOGGER.error("Message is null in runDiscoveryHandler");
+      }
     }
 
-    else
+    catch (Exception exception)
     {
-      LOGGER.error("id is null in runDiscoveryHandler");
+      LOGGER.error(exception.getMessage());
     }
+
   }
 
   private void viewMonitorHandler(RoutingContext routingContext)
   {
-    JsonObject message = routingContext.body().asJsonObject();
-
-    if(message != null)
+    try
     {
-      JsonObject getMonitor = new JsonObject();
+      JsonObject message = routingContext.body().asJsonObject();
 
-      JsonArray paramValues = new JsonArray();
-
-      paramValues.add(message.getString("ip"));
-
-      paramValues.add(message.getString("ip"));
-
-      getMonitor.put("action", "get");
-
-      getMonitor.put("tableName", message.getString("tableName"));
-
-      getMonitor.put("columns", "p.metrics, p.data, p.ip, p.timestamp");
-
-      getMonitor.put("paramValues", paramValues);
-
-      getMonitor.put("condition", " p WHERE (metrics IN ('Loss', 'Status') AND timestamp = (SELECT MAX(timestamp) FROM " + message.getString("tableName") + " WHERE metrics = p.metrics)) OR (metrics IN ('Min', 'Max', 'Avg') AND timestamp >= NOW() - INTERVAL '86400' SECOND AND ip = ?) OR (metrics = 'Status' AND timestamp >= NOW() - INTERVAL '86400' SECOND AND ip = ?) ORDER BY p.metrics");
-
-      Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getMonitor);
-
-      if (future != null)
+      if(message != null)
       {
-        future.onComplete(viewResult ->
+        JsonObject getMonitor = new JsonObject();
+
+        JsonArray paramValues = new JsonArray();
+
+        paramValues.add(message.getString("ip"));
+
+        paramValues.add(message.getString("ip"));
+
+        getMonitor.put("action", "get");
+
+        getMonitor.put("tableName", message.getString("tableName"));
+
+        getMonitor.put("columns", "p.metrics, p.data, p.ip, p.timestamp");
+
+        getMonitor.put("paramValues", paramValues);
+
+        getMonitor.put("condition", " p WHERE (metrics IN ('Loss', 'Status') AND timestamp = (SELECT MAX(timestamp) FROM " + message.getString("tableName") + " WHERE metrics = p.metrics)) OR (metrics IN ('Min', 'Max', 'Avg') AND timestamp >= NOW() - INTERVAL '86400' SECOND AND ip = ?) OR (metrics = 'Status' AND timestamp >= NOW() - INTERVAL '86400' SECOND AND ip = ?) ORDER BY p.metrics");
+
+        Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getMonitor);
+
+        if (future != null)
         {
-          if (viewResult.succeeded())
+          future.onComplete(viewResult ->
           {
-            @SuppressWarnings("unchecked")
-            HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) viewResult.result();
-
-            JsonObject rowData = new JsonObject();
-
-            for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+            if (viewResult.succeeded())
             {
-              rowData = entry.getValue();
-            }
+              @SuppressWarnings("unchecked")
+              HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) viewResult.result();
 
-            routingContext.response().end(String.valueOf(rowData));
-          }
-          else
-          {
-            routingContext.response().setStatusCode(500).end("Error: " + viewResult.cause());
-          }
-        });
+              JsonObject rowData = new JsonObject();
+
+              for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+              {
+                rowData = entry.getValue();
+              }
+
+              routingContext.response().end(String.valueOf(rowData));
+            }
+            else
+            {
+              routingContext.response().setStatusCode(500).end("Error: " + viewResult.cause());
+            }
+          });
+        }
+        else
+        {
+          routingContext.response().setStatusCode(500).end("Error: Future is null");
+        }
       }
+
       else
       {
-        routingContext.response().setStatusCode(500).end("Error: Future is null");
+        LOGGER.error("Message is null in run discovery");
       }
     }
 
-    else
+    catch (Exception exception)
     {
-      LOGGER.error("Message is null in run discovery");
+      LOGGER.error(exception.getMessage());
+    }
+
+  }
+
+  private void pollingHandler(RoutingContext routingContext)
+  {
+    try
+    {
+      JsonObject getPollingData = new JsonObject();
+
+      getPollingData.put("action", "get");
+
+      getPollingData.put("tableName", "");
+
+      getPollingData.put("columns", "m.metric, m.data, m.ip, n.success_count, n.failed_count, n.unknown_count");
+
+      getPollingData.put("condition", "(( SELECT 'Max' AS metric, p.data, p.ip FROM polling_table p WHERE p.metrics = 'Max' AND p.timestamp >= NOW() - INTERVAL '86400' SECOND ORDER BY p.data DESC LIMIT 10) UNION ALL ( SELECT 'Min' AS metric, p.data, p.ip FROM polling_table p WHERE p.metrics = 'Min' AND p.timestamp >= NOW() - INTERVAL '86400' SECOND ORDER BY p.data ASC LIMIT 10)) AS m CROSS JOIN ( SELECT COUNT(CASE WHEN status = 'success' THEN 1 END) AS success_count, COUNT(CASE WHEN status = 'failed' THEN 1 END) AS failed_count, COUNT(CASE WHEN status = 'Unknown' THEN 1 END) AS unknown_count FROM monitor_table) AS n");
+
+      Future<Object> future = DatabaseOperations.dashBoardData(vertx, getPollingData);
+
+      if(future != null)
+      {
+        future.onComplete(pollingResult ->
+        {
+          if (pollingResult.succeeded())
+          {
+            routingContext.response().end(pollingResult.result().toString());
+          }
+
+          else
+          {
+            LOGGER.error("get operation failed on PollingData: " + pollingResult.cause());
+          }
+        });
+      }
+
+      else
+      {
+        LOGGER.error("Future is null in Polling Data");
+      }
+    }
+
+    catch (Exception exception)
+    {
+      exception.printStackTrace();
+      LOGGER.error(exception.getMessage() + "ExceptionHere");
     }
   }
 
@@ -457,7 +588,12 @@ public class VisualPublicAPI extends AbstractVerticle
 
       router.route("/api/*").handler(RedirectAuthHandler.create(authenticate, "/login.html"));
 
-      router.post("/login").handler(FormLoginHandler.create(authenticate));
+      router.post("/login").handler(routingContext ->
+      {
+        routingContext.request().getFormAttribute("data");
+
+        FormLoginHandler.create(authenticate).handle(routingContext);
+      });
       // This is for Login
       router.route().handler(StaticHandler.create());
       // This is for index.html
@@ -487,6 +623,8 @@ public class VisualPublicAPI extends AbstractVerticle
       router.post("/runDiscovery").handler(this::runDiscoveryHandler);
 
       router.post("/viewMonitor").handler(this::viewMonitorHandler);
+
+      router.get("/getPolling").handler(this::pollingHandler);
 
       SockJSHandler jsHandler = SockJSHandler.create(vertx);
 

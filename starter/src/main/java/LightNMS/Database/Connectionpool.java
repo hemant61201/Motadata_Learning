@@ -25,11 +25,7 @@ public class Connectionpool
   {
     Properties auth_Properties = null;
 
-    String workingDir = System.getProperty("user.dir");
-
-    String jdbcPath = workingDir + "/src/main/resources/jdbcAuthentication";
-
-    try(FileInputStream fileInputStream = new FileInputStream(jdbcPath))
+    try(FileInputStream fileInputStream = new FileInputStream(ConstVariables.JDBCPATH))
     {
       auth_Properties = new Properties();
 
