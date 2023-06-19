@@ -78,7 +78,7 @@ var fetchData =
 
             fail: function (ajaxResponse)
             {
-              console.log(ajaxResponse)
+              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
             }
           }
         };

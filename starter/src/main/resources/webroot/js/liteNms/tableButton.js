@@ -38,6 +38,16 @@ var runButton =
     {
       onclick : function (button)
       {
+        var alertBox = $("#alert").get(0);
+
+        var alertText = $("#text").get(0);
+
+        var alertIcon = $("#icon").get(0);
+
+        const alertName = "discoveryStart";
+
+        successAlert.success(alertBox, alertIcon, alertText, alertName, "DiscoveryStarted Successfully");
+
         var dataTable = $(button).closest('table').DataTable();
 
         var row = dataTable.row($(button).closest('tr'));
@@ -56,6 +66,14 @@ var runConfig =
   {
     runConfig: function (id)
     {
+      var alertBox = $("#alert").get(0);
+
+      var alertText = $("#text").get(0);
+
+      var alertIcon = $("#icon").get(0);
+
+      const alertName = "discoveryResult";
+
       const method = "POST";
 
       const url = "/runDiscovery";
@@ -76,6 +94,8 @@ var runConfig =
             {
               if (ajaxResponse !== null)
               {
+                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+
                 let dataTable = $('#discoveryTable').DataTable();
 
                 dataTable.destroy();
@@ -86,7 +106,7 @@ var runConfig =
 
             fail: function (ajaxResponse)
             {
-              console.log(ajaxResponse);
+              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
             }
           }
         }
@@ -163,6 +183,14 @@ var updateConfig =
   {
     updateConfig : function (updateValue)
     {
+      var alertBox = $("#alert").get(0);
+
+      var alertText = $("#text").get(0);
+
+      var alertIcon = $("#icon").get(0);
+
+      const alertName = "updateDiscovery";
+
       const method = "POST";
 
       const url = "/updateDiscovery";
@@ -182,6 +210,8 @@ var updateConfig =
             {
               if (ajaxResponse !== null)
               {
+                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+
                 let dataTable = $('#discoveryTable').DataTable();
 
                 dataTable.destroy();
@@ -192,7 +222,7 @@ var updateConfig =
 
             fail: function (ajaxResponse)
             {
-              console.log(ajaxResponse)
+              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
             }
           }
 
@@ -220,6 +250,14 @@ var provisonConfig =
   {
     provisonConfig: function (tableValue)
     {
+      var alertBox = $("#alert").get(0);
+
+      var alertText = $("#text").get(0);
+
+      var alertIcon = $("#icon").get(0);
+
+      const alertName = "provisionDiscovery";
+
       var tableData = tableValue.data();
 
       const method = "POST"
@@ -242,6 +280,8 @@ var provisonConfig =
             {
               if(ajaxResponse != null)
               {
+                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+
                 let dataTable = $('#monitorTable').DataTable();
 
                 dataTable.destroy();
@@ -252,7 +292,7 @@ var provisonConfig =
 
             fail: function (ajaxResponse)
             {
-              console.log(ajaxResponse);
+              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
             }
           }
         };
@@ -273,9 +313,12 @@ var monitorTableBtn =
 
       var id = data.ID;
 
-      let btnConf = deleteMonitor.deleteMonitorConfig(id);
+      if (confirm("Are you sure you want to delete?"))
+      {
+        let btnConf = deleteMonitor.deleteMonitorConfig(id);
 
-      genricAjax.ajaxCall(btnConf);
+        genricAjax.ajaxCall(btnConf);
+      }
     }
   };
 
@@ -283,6 +326,14 @@ var deleteMonitor =
   {
     deleteMonitorConfig: function (id)
     {
+      var alertBox = $("#alert").get(0);
+
+      var alertText = $("#text").get(0);
+
+      var alertIcon = $("#icon").get(0);
+
+      const alertName = "deleteMonitor";
+
       const method = "POST";
 
       const url = "/deleteMonitorTable";
@@ -303,6 +354,8 @@ var deleteMonitor =
             {
               if (ajaxResponse !== null)
               {
+                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+
                 let dataTable = $('#monitorTable').DataTable();
 
                 dataTable.destroy();
@@ -313,7 +366,7 @@ var deleteMonitor =
 
             fail: function (ajaxResponse)
             {
-              console.log(ajaxResponse);
+              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
             }
           }
         }
@@ -335,9 +388,12 @@ var deleteBtn =
 
       var id = data.ID;
 
-      let btnConf = deleteConfig.deleteConfig(id);
+      if (confirm("Are you sure you want to delete?"))
+      {
+        let btnConf = deleteConfig.deleteConfig(id);
 
-      genricAjax.ajaxCall(btnConf);
+        genricAjax.ajaxCall(btnConf);
+      }
     },
   }
 
@@ -345,9 +401,17 @@ var deleteConfig =
   {
     deleteConfig : function (id)
     {
+      var alertBox = $("#alert").get(0);
+
+      var alertText = $("#text").get(0);
+
+      var alertIcon = $("#icon").get(0);
+
       const method = "POST";
 
       const url = "/deleteDiscoveryTable";
+
+      const alertName = "deleteDiscovery";
 
       const data = JSON.stringify({tableName: "discovery_table", id: id})
 
@@ -365,6 +429,8 @@ var deleteConfig =
             {
               if (ajaxResponse !== null)
               {
+                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+
                 let dataTable = $('#discoveryTable').DataTable();
 
                 dataTable.destroy();
@@ -375,7 +441,7 @@ var deleteConfig =
 
             fail: function (ajaxResponse)
             {
-              console.log(ajaxResponse);
+              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
             }
           }
         }
