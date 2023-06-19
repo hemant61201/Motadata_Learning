@@ -21,7 +21,7 @@ var pollingConfig =
     {
       const method = "GET";
 
-      const url = "/getPolling"
+      const url = "/api/getPolling"
 
       var config =
         {

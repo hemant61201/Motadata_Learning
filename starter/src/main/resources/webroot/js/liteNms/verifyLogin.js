@@ -10,14 +10,26 @@ var login =
 
 var fetchData =
   {
+    ajaxSuccessMethod : function (ajaxResponse)
+    {
+      const alertName = "login";
+
+      const alertData = "Login Successful";
+
+      successAlert.success(alertName, alertData);
+    },
+
+    ajaxFail : function (ajaxResponse)
+    {
+      const alertName = "login";
+
+      const alertData = "Login Failed";
+
+      failAlert.fail(alertName, alertData);
+    },
+
     fetchData : function ()
     {
-      var alertBox = $("#alert").get(0);
-
-      var alertText = $("#text").get(0);
-
-      var alertIcon = $("#icon").get(0);
-
       const username = $("#username").val();
 
       const password = $("#password").val();
@@ -32,10 +44,6 @@ var fetchData =
 
       formData.append("password", password);
 
-      const alertName = "login";
-
-      const alertData = "";
-
       const myData =
         {
           method: method,
@@ -44,19 +52,12 @@ var fetchData =
 
           data: formData.toString(),
 
-          callbacks: {
-
-            success: function (ajaxResponse)
+          callbacks:
             {
-              successAlert.success(alertBox, alertIcon, alertText, alertName, alertData);
-            },
+              success: fetchData.ajaxSuccessMethod,
 
-            fail: function (ajaxResponse)
-            {
-              failAlert.fail(alertBox, alertIcon, alertText, alertName, alertData);
+              fail: fetchData.ajaxFail,
             }
-
-          }
         };
 
       return myData;

@@ -14,15 +14,28 @@ var genricAjax =
           {
             if (data.callbacks && data.callbacks.success)
             {
-              data.callbacks.success(ajaxResponse);
+              let callbacks = $.Callbacks();
+
+              callbacks.add(data.callbacks.success);
+
+              callbacks.fire(ajaxResponse);
+
+              callbacks.remove(data.callbacks.success)
+
             }
           },
 
           error: function (ajaxResponse)
           {
-            if (data.callbacks && data.callbacks.fail)
+            if (data.callbacks && data.callbacks.success)
             {
-              data.callbacks.fail(ajaxResponse);
+              let callbacks = $.Callbacks();
+
+              callbacks.add(data.callbacks.success);
+
+              callbacks.fire(ajaxResponse);
+
+              callbacks.remove(data.callbacks.success)
             }
           }
         });

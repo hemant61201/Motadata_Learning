@@ -1,10 +1,19 @@
 var monitorConfig =
   {
+    ajaxSuccessMethod : function (ajaxResponse)
+    {
+      const jsonArray = JSON.parse(ajaxResponse);
+
+      const resultArray = jsonArray.map(jsonString => JSON.parse(jsonString));
+
+      dataTable.loadDataTable("#monitorTable", resultArray)
+    },
+
     getmonitorConfig : function ()
     {
       const method = "POST";
 
-      const url = "/getMonitorTable"
+      const url = "/api/getMonitorTable"
 
       const data = JSON.stringify({tableName: "monitor_table"})
 
@@ -16,22 +25,10 @@ var monitorConfig =
 
           data: data,
 
-          callbacks: {
-
-            success: function (ajaxResponse)
+          callbacks:
             {
-              const jsonArray = JSON.parse(ajaxResponse);
-
-              const resultArray = jsonArray.map(jsonString => JSON.parse(jsonString));
-
-              dataTable.loadDataTable("#monitorTable", resultArray)
-            },
-
-            fail: function (ajaxResponse)
-            {
-              console.log(ajaxResponse)
+              success: monitorConfig.ajaxSuccessMethod,
             }
-          }
         }
 
       return config;

@@ -38,6 +38,6 @@ var discovery =
 
       genricAjax.ajaxCall(config)
     }
-  }
+  };
 
 

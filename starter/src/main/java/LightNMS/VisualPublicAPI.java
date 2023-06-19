@@ -44,6 +44,7 @@ public class VisualPublicAPI extends AbstractVerticle
             }
           });
         }
+        break;
 
         case ConstVariables.DATABASE:
         {
@@ -598,25 +599,25 @@ public class VisualPublicAPI extends AbstractVerticle
         context.redirect("/api/login.html");
       });
 
-      router.post("/addDiscovery").handler(this::addDiscoveryHandler);
+      router.post("/api/addDiscovery").handler(this::addDiscoveryHandler);
 
-      router.post("/addMonitorTable").handler(this::addMonitorHandler);
+      router.post("/api/addMonitorTable").handler(this::addMonitorHandler);
 
-      router.post("/getDiscovery").handler(this::getHandler);
+      router.post("/api/getDiscovery").handler(this::getHandler);
 
-      router.post("/getMonitorTable").handler(this::getHandler);
+      router.post("/api/getMonitorTable").handler(this::getHandler);
 
-      router.post("/deleteDiscoveryTable").handler(this::deleteHandler);
+      router.post("/api/deleteDiscoveryTable").handler(this::deleteHandler);
 
-      router.post("/deleteMonitorTable").handler(this::deleteHandler);
+      router.post("/api/deleteMonitorTable").handler(this::deleteHandler);
 
-      router.post("/updateDiscovery").handler(this::updateHandler);
+      router.post("/api/updateDiscovery").handler(this::updateHandler);
 
-      router.post("/runDiscovery").handler(this::runDiscoveryHandler);
+      router.post("/api/runDiscovery").handler(this::runDiscoveryHandler);
 
-      router.post("/viewMonitor").handler(this::viewMonitorHandler);
+      router.post("/api/viewMonitor").handler(this::viewMonitorHandler);
 
-      router.get("/getPolling").handler(this::pollingHandler);
+      router.get("/api/getPolling").handler(this::pollingHandler);
 
       SockJSHandler jsHandler = SockJSHandler.create(vertx);
 

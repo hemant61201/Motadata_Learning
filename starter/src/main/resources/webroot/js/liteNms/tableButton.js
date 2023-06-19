@@ -38,15 +38,9 @@ var runButton =
     {
       onclick : function (button)
       {
-        var alertBox = $("#alert").get(0);
+        const alertName = "";
 
-        var alertText = $("#text").get(0);
-
-        var alertIcon = $("#icon").get(0);
-
-        const alertName = "discoveryStart";
-
-        successAlert.success(alertBox, alertIcon, alertText, alertName, "DiscoveryStarted Successfully");
+        successAlert.success(alertName, "DiscoveryStarted Successfully");
 
         var dataTable = $(button).closest('table').DataTable();
 
@@ -64,19 +58,35 @@ var runButton =
 
 var runConfig =
   {
+    ajaxSuccessMethod : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      const alertData = "Discovery Successfully Completed";
+
+      successAlert.success(alertName, alertData);
+
+      let dataTable = $('#discoveryTable').DataTable();
+
+      dataTable.destroy();
+
+      discovery.loadDiscovery();
+    },
+
+    ajaxFail : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      const alertData = "Discovery Failed";
+
+      failAlert.fail(alertName, alertData);
+    },
+
     runConfig: function (id)
     {
-      var alertBox = $("#alert").get(0);
-
-      var alertText = $("#text").get(0);
-
-      var alertIcon = $("#icon").get(0);
-
-      const alertName = "discoveryResult";
-
       const method = "POST";
 
-      const url = "/runDiscovery";
+      const url = "/api/runDiscovery";
 
       const data = JSON.stringify({tableName: "discovery_table", id: id});
 
@@ -88,32 +98,17 @@ var runConfig =
 
           data: data,
 
-          callbacks:{
-
-            success: function (ajaxResponse)
+          callbacks:
             {
-              if (ajaxResponse !== null)
-              {
-                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              success: runConfig.ajaxSuccessMethod,
 
-                let dataTable = $('#discoveryTable').DataTable();
-
-                dataTable.destroy();
-
-                discovery.loadDiscovery();
-              }
-            },
-
-            fail: function (ajaxResponse)
-            {
-              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              fail: runConfig.ajaxFail,
             }
-          }
         }
 
       return config;
     }
-}
+};
 
 var updateBtn =
   {
@@ -138,62 +133,81 @@ var updateBtn =
 
     onclick: function ()
     {
-      const field = $("#deviceSelect").val();
-
-      var updatefeild;
-
-      switch (field)
+      if(validation.preCheckUpdateValue())
       {
-        case "DeviceName":
-        {
-          updatefeild = updateBtn.id + "_" + field + "_" + $("#update_deviceName").val();
+        const field = $("#deviceSelect").val();
 
-          break;
+        var updatefeild;
+
+        switch (field)
+        {
+          case "DeviceName":
+          {
+            updatefeild = updateBtn.id + "_" + field + "_" + $("#update_deviceName").val();
+
+            break;
+          }
+
+          case "IP":
+          {
+            updatefeild = updateBtn.id + "_" + field + "_" + $("#update_ip").val();
+
+            break;
+          }
+
+          case "DeviceType":
+          {
+            updatefeild = updateBtn.id + "_" + field + "_" + $("#update_deviceType").val();
+
+            break;
+          }
+
+          case "credential":
+          {
+            updatefeild = updateBtn.id + "_" + field + "_" + $("#update_username").val() + "." + $("#update_password").val();
+
+            break;
+          }
         }
 
-        case "IP":
-        {
-          updatefeild = updateBtn.id + "_" + field + "_" + $("#update_ip").val();
+        let updatevalue = updateConfig.updateConfig(updatefeild);
 
-          break;
-        }
-
-        case "DeviceType":
-        {
-          updatefeild = updateBtn.id + "_" + field + "_" + $("#update_deviceType").val();
-
-          break;
-        }
-
-        case "credential":
-        {
-          updatefeild = updateBtn.id + "_" + field + "_" + $("#update_username").val() + "." + $("#update_password").val();
-
-          break;
-        }
+        genricAjax.ajaxCall(updatevalue);
       }
-
-      let updatevalue = updateConfig.updateConfig(updatefeild);
-
-      genricAjax.ajaxCall(updatevalue);
       },
   };
 
 var updateConfig =
   {
+    ajaxSuccessMethod : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      var alertData = "Device Updated Successfully"
+
+      successAlert.success(alertName, alertData);
+
+      let dataTable = $('#discoveryTable').DataTable();
+
+      dataTable.destroy();
+
+      discovery.loadDiscovery();
+    },
+
+    ajaxFail : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      const alertData = "Device Not Updated Successfully";
+
+      failAlert.fail(alertName, alertData);
+    },
+
     updateConfig : function (updateValue)
     {
-      var alertBox = $("#alert").get(0);
-
-      var alertText = $("#text").get(0);
-
-      var alertIcon = $("#icon").get(0);
-
-      const alertName = "updateDiscovery";
-
       const method = "POST";
 
-      const url = "/updateDiscovery";
+      const url = "/api/updateDiscovery";
 
       const data = JSON.stringify({tableName: "discovery_table", id: updateValue})
 
@@ -205,27 +219,12 @@ var updateConfig =
 
           data: data,
 
-          callbacks:{
-            success: function (ajaxResponse)
+          callbacks:
             {
-              if (ajaxResponse !== null)
-              {
-                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              success: updateConfig.ajaxSuccessMethod,
 
-                let dataTable = $('#discoveryTable').DataTable();
-
-                dataTable.destroy();
-
-                discovery.loadDiscovery();
-              }
-            },
-
-            fail: function (ajaxResponse)
-            {
-              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              fail: updateConfig.ajaxFail,
             }
-          }
-
         }
 
       return config;
@@ -248,21 +247,51 @@ var provisonButton =
 
 var provisonConfig =
   {
+    ajaxSuccessMethod : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      var alertData;
+
+      if(ajaxResponse === 1)
+      {
+        alertData = "Device Added Successfully in MonitorTable";
+
+        successAlert.success(alertName, alertData);
+      }
+
+      else
+      {
+        alertData = "Device Already Present in MonitorTable";
+
+        failAlert.fail(alertName, alertData);
+      }
+
+
+
+      let dataTable = $('#monitorTable').DataTable();
+
+      dataTable.destroy();
+
+      monitor.loadMonitor();
+    },
+
+    ajaxFail : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      const alertData = "Provision Failed";
+
+      failAlert.fail(alertName, alertData);
+    },
+
     provisonConfig: function (tableValue)
     {
-      var alertBox = $("#alert").get(0);
-
-      var alertText = $("#text").get(0);
-
-      var alertIcon = $("#icon").get(0);
-
-      const alertName = "provisionDiscovery";
-
       var tableData = tableValue.data();
 
       const method = "POST"
 
-      const url = "/addMonitorTable"
+      const url = "/api/addMonitorTable"
 
       const data = JSON.stringify({tableName:"discovery_table", id: tableData.ID});
 
@@ -274,27 +303,12 @@ var provisonConfig =
 
           data: data,
 
-          callbacks:{
-
-            success: function (ajaxResponse)
+          callbacks:
             {
-              if(ajaxResponse != null)
-              {
-                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              success: provisonConfig.ajaxSuccessMethod,
 
-                let dataTable = $('#monitorTable').DataTable();
-
-                dataTable.destroy();
-
-                monitor.loadMonitor();
-              }
-            },
-
-            fail: function (ajaxResponse)
-            {
-              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              fail: provisonConfig.ajaxFail,
             }
-          }
         };
 
       return provConf;
@@ -324,19 +338,35 @@ var monitorTableBtn =
 
 var deleteMonitor =
   {
+    ajaxSuccessMethod : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      var alertData = "Device Deleted Successfully"
+
+      successAlert.success(alertName, alertData);
+
+      let dataTable = $('#monitorTable').DataTable();
+
+      dataTable.destroy();
+
+      monitor.loadMonitor();
+    },
+
+    ajaxFail : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      const alertData = "Device Not Deleted";
+
+      failAlert.fail(alertName, alertData);
+    },
+
     deleteMonitorConfig: function (id)
     {
-      var alertBox = $("#alert").get(0);
-
-      var alertText = $("#text").get(0);
-
-      var alertIcon = $("#icon").get(0);
-
-      const alertName = "deleteMonitor";
-
       const method = "POST";
 
-      const url = "/deleteMonitorTable";
+      const url = "/api/deleteMonitorTable";
 
       const data = JSON.stringify({tableName: "monitor_table", id: id})
 
@@ -348,27 +378,12 @@ var deleteMonitor =
 
           data: data,
 
-          callbacks:{
-
-            success: function (ajaxResponse)
+          callbacks:
             {
-              if (ajaxResponse !== null)
-              {
-                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              success: deleteMonitor.ajaxSuccessMethod,
 
-                let dataTable = $('#monitorTable').DataTable();
-
-                dataTable.destroy();
-
-                monitor.loadMonitor();
-              }
-            },
-
-            fail: function (ajaxResponse)
-            {
-              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              fail: deleteMonitor.ajaxFail,
             }
-          }
         }
 
       return config;
@@ -399,19 +414,35 @@ var deleteBtn =
 
 var deleteConfig =
   {
+    ajaxSuccessMethod : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      var alertData = "Device Deleted Successfully"
+
+      successAlert.success(alertName, alertData);
+
+      let dataTable = $('#discoveryTable').DataTable();
+
+      dataTable.destroy();
+
+      discovery.loadDiscovery();
+    },
+
+    ajaxFail : function (ajaxResponse)
+    {
+      const alertName = "";
+
+      const alertData = "Device Not Deleted";
+
+      failAlert.fail(alertName, alertData);
+    },
+
     deleteConfig : function (id)
     {
-      var alertBox = $("#alert").get(0);
-
-      var alertText = $("#text").get(0);
-
-      var alertIcon = $("#icon").get(0);
-
       const method = "POST";
 
-      const url = "/deleteDiscoveryTable";
-
-      const alertName = "deleteDiscovery";
+      const url = "/api/deleteDiscoveryTable";
 
       const data = JSON.stringify({tableName: "discovery_table", id: id})
 
@@ -423,27 +454,12 @@ var deleteConfig =
 
           data: data,
 
-          callbacks: {
-
-            success: function (ajaxResponse)
+          callbacks:
             {
-              if (ajaxResponse !== null)
-              {
-                successAlert.success(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              success: deleteConfig.ajaxSuccessMethod,
 
-                let dataTable = $('#discoveryTable').DataTable();
-
-                dataTable.destroy();
-
-                discovery.loadDiscovery();
-              }
-            },
-
-            fail: function (ajaxResponse)
-            {
-              failAlert.fail(alertBox, alertIcon, alertText, alertName, ajaxResponse);
+              fail: deleteConfig.ajaxFail,
             }
-          }
         }
 
       return config;
@@ -474,7 +490,7 @@ var viewMonitorConfig =
     {
       const method = "POST"
 
-      const url = "/viewMonitor"
+      const url = "/api/viewMonitor"
 
       const data = JSON.stringify({tableName: "polling_table", ip: ip})
 

@@ -165,6 +165,8 @@ public class Discovery extends AbstractVerticle
           }
         });
       });
+
+      startPromise.complete();
     }
 
     catch (Exception exception)

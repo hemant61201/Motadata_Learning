@@ -11,7 +11,7 @@ var dataTable =
           { title: 'DeviceName', data: 'DEVICENAME' },
           { title: 'IP', data: 'IP' },
           { title: 'DeviceType', data: 'DEVICETYPE' },
-          { title: 'Discovery_Status', data: 'STATUS' },
+          { title: 'Status', data: 'STATUS' },
           {
             title: 'Actions',
 
