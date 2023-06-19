@@ -17,9 +17,8 @@ public class GenricQuery
       {
         case ConstVariables.ADD:
         {
-          String query = "INSERT INTO " + message.getString("tableName") + " (" + message.getString("columns") + ") " + message.getString("condition");
+          return "INSERT INTO " + message.getString("tableName") + " (" + message.getString("columns") + ") " + message.getString("condition");
 
-          return query;
         }
 
         case ConstVariables.GET:
