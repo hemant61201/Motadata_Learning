@@ -17,7 +17,7 @@ public class ConstVariables
 
   public static String workingDir = System.getProperty("user.dir");
 
-  public static final String BOOTSTRAPPATH = workingDir + "/src/main/resources/BootStrap";
+  public static final String BOOTSTRAPPATH = workingDir + "/src/main/resources/bootstrap";
 
   public static final String JDBCPATH = workingDir + "/src/main/resources/jdbcAuthentication";
 

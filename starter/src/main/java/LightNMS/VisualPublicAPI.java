@@ -26,53 +26,45 @@ public class VisualPublicAPI extends AbstractVerticle
 
   private void eventBusRequestHandler(RoutingContext routingContext, JsonObject message)
   {
-    try
+    if(message != null)
     {
-      if(message != null)
+      switch (message.getString("address"))
       {
-        switch (message.getString("address"))
+        case ConstVariables.DISCOVERY:
         {
-          case ConstVariables.DISCOVERY:
+          vertx.eventBus().request(message.getString("address"), message, discoveryResult ->
           {
-            vertx.eventBus().request(message.getString("address"), message, discoveryResult ->
+            if (discoveryResult.succeeded())
             {
-              if (discoveryResult.succeeded())
-              {
-                routingContext.response().end(discoveryResult.result().body().toString());
-              }
-              else
-              {
-                routingContext.response().setStatusCode(500).end("Error occurred in discoveryResult");
-              }
-            });
-          }
-
-          case ConstVariables.DATABASE:
-          {
-            vertx.eventBus().request(message.getString("address"), message, databaseResult ->
+              routingContext.response().end(discoveryResult.result().body().toString());
+            }
+            else
             {
-              if (databaseResult.succeeded())
-              {
-                routingContext.response().end(databaseResult.result().body().toString());
-              }
-              else
-              {
-                routingContext.response().setStatusCode(500).end("Error occurred in databaseResult");
-              }
-            });
-          }
+              routingContext.response().setStatusCode(500).end("Error occurred in discoveryResult");
+            }
+          });
         }
-      }
 
-      else
-      {
-        LOGGER.error("Message is null in eventbus handler");
+        case ConstVariables.DATABASE:
+        {
+          vertx.eventBus().request(message.getString("address"), message, databaseResult ->
+          {
+            if (databaseResult.succeeded())
+            {
+              routingContext.response().end(databaseResult.result().body().toString());
+            }
+            else
+            {
+              routingContext.response().setStatusCode(500).end("Error occurred in databaseResult");
+            }
+          });
+        }
       }
     }
 
-    catch (Exception exception)
+    else
     {
-      LOGGER.error(exception.getMessage());
+      LOGGER.error("Message is null in eventbus handler");
     }
   }
 

@@ -60,6 +60,8 @@ public class Main
           vertx.undeploy(DatabaseOperations.class.getName());
 
           vertx.undeploy(PollingExecution.class.getName());
+
+          LOGGER.info("All Verticles Successfully Undeploy");
         }
         catch (Exception exception)
         {
