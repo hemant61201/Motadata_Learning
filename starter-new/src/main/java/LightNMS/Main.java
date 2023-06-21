@@ -1,71 +1,78 @@
 package LightNMS;
 
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main
 {
-  private static final Logger logger = LoggerFactory.getLogger(Main.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
   public static void main(String[] args)
   {
+    try
+    {
+      Vertx vertx = Vertx.vertx();
 
-    Vertx vertx = Vertx.vertx();
+      Promise<String> visualizationDeployment = Promise.promise();
 
-    Promise<String> visualizationDeployment = Promise.promise();
+      Promise<String> discoveryDeployment = Promise.promise();
 
-    Promise<String> discoveryDeployment = Promise.promise();
+      Promise<String> crudOperationsDeployment = Promise.promise();
 
-    Promise<String> crudOperationsDeployment = Promise.promise();
+      Promise<String> pollingExecutionDeployment = Promise.promise();
 
-    Promise<String> pollingExecutionDeployment = Promise.promise();
+      vertx.deployVerticle(VisualPublicAPI.class.getName(), visualizationDeployment);
 
-    vertx.deployVerticle(VisualPublicAPI.class.getName(), visualizationDeployment);
+      vertx.deployVerticle(Discovery.class.getName(), discoveryDeployment);
 
-    vertx.deployVerticle(Discovery.class.getName(), discoveryDeployment);
+      vertx.deployVerticle(DatabaseOperations.class.getName(), crudOperationsDeployment);
 
-    vertx.deployVerticle(CrudOperations.class.getName(), crudOperationsDeployment);
+      vertx.deployVerticle(PollingExecution.class.getName(), pollingExecutionDeployment);
 
-    vertx.deployVerticle(PollingExecution.class.getName(), pollingExecutionDeployment);
-
-    CompositeFuture.all(visualizationDeployment.future(), discoveryDeployment.future(), crudOperationsDeployment.future(), pollingExecutionDeployment.future())
-      .onComplete(ar ->
-      {
-        if (ar.succeeded())
+      CompositeFuture.all(visualizationDeployment.future(), discoveryDeployment.future(), crudOperationsDeployment.future(), pollingExecutionDeployment.future())
+        .onComplete(ar ->
         {
-          logger.info("All verticles deployed successfully");
-        }
+          if (ar.succeeded())
+          {
+            LOGGER.info("All verticles deployed successfully");
+          }
 
-        else
-        {
-          logger.info("One or more verticles failed to deploy");
+          else
+          {
+            LOGGER.info("One or more verticles failed to deploy");
 
-          ar.cause().printStackTrace();
+            ar.cause().printStackTrace();
 
-          System.exit(1);
-        }
-      });
+            System.exit(1);
+          }
+        });
 
       Runtime.getRuntime().addShutdownHook(new Thread(() ->
       {
         try
         {
           // Undeploy the verticles
-          vertx.undeploy(visualizationDeployment.future().result());
+          vertx.undeploy(VisualPublicAPI.class.getName());
 
-          vertx.undeploy(discoveryDeployment.future().result());
+          vertx.undeploy(Discovery.class.getName());
 
-          vertx.undeploy(crudOperationsDeployment.future().result());
+          vertx.undeploy(DatabaseOperations.class.getName());
 
-          vertx.undeploy(pollingExecutionDeployment.future().result());
+          vertx.undeploy(PollingExecution.class.getName());
+
+          LOGGER.info("All Verticles Successfully Undeploy");
         }
         catch (Exception exception)
         {
-          logger.error(String.valueOf(exception));
+          LOGGER.error(String.valueOf(exception));
         }
       }));
+    }
+
+    catch (Exception exception)
+    {
+      LOGGER.error(exception.getMessage());
+    }
   }
 }

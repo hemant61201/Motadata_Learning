@@ -2,45 +2,159 @@ package LightNMS;
 
 import com.zaxxer.nuprocess.NuProcess;
 import com.zaxxer.nuprocess.NuProcessBuilder;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Promise;
+import io.vertx.core.*;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 
 public class Discovery extends AbstractVerticle
 {
-  private String id;
-
-  private static final Logger logger = LoggerFactory.getLogger(Main.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
   @Override
   public void start(Promise<Void> startPromise)
   {
     try
     {
-      vertx.eventBus().consumer("discovery", message ->
+      vertx.eventBus().consumer(ConstVariables.DISCOVERY, message ->
       {
         JsonObject requestData = new JsonObject();
 
-        String param = message.body().toString();
-
-        JsonObject msg = new JsonObject();
-
-        msg.put("action", "get_DiscoveryTable_id");
-
-        if (param != null)
-        {
-          msg.put("param", param);
-        }
-
         Promise<Object> promise = Promise.promise();
+
+        JsonObject discoveryData = new JsonObject(message.body().toString());
+
+        JsonObject getDiscoveryData = new JsonObject();
+
+        JsonArray paramValues = new JsonArray();
+
+        paramValues.add(discoveryData.getString("id"));
+
+        getDiscoveryData.put(ConstVariables.ACTION, "get");
+
+        getDiscoveryData.put(ConstVariables.TABLENAME, discoveryData.getString("tableName"));
+
+        getDiscoveryData.put(ConstVariables.COLUMNS, "*");
+
+        getDiscoveryData.put(ConstVariables.PARAMVALUES, paramValues);
+
+        getDiscoveryData.put(ConstVariables.CONDITION, " where id = ?");
+
+        Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getDiscoveryData);
+
+        if (future != null)
+        {
+          future.onComplete(getResult ->
+          {
+            if (getResult.succeeded())
+            {
+              @SuppressWarnings("unchecked")
+              HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) getResult.result();
+
+              JsonObject getData = new JsonObject();
+
+              for (Map.Entry<Integer, JsonObject> entry : data.entrySet())
+              {
+                getData = entry.getValue();
+              }
+
+              String credentialData = getData.getString("CREDENTIAL");
+
+              String[] values = getData.getString("IP").split(",");
+
+              JsonArray ipArray = new JsonArray();
+
+              for (String value : values)
+              {
+                ipArray.add(value);
+              }
+
+              JsonObject credentialObject = new JsonObject(credentialData);
+
+              JsonArray userName = new JsonArray();
+
+              userName.add(credentialObject.getString("credential_userName"));
+
+              JsonArray password = new JsonArray();
+
+              password.add(credentialObject.getString("credential_password"));
+
+              requestData.put("Method", "Discovery")
+                .put("Operation", getData.getString("DEVICETYPE"))
+                .put("credentialProfile", new JsonObject()
+                  .put("username", userName)
+                  .put("password", password))
+                .put("discoveryProfile", new JsonObject()
+                  .put("ip", ipArray)
+                  .put("port", 22)
+                  .put("id", new JsonArray().add(getData.getInteger("ID"))));
+
+              executeCommand(ConstVariables.BOOTSTRAPPATH, requestData.encode(), exeResult ->
+              {
+                if (exeResult.succeeded())
+                {
+                  String[] result = exeResult.result().split("_");
+
+                  String id = result[1].trim();
+
+                  String idString = id.substring(1, id.length() - 1);
+
+                  JsonObject updateStatus = new JsonObject();
+
+                  JsonArray paramValue = new JsonArray();
+
+                  paramValue.add(result[0]);
+
+                  paramValue.add(idString);
+
+                  updateStatus.put(ConstVariables.ACTION,"update");
+
+                  updateStatus.put(ConstVariables.TABLENAME, discoveryData.getString("tableName"));
+
+                  updateStatus.put(ConstVariables.COLUMNS, "status");
+
+                  updateStatus.put(ConstVariables.PARAMVALUES, paramValue);
+
+                  updateStatus.put(ConstVariables.CONDITION, " = ? where id = ?");
+
+                  vertx.eventBus().request("database", updateStatus, updateResult ->
+                  {
+                    if(updateResult.succeeded())
+                    {
+                      promise.complete("success");
+                    }
+
+                    else
+                    {
+                      promise.fail(updateResult.cause());
+                    }
+                  });
+                }
+                else
+                {
+                  LOGGER.info("Process execution failed: " + exeResult.cause().getMessage());
+
+                  startPromise.fail(exeResult.cause());
+                }
+              });
+            }
+            else
+            {
+              LOGGER.error(getResult.cause().getMessage());
+            }
+          });
+        }
+        else
+        {
+          LOGGER.error("Error: Future is null");
+        }
 
         promise.future().onComplete(result ->
         {
@@ -53,119 +167,79 @@ public class Discovery extends AbstractVerticle
 
           else
           {
-            Throwable cause = result.cause();
+            LOGGER.error("Discovery operation failed: " + result.cause());
 
-            logger.error("Discovery operation failed: " + cause.getMessage());
-
-            message.fail(500, cause.getMessage());
-          }
-        });
-
-        vertx.eventBus().request("database", msg.encode(), rowResult ->
-        {
-          if (rowResult.succeeded())
-          {
-            JsonObject getData = (JsonObject) rowResult.result().body();
-
-            String credentialData = getData.getString("CREDENTIAL");
-
-            String[] values = getData.getString("IP").split(",");
-
-            JsonArray ipArray = new JsonArray();
-
-            for (String value : values)
-            {
-              ipArray.add(value);
-            }
-
-            JsonObject credentialObject = new JsonObject(credentialData);
-
-            requestData.put("Method", "Discovery")
-              .put("Operation", getData.getString("DEVICETYPE"))
-              .put("credentialProfile", new JsonObject()
-                .put("username", credentialObject.getString("credential_userName"))
-                .put("password", credentialObject.getString("credential_password")))
-              .put("discoveryProfile", new JsonObject()
-                .put("ip", ipArray)
-                .put("port", 22)
-                .put("id", new JsonArray().add(getData.getInteger("ID"))));
-
-            executeCommand("/home/hemant/Music/LightNMS/src/main/resources/BootStrap", requestData.encode(), exeResult ->
-            {
-              if (exeResult.succeeded())
-              {
-                String parm = exeResult.result();
-
-                JsonObject msges = new JsonObject();
-
-                msges.put("action", "update_DiscoveryTable");
-
-                if (parm != null)
-                {
-                  msges.put("param", parm);
-                }
-
-                vertx.eventBus().request("database", msges.encode(), updateResult ->
-                {
-                  if(updateResult.succeeded())
-                  {
-                    promise.complete("success");
-                  }
-
-                  else
-                  {
-                    promise.fail(updateResult.cause());
-                  }
-                });
-              }
-              else
-              {
-                System.err.println("Process execution failed: " + exeResult.cause().getMessage());
-
-                startPromise.fail(exeResult.cause());
-              }
-            });
+            message.fail(500, result.cause().getMessage());
           }
         });
       });
+
+      startPromise.complete();
     }
 
     catch (Exception exception)
     {
-      System.out.println(exception.getMessage());
+      LOGGER.error(exception.getMessage());
 
       startPromise.fail(exception);
     }
   }
 
-  private void executeCommand(String command, String input, io.vertx.core.Handler<io.vertx.core.AsyncResult<String>> handler)
+  private void executeCommand(String command, String input, Handler<AsyncResult<String>> handler)
   {
-    CompletableFuture<String> processOutputFuture = new CompletableFuture<>();
-
-    command += " " + input;
-
-    NuProcessBuilder pb = new NuProcessBuilder(Arrays.asList(command.split("\\s+")));
-
-    pb.setProcessListener(new NuProcessHandler(processOutputFuture));
-
-    vertx.<String>executeBlocking(future ->
+    try
     {
-      try
+      CompletableFuture<String> processOutputFuture = new CompletableFuture<>();
+
+      command += " " + input;
+
+      NuProcessBuilder nuProcessBuilder = new NuProcessBuilder(Arrays.asList(command.split("\\s+")));
+
+      nuProcessBuilder.setProcessListener(new NuProcessHandler(processOutputFuture));
+
+      vertx.executeBlocking(future ->
       {
-        NuProcess process = pb.start();
+        try
+        {
+          NuProcess process = nuProcessBuilder.start();
 
-        process.waitFor(60, TimeUnit.SECONDS);
-      }
+          process.waitFor(60, TimeUnit.SECONDS);
+        }
 
-      catch (Exception e)
-      {
-        future.fail(e);
+        catch (Exception exception)
+        {
+          future.fail(exception);
 
-        return;
-      }
+          return;
+        }
 
-      future.complete(processOutputFuture.join());
+        String output = processOutputFuture.join();
 
-    },false, handler);
+        String[] outputLines = output.split("\\r?\\n");
+
+        StringBuilder successOutput = new StringBuilder();
+
+        for (String line : outputLines)
+        {
+          // Filter out error lines based on a specific pattern
+          if (!line.contains("Error"))
+          {
+            successOutput.append(line).append(System.lineSeparator());
+          }
+          else
+          {
+            LOGGER.error(line);
+          }
+        }
+
+        future.complete(successOutput.toString());
+
+      },false, handler);
+    }
+
+    catch (Exception exception)
+    {
+      LOGGER.error(exception.getMessage());
+    }
   }
 }

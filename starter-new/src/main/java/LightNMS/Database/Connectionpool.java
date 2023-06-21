@@ -1,5 +1,9 @@
 package LightNMS.Database;
 
+import LightNMS.ConstVariables;
+import LightNMS.Main;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,112 +13,127 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Connectionpool
 {
-  static Properties auth_Properties;
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
   private static LinkedBlockingQueue<Connection> connectionQueue;
 
-  private static ArrayList<Connection> activeConnections = new ArrayList<>();
+  private static final ArrayList<Connection> ACTIVECONNECTION = new ArrayList<>();
 
-  private final int poolCapacity = 10;
+  private static final int POOLCAPACITY = ConstVariables.POOLCAPACITY;
 
-  private static Connectionpool connectionPool;
-
-  public Connectionpool(){}
-
-  public static void authentication()
+  // private
+  private static Properties authentication()
   {
-    auth_Properties = new Properties();
+    Properties auth_Properties = null;
 
-    try(FileInputStream fileInputStream = new FileInputStream("/home/hemant/Music/LightNMS/src/main/resources/jdbcAuthentication"))
+    try(FileInputStream fileInputStream = new FileInputStream(ConstVariables.JDBCPATH))
     {
+      auth_Properties = new Properties();
+
       auth_Properties.load(fileInputStream);
     }
 
     catch (Exception exception)
     {
-      exception.printStackTrace();
-    }
-  }
-
-  public static Connectionpool getInstance()
-  {
-    if (connectionPool == null)
-    {
-      connectionPool = new Connectionpool();
+      LOGGER.error(exception.getMessage());
     }
 
-    return connectionPool;
+    return auth_Properties;
   }
 
-  public void createConnection()
+  public static boolean createConnection()
   {
+    boolean isCreateConnectionSucess = true;
+
     Connection connection;
 
-    authentication();
+    connectionQueue = new LinkedBlockingQueue<>(POOLCAPACITY);
 
-    connectionQueue = new LinkedBlockingQueue<>(poolCapacity);
+    // null check for properties
+    Properties auth_Properties = authentication();
 
-    try
+    if(auth_Properties != null)
     {
-      for (int i =0 ; i< poolCapacity; i++)
+      try
       {
-        connection = DriverManager.getConnection(auth_Properties.getProperty("url"), auth_Properties.getProperty("user"), auth_Properties.getProperty("password"));
+        for (int i =0 ; i< POOLCAPACITY; i++)
+        {
+          connection = DriverManager.getConnection(auth_Properties.getProperty("url"), auth_Properties.getProperty("user"), auth_Properties.getProperty("password"));
 
-        connectionQueue.add(connection);
+          connectionQueue.add(connection);
+        }
+      }
+
+      catch (Exception exception)
+      {
+        isCreateConnectionSucess = false;
+
+        exception.printStackTrace();
       }
     }
-
-    catch (Exception exception)
+    else
     {
-      exception.printStackTrace();
+      isCreateConnectionSucess = false;
+
+      LOGGER.error("Create Connection Failed");
     }
+
+    return isCreateConnectionSucess;
   }
 
-  public Connection getConnection ()
+  public static Connection getConnection ()
   {
+    Connection connection = null;
     try
     {
-      Connection connection = connectionQueue.take();
+      connection = connectionQueue.take();
 
-      activeConnections.add(connection);
-
-      return connection;
+      ACTIVECONNECTION.add(connection);
     }
 
     catch (Exception exception)
     {
-      exception.printStackTrace();
+      LOGGER.error(exception.getMessage());
     }
 
-    return null;
+    return connection;
   }
 
   public static void removeConnection (Connection connection)
   {
     try
     {
-      connectionQueue.put(connection);
+      if(connection != null)
+      {
+        connectionQueue.put(connection);
 
-      activeConnections.remove(connection);
+        ACTIVECONNECTION.remove(connection);
+      }
+
+      else
+      {
+        LOGGER.error("Connection not removed null Connection");
+      }
     }
 
     catch (Exception exception)
     {
-      exception.printStackTrace();
+      LOGGER.error(exception.getMessage());
     }
   }
 
-  public void closeConnections()
+  public static void closeConnections()
   {
-    for(int index=0; index<activeConnections.size(); index++)
+    for (Connection connection : connectionQueue)
     {
       try
       {
-        activeConnections.get(index).close();
+        connection.close();
+
+        LOGGER.info("Connection Closed");
       }
       catch (Exception exception)
       {
-        exception.printStackTrace();
+        LOGGER.error(exception.getMessage());
       }
     }
   }

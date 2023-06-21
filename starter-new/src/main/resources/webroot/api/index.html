@@ -1,120 +1,137 @@
 <html>
 
 <head>
-    <title>Monitors</title>
+  <title>Monitors</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
-    <link rel="stylesheet" href="../css/all.min.css">
+  <link rel="stylesheet" href="../css/all.min.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
-    <link rel="stylesheet" href="../css/tempusdominus-bootstrap-4.min.css">
+  <link rel="stylesheet" href="../css/tempusdominus-bootstrap-4.min.css">
 
-    <link rel="stylesheet" href="../css/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="../css/icheck-bootstrap.min.css">
 
-    <link rel="stylesheet" href="../css/jqvmap.min.css">
+  <link rel="stylesheet" href="../css/jqvmap.min.css">
 
-    <link rel="stylesheet" href="../css/adminlte.min.css">
+  <link rel="stylesheet" href="../css/adminlte.min.css">
 
-    <link rel="stylesheet" href="../css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="../css/OverlayScrollbars.min.css">
 
-    <link rel="stylesheet" href="../css/daterangepicker.css">
+  <link rel="stylesheet" href="../css/daterangepicker.css">
 
-    <link rel="stylesheet" href="../css/summernote-bs4.min.css">
+  <link rel="stylesheet" href="../css/summernote-bs4.min.css">
 
-    <link rel="stylesheet" href="../css/rotating-icon.css">
-
-<!--  <link rel="stylesheet" href="../css/viewMonitor.css">-->
+  <link rel="stylesheet" href="../css/rotating-icon.css">
 
   <link rel="stylesheet" href="../css/hidden.css">
 
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"
-    />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"
+  />
 
   <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 
+  <link rel="stylesheet" href="../css/dashboard.css">
+
+  <link rel="stylesheet" href="../css/sshMonitor.css">
+
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-  <link rel="stylesheet" href="http://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css" />
-
-  <script src="http://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
-
-  <script src="../js/viewMonitor.js"></script>
-
+  <script src="../js/liteNms/viewPingMonitor.js"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
-    <script
-      type="text/javascript"
-      charset="utf8"
-      src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"
-    ></script>
+  <script
+    type="text/javascript"
+    charset="utf8"
+    src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"
+  ></script>
 
-    <script
-      type="text/javascript"
-      charset="utf8"
-      src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"
-    ></script>
+  <script
+    type="text/javascript"
+    charset="utf8"
+    src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"
+  ></script>
 
-    <script src="../js/jquery.min.js"></script>
+  <script src="../js/jquery.min.js"></script>
 
-    <script src="../js/jquery-ui.min.js"></script>
+  <script src="../js/jquery-ui.min.js"></script>
 
-    <script>
-      $.widget.bridge('uibutton', $.ui.button)
-    </script>
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
 
-    <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
 
-    <script src="../js/Chart.min.js"></script>
+  <script src="../js/Chart.min.js"></script>
 
-    <script src="../js/sparkline.js"></script>
+  <script src="../js/sparkline.js"></script>
 
-    <script src="../js/jquery.vmap.min.js"></script>
+  <script src="../js/jquery.vmap.min.js"></script>
 
-    <script src="../js/jquery.vmap.usa.js"></script>
+  <script src="../js/jquery.vmap.usa.js"></script>
 
-    <script src="../js/jquery.knob.min.js"></script>
+  <script src="../js/jquery.knob.min.js"></script>
 
-    <script src="../js/moment.min.js"></script>
+  <script src="../js/moment.min.js"></script>
 
-    <script src="../js/tempusdominus-bootstrap-4.min.js"></script>
+  <script src="../js/tempusdominus-bootstrap-4.min.js"></script>
 
-    <script src="../js/summernote-bs4.min.js"></script>
+  <script src="../js/summernote-bs4.min.js"></script>
 
-    <script src="../js/jquery.overlayScrollbars.min.js"></script>
+  <script src="../js/jquery.overlayScrollbars.min.js"></script>
 
-    <script src="../js/adminlte.js"></script>
+  <script src="../js/liteNms/dashbord.js"></script>
 
-    <script src="../js/demo.js"></script>
+  <script src="../js/adminlte.js"></script>
 
-    <script src="../js/Discovery.js"></script>
+  <script src="../js/demo.js"></script>
 
-    <script src="../js/ajax.js"></script>
+  <script src="../js/liteNms/discovery.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="../js/liteNms/genricAjax.js"></script>
 
-    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="../js/tableButton.js"></script>
+  <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
-    <script src="../js/divShow.js"></script>
+  <script src="../js/liteNms/tableButton.js"></script>
 
-    <script src="../js/Monitor.js"></script>
+  <script src="../js/liteNms/Monitor.js"></script>
 
-  <script src="../js/pollingData.js"></script>
+  <script src="../js/liteNms/pollingData.js"></script>
+
+  <script src="../js/liteNms/validation.js"></script>
 
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="../js/liteNms/viewPingMonitor.js"></script>
+
+  <script src="../js/liteNms/toggle.js"></script>
+
+  <script src="../js/liteNms/dialog.js"></script>
+
+  <script src="../js/liteNms/dataTable.js"></script>
+
+  <script src="../js/liteNms/alert.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
+
+  <script src="../js/liteNms/viewSSHMonitor.js"></script>
 
   <script src="//cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js"></script>
 
   <script src="https://unpkg.io/@vertx/eventbus-bridge-client.js@1.0.0-1/vertx-eventbus.js"></script>
+
+  <script src="../js/liteNms/OnePageDiv.js"></script>
 
 </head>
 
@@ -133,7 +150,7 @@
 
     </ul>
 
-    <ul class="navbar-nav ml-auto">
+    <div class="navbar-nav ml-auto" id="navIcons">
 
       <li class="nav-item">
 
@@ -185,9 +202,28 @@
 
       </li>
 
-    </ul>
+    </div>
+
+    <div class="navbar-nav ml-auto" id="alertContainer" style="display: none">
+
+      <div class="row justify-content-between px-3" id="alertDiv" style="background-color: white">
+
+        <div class=""></div>
+
+        <div class="m-3 row p-2" id="alert" style="background-color: white; color: #e9ecef;width:250%;font-size: 18px;font-weight: 800">
+
+          <div class="col-4" id="icon"></div>
+
+          <div class="col-8" id="text" style="color:white"></div>
+
+        </div>
+
+      </div>
+
+    </div>
 
   </nav>
+
 
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
@@ -253,7 +289,7 @@
 
             <li class="nav-item">
 
-              <a href="#" class="nav-link active" onclick="showDiv('dashboardDiv')">
+              <a href="index.html" class="nav-link active">
 
                 <i class="fa fa-dashboard"></i>
 
@@ -269,7 +305,7 @@
 
         <li class="nav-item">
 
-          <a href="#" onclick="showDiv('monitorDiv')" class="nav-link">
+          <a onclick="monitor.monitorPage()" class="nav-link">
 
             <i class="fa fa-desktop"></i>
 
@@ -283,7 +319,7 @@
 
         <li class="nav-item">
 
-          <a href="#" onclick="showDiv('discoveyDiv')" class="nav-link">
+          <a onclick="discovery.discoveryPage()" class="nav-link">
 
             <i class="fa fa-binoculars menu-grid-fa-size"></i>
 
@@ -301,10 +337,7 @@
 
   </aside>
 
-  <div class="content-wrapper hidden" id="dashboardDiv">
-
-    <link rel="stylesheet" href="../css/dashboard.css">
-
+  <div class="content-wrapper" id="dashboardDiv">
 
     <section class="content-header">
 
@@ -341,7 +374,7 @@
         <div class="small-box bg-gradient-success">
           <div class="inner">
             <div class="big-text">Up</div>
-            <div class="value" id="successValue"></div>
+            <h3><div class="value" id="successValue">00</div></h3>
           </div>
         </div>
       </div>
@@ -350,7 +383,7 @@
         <div class="small-box bg-gradient-red">
           <div class="inner">
             <div class="big-text">Down</div>
-            <div class="value" id="failedValue"></div>
+            <h3><div class="value" id="failedValue">00</div></h3>
           </div>
         </div>
       </div>
@@ -359,7 +392,7 @@
         <div class="small-box bg-gray-dark">
           <div class="inner">
             <div class="big-text">Unknown</div>
-            <div class="value" id="unknownValue"></div>
+            <h3><div class="value" id="unknownValue">00</div></h3>
           </div>
         </div>
       </div>
@@ -367,8 +400,8 @@
 
     <div class="row">
       <div class="col">
+        <h4><caption>Max 5 Rtt</caption></h4>
         <table class="table" id="maxTable">
-          <caption>Max 10 Rtt</caption>
           <tr>
             <th>IP</th>
             <th>Value</th>
@@ -377,8 +410,8 @@
       </div>
 
       <div class="col">
-        <table class="table" id="minTable">
-          <caption>Min 10 Rtt</caption>
+        <h4><caption>Max 5 CPU Usage</caption></h4>
+        <table class="table" id="cpuTable">
           <tr>
             <th>IP</th>
             <th>Value</th>
@@ -387,315 +420,27 @@
       </div>
     </div>
 
-    <script src="../js/dashbord.js"></script>
-
-  </div>
-
-  <div class="content-wrapper hidden" id="monitorDiv">
-
-    <section class="content-header">
-
-      <div class="container-fluid">
-
-        <div class="row mb-2">
-
-          <div class="col-sm-6">
-
-            <h1><i class="fa fa-desktop"></i>Monitor</h1>
-
-          </div>
-
-          <div class="col-sm-6">
-
-            <ol class="breadcrumb float-sm-right">
-
-              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-
-              <li class="breadcrumb-item active">Monitor</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-
+    <div class="row">
+      <div class="col">
+        <h4><caption>Max 5 Memory Usage</caption></h4>
+        <table class="table" id="memoryTable">
+          <tr>
+            <th>IP</th>
+            <th>Value</th>
+          </tr>
+        </table>
       </div>
 
-    </section>
-
-    <div class="card">
-
-      <div class="card-header">
-
-        <h3 class="card-title">Monitor</h3>
-
-        <br>
-
-        <table id="monitorTable" class="display" width="100%"></table>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="content-wrapper hidden" id="viewMonitorDiv">
-  <div class="row">
-    <div class="col">
-      <div class="small-box" id="lossBox" style="background-color: red; height: 100px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: bold;">
-        <div id="lossLabel">Loss</div>
-        <div id="lossValue"></div>
+      <div class="col">
+        <h4><caption>Max 5 Disk Usage</caption></h4>
+        <table class="table" id="diskTable">
+          <tr>
+            <th>IP</th>
+            <th>Value</th>
+          </tr>
+        </table>
       </div>
     </div>
-
-    <div class="col">
-      <div class="small-box" id="rttBox" style="background-color: blue; height: 100px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: bold;">
-        <div id="rttLabel"></div>
-        <div id="rttValue"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <canvas id="availabilityChart" style="height: 100px; width: 150px;"></canvas>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <canvas id="metricChart" style="height: 100px; width: 150px;"></canvas>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="../js/viewMonitor.js"></script>
-</div>
-
-  <div class="content-wrapper hidden" id="discoveyDiv">
-
-    <section class="content-header">
-
-      <div class="container-fluid">
-
-        <div class="row mb-2">
-
-          <div class="col-sm-6">
-
-            <h1><i class="fa fa-binoculars menu-grid-fa-size rotating-icon" id="icon"></i>Discovery</h1>
-
-          </div>
-
-          <div class="col-sm-6">
-
-            <ol class="breadcrumb float-sm-right">
-
-              <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-
-              <li class="breadcrumb-item active">Discovery</li>
-
-            </ol>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <div class="card">
-
-      <div class="card-header">
-
-        <h3 class="card-title">Discovery</h3>
-
-        <div class="card-tools">
-
-          <button type="button" id="add-button" class="btn btn-tool" style="height: 40px; align-content: center" data-card-widget="add" title="Add">
-
-            <i class="fa fa-plus" ></i>
-
-          </button>
-
-          <dialog id="add-dialog">
-
-              <div class="card card-primary">
-
-                <div class="card-header">
-
-                  <h3 class="card-title">Discovery Details</h3>
-
-                  <div class="card-tools">
-
-                    <button type="button" id="minus-button" class="btn btn-tool" data-card-widget="close" title="Close">
-
-                      <i class="fa fa-minus"></i>
-
-                    </button>
-
-                  </div>
-
-                </div>
-
-                <div class="card-body">
-
-                  <div class="form-group">
-
-                    <label for="name">Monitor Name</label>
-
-                    <input type="text" id="name" class="form-control" name="name" required>
-
-                  </div>
-
-                  <div class="form-group">
-
-                    <label for="ip">Monitor IP</label>
-
-                    <input type="text" id="ip" class="form-control" name="ip" placeholder="e.g 10.20.40.156" required>
-
-                  </div>
-
-                  <div class="form-group">
-
-                    <label for="type">Type</label>
-
-                    <select id="type" class="form-control custom-select" name="type" required>
-
-                      <option disabled>Select one</option>
-
-                      <option>Ping</option>
-
-                      <option>SSH</option>
-
-                    </select>
-
-                  </div>
-
-                  <div class="form-group" id="credentialsFormGroup">
-
-                    <label for="credential_username">UserName</label>
-
-                    <input type="text" id="credential_username" class="form-control" name="credential" required>
-
-                    <br>
-
-                    <label for="credential_passwd">Password</label>
-
-                    <input type="password" id="credential_passwd" class="form-control" name="credential" required>
-
-                  </div>
-
-                  <button type="button" id="addMontior" data-card-widget="close" onclick="discovery.onclick()">Add</button>
-
-                </div>
-
-              </div>
-          </dialog>
-
-          <dialog id="update-dialog" aria-hidden="true">
-
-            <div class="card card-primary">
-
-              <div class="card-header">
-
-                <h3 class="card-title">Discovery Details</h3>
-
-                <div class="card-tools">
-
-                  <button type="button" id="minus-update-button" class="btn btn-tool" data-card-widget="close" title="Close">
-
-                    <i class="fa fa-minus"></i>
-
-                  </button>
-
-                </div>
-
-              </div>
-
-              <div class="card-body">
-
-                <div class="form-group">
-
-                  <label for="deviceSelect">Select a field:</label>
-
-                  <select id="deviceSelect" onchange="toggleField()">
-
-                    <option value="">-- Select --</option>
-
-                    <option value="DeviceName">Device Name</option>
-
-                    <option value="IP">IP</option>
-
-                    <option value="DeviceType">Device Type</option>
-
-                    <option value="credential">Credential</option>
-
-                  </select>
-
-                  <br><br>
-
-                  <div id="DeviceNameField" class="hidden">
-
-                    <label for="update_deviceName">Device Name:</label>
-
-                    <input type="text" id="update_deviceName" required>
-
-                  </div>
-
-                  <div id="IPField" class="hidden">
-
-                    <label for="update_ip">IP:</label>
-
-                    <input type="text" id="update_ip" required>
-
-                  </div>
-
-                  <div id="DeviceTypeField" class="hidden">
-
-                    <label for="update_deviceType">Device Type:</label>
-
-                    <input type="text" id="update_deviceType" required>
-
-                  </div>
-
-                  <div id="credentialField" class="hidden">
-
-                    <label for="update_username">Username:</label>
-
-                    <input type="text" id="update_username" required>
-
-                    <br><br>
-
-                    <label for="update_password">Password:</label>
-
-                    <input type="password" id="update_password" required>
-
-                  </div>
-
-                </div>
-
-                <button type="button" id="update_btn" data-card-widget="close" onclick="updateBtn.onclick()">Update</button>
-
-              </div>
-
-            </div>
-
-          </dialog>
-
-          <script src="../js/toggle.js"></script>
-
-          <script src="../js/dialog.js"></script>
-
-        </div>
-
-        <br>
-
-        <table id="discoveryTable" class="display" width="100%"></table>
-
-      </div>
-
-  </div>
 
   </div>
 
