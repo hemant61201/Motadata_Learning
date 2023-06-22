@@ -29,30 +29,42 @@ var SSHMonitor =
 
       diskValue.innerText = data.Disk[data.Disk.length - 2];
 
-      // Create availability donut chart
+      var successPercentage = ((data.Status.success / (data.Status.success + data.Status.failed)) * 100).toFixed(2);
+
+      var failedPercentage = ((data.Status.failed / (data.Status.success + data.Status.failed)) * 100).toFixed(2);
+
       var availabilityData = [{
-        label: 'Success',
-        value: data.Status.success
+        label: 'Success (' + successPercentage + '%)',
+        value: parseFloat(successPercentage)
       }, {
-        label: 'Failed',
-        value: data.Status.failed
+        label: 'Failed (' + failedPercentage + '%)',
+        value: parseFloat(failedPercentage)
       }];
 
       drawDonutChart('availabilityChart', availabilityData);
 
       // Create bar chart
-      var barChartData = [{
-        label: 'Max',
-        value: parseFloat(data.Max[0])
-      }, {
-        label: 'Min',
-        value: parseFloat(data.Min[0])
-      }, {
-        label: 'Avg',
-        value: parseFloat(data.Avg[0])
-      }];
+      var lineChartData = [];
 
-      drawBarChart('barChart', barChartData);
+      for (var i = 1; i < data.Avg.length; i += 2) {
+
+        var timestamp = data.Avg[i].split('.')[0];
+
+        var adjustedTimestamp = new Date(timestamp + "Z");
+
+        adjustedTimestamp.setHours(adjustedTimestamp.getHours());
+
+        adjustedTimestamp.setMinutes(adjustedTimestamp.getMinutes());
+
+        lineChartData.push({
+          timestamp: adjustedTimestamp.getTime(),
+          avgValue: data.Avg[i - 1],
+          maxValue: data.Max[i - 1],
+          minValue: data.Min[i - 1]
+        });
+      }
+
+      drawLineChart('lineChart', lineChartData);
 
       // Create earth chart for CPU
       var cpuChartData = [];
@@ -147,48 +159,49 @@ var SSHMonitor =
         chart.render();
       }
 
-      function drawBarChart(chartId, data) {
-        // Chart drawing logic for bar chart
+      function drawLineChart(chartId, data) {
+        // Chart drawing logic for line chart
         var options = {
           series: [{
-            name: 'Value',
-            data: data.map(item => item.value)
+            name: 'Average',
+            data: data.map(item => ({ x: item.timestamp, y: parseFloat(item.avgValue) || 0 }))
+          }, {
+            name: 'Max',
+            data: data.map(item => ({ x: item.timestamp, y: parseFloat(item.maxValue) || 0 }))
+          }, {
+            name: 'Min',
+            data: data.map(item => ({ x: item.timestamp, y: parseFloat(item.minValue) || 0 }))
           }],
-
           chart: {
-            type: 'bar',
             height: 200,
+            type: 'line',
+            zoom: {
+              enabled: false
+            }
           },
-
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              columnWidth: '55%',
-              endingShape: 'rounded'
-            },
-          },
-
           dataLabels: {
             enabled: false
           },
-
           xaxis: {
-            categories: data.map(item => item.label)
+            type: 'datetime',
+            labels: {
+              format: 'yyyy-MM-dd HH:mm:ss'
+            }
           },
-
           yaxis: {
             title: {
               text: 'Value'
             }
           },
-
           legend: {
             position: 'bottom'
+          },
+          stroke: {
+            width: 2
           }
         };
 
         var chart = new ApexCharts($("#" + chartId).get(0), options);
-
         chart.render();
       }
 

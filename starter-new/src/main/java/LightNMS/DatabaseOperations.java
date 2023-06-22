@@ -2,7 +2,6 @@ package LightNMS;
 
 import LightNMS.Database.Connectionpool;
 import LightNMS.Database.GenricQuery;
-import LightNMS.Database.MetricsData;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -16,11 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.HashMap;
-import java.util.Map;
 
 public class DatabaseOperations extends AbstractVerticle
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
+  private static final Object lock = new Object();
 
   private static Connectionpool connectionPool;
 
@@ -502,27 +502,35 @@ public class DatabaseOperations extends AbstractVerticle
 
       vertx.executeBlocking(blockingPromise ->
       {
-        JsonObject pollingData;
-
         try(PreparedStatement preparedStatement = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY))
         {
           ResultSet queryResult = preparedStatement.executeQuery();
 
-          ObjectMapper mapper = new ObjectMapper();
+          JsonObject pollingData = new JsonObject();
 
-          MetricsData metricsData = new MetricsData();
+          JsonObject maxObj = new JsonObject();
 
-          metricsData.setMax(new HashMap<>());
+          JsonObject cpuObj = new JsonObject();
 
-          metricsData.setCpu(new HashMap<>());
+          JsonObject memoryObj = new JsonObject();
 
-          metricsData.setMemory(new HashMap<>());
+          JsonObject diskObj = new JsonObject();
 
-          metricsData.setDisk(new HashMap<>());
+          String successCount = null;
+
+          String failCount = null;
+
+          String unknownCount = null;
 
           while (queryResult.next())
           {
             String metric = queryResult.getString("metric");
+
+            successCount = Integer.toString(queryResult.getInt("success_count"));
+
+            failCount = Integer.toString(queryResult.getInt("failed_count"));
+
+            unknownCount = Integer.toString(queryResult.getInt("unknown_count"));
 
             String ip = queryResult.getString("ip");
 
@@ -530,53 +538,35 @@ public class DatabaseOperations extends AbstractVerticle
 
             if (metric.equals("Max"))
             {
-              Map<String, String> maxMap = metricsData.getMax().getOrDefault(metric, new HashMap<>());
-
-              maxMap.put(ip, value);
-
-              metricsData.getMax().put(metric, maxMap);
+              maxObj.put(ip, value);
             }
-
             else if (metric.equals("CPU"))
             {
-              Map<String, String> cpuMap = metricsData.getCpu().getOrDefault(metric, new HashMap<>());
-
-              cpuMap.put(ip, value);
-
-              metricsData.getCpu().put(metric, cpuMap);
+              cpuObj.put(ip, value);
             }
-
             else if (metric.equals("Memory"))
             {
-              Map<String, String> memoryMap = metricsData.getMemory().getOrDefault(metric, new HashMap<>());
-
-              memoryMap.put(ip, value);
-
-              metricsData.getMemory().put(metric, memoryMap);
+              memoryObj.put(ip, value);
             }
-
             else if (metric.equals("Disk"))
             {
-              Map<String, String> diskMap = metricsData.getDisk().getOrDefault(metric, new HashMap<>());
-
-              diskMap.put(ip, value);
-
-              metricsData.getDisk().put(metric, diskMap);
+              diskObj.put(ip, value);
             }
           }
 
-          if (queryResult.last())
-          {
-            metricsData.setSuccess(Integer.toString(queryResult.getInt("success_count")));
+          pollingData.put("max", maxObj);
 
-            metricsData.setFailed(Integer.toString(queryResult.getInt("failed_count")));
+          pollingData.put("cpu", cpuObj);
 
-            metricsData.setUnknown(Integer.toString(queryResult.getInt("unknown_count")));
-          }
+          pollingData.put("memory", memoryObj);
 
-          String jsonData = mapper.writeValueAsString(metricsData);
+          pollingData.put("disk", diskObj);
 
-          pollingData = new JsonObject(jsonData);
+          pollingData.put("success", successCount);
+
+          pollingData.put("failed", failCount);
+
+          pollingData.put("unknown", unknownCount);
 
           blockingPromise.complete(pollingData);
         }
@@ -618,7 +608,13 @@ public class DatabaseOperations extends AbstractVerticle
   {
     try
     {
-      connectionPool = Connectionpool.getInstance();
+      synchronized (lock)
+      {
+        if (connectionPool == null)
+        {
+          connectionPool = Connectionpool.getInstance();
+        }
+      }
 
       boolean connectionpoolChecker = connectionPool.createConnection();
 
@@ -634,7 +630,7 @@ public class DatabaseOperations extends AbstractVerticle
 
         getPollingData.put(ConstVariables.CONDITION, ConstVariables.POLLINGCONDITION);
 
-        vertx.setPeriodic(120_000, id -> {
+        vertx.setPeriodic(300_000, id -> {
 
           Future<Object> future = dashBoardData(vertx, getPollingData);
 

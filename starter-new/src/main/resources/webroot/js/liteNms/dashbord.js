@@ -26,9 +26,9 @@ var dashBoardData =
         </tr>
         `;
 
-      for (var ip in jsonData.max.Max)
+      for (var ip in jsonData.max)
       {
-        var value = jsonData.max.Max[ip];
+        var value = jsonData.max[ip];
 
         var row = `<tr><td>${ip}</td><td>${value}</td></tr>`;
 
@@ -45,9 +45,9 @@ var dashBoardData =
         </tr>
       `;
 
-      for (var ip in jsonData.cpu.CPU)
+      for (var ip in jsonData.cpu)
       {
-        var value = jsonData.cpu.CPU[ip] + "%";
+        var value = jsonData.cpu[ip] + "%";
 
         var row = `<tr><td>${ip}</td><td>${value}</td></tr>`;
 
@@ -64,9 +64,9 @@ var dashBoardData =
         </tr>
       `;
 
-      for (var ip in jsonData.memory.Memory)
+      for (var ip in jsonData.memory)
       {
-        var value = jsonData.memory.Memory[ip];
+        var value = jsonData.memory[ip];
 
         var row = `<tr><td>${ip}</td><td>${value}</td></tr>`;
 
@@ -83,9 +83,9 @@ var dashBoardData =
         </tr>
       `;
 
-      for (var ip in jsonData.disk.Disk)
+      for (var ip in jsonData.disk)
       {
-        var value = jsonData.disk.Disk[ip];
+        var value = jsonData.disk[ip];
 
         var row = `<tr><td>${ip}</td><td>${value}</td></tr>`;
 

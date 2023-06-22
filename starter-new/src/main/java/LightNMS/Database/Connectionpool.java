@@ -9,12 +9,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class Connectionpool
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
-  private static LinkedBlockingQueue<Connection> connectionQueue;
+  private static ArrayBlockingQueue<Connection> connectionQueue;
 
   private static final ArrayList<Connection> ACTIVECONNECTION = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class Connectionpool
 
     Connection connection;
 
-    connectionQueue = new LinkedBlockingQueue<>(POOLCAPACITY);
+    connectionQueue = new ArrayBlockingQueue<>(POOLCAPACITY, true);
 
     // null check for properties
     Properties auth_Properties = authentication();

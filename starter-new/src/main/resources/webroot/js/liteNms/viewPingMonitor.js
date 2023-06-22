@@ -1,7 +1,5 @@
 var availabilityChart = null;
 
-var metricChart = null;
-
 var monitorView =
   {
     viewMonitor: function (data)
@@ -24,11 +22,6 @@ var monitorView =
         availabilityChart.destroy();
       }
 
-      if (metricChart)
-      {
-        metricChart.destroy();
-      }
-
       // Create Availability chart
       var availabilityData = {
 
@@ -36,7 +29,7 @@ var monitorView =
 
         datasets: [
           {
-            data: [jsonData.Status.success, jsonData.Status.failed],
+            data: [((jsonData.Status.success / (jsonData.Status.success + jsonData.Status.failed)) * 100).toFixed(2), ((jsonData.Status.failed / (jsonData.Status.success + jsonData.Status.failed)) * 100).toFixed(2)],
 
             backgroundColor: ["limegreen", "red"]
           }
@@ -59,7 +52,7 @@ var monitorView =
 
                   var value = context.raw || '';
 
-                  return label + ": " + value;
+                  return label + ": " + value + "%";
                 }
               }
             }
@@ -70,54 +63,74 @@ var monitorView =
         }
       });
 
+      var lineChartData = [];
+
+      for (var i = 1; i < jsonData.Avg.length; i += 2) {
+
+        var timestamp = jsonData.Avg[i].split('.')[0];
+
+        var adjustedTimestamp = new Date(timestamp + "Z");
+
+        adjustedTimestamp.setHours(adjustedTimestamp.getHours());
+
+        adjustedTimestamp.setMinutes(adjustedTimestamp.getMinutes());
+
+        lineChartData.push({
+          timestamp: adjustedTimestamp.getTime(),
+          avgValue: jsonData.Avg[i - 1],
+          maxValue: jsonData.Max[i - 1],
+          minValue: jsonData.Min[i - 1]
+        });
+      }
+
+      drawLineChart('lineChart', lineChartData);
+
       // Create Metric chart
-      var metricData = {
-
-        labels: ['Max', 'Min', 'Avg'],
-
-        datasets: [
-          {
-            label: 'Metric Values',
-
-            data: [jsonData.Max[jsonData.Max.length - 2], jsonData.Min[jsonData.Min.length - 2], jsonData.Avg[jsonData.Avg.length - 2]],
-
-            backgroundColor: 'rgba(0, 123, 255, 0.2)',
-
-            borderColor: 'rgba(0, 123, 255, 1)',
-
-            borderWidth: 1
-          }
-        ]
-      };
-
-      metricChart = new Chart($('#metricChart').get(0), {
-
-        type: 'bar',
-
-        data: metricData,
-
-        options: {
-          scales: {
-            x: {
-              title: {
-                display: true,
-
-                text: 'Metric'
-              }
-            },
-            y: {
-              title: {
-                display: true,
-
-                text: 'Value'
-              }
+      function drawLineChart(chartId, data) {
+        // Chart drawing logic for line chart
+        var options = {
+          series: [{
+            name: 'Average',
+            data: data.map(item => ({ x: item.timestamp, y: parseFloat(item.avgValue) || 0 }))
+          }, {
+            name: 'Max',
+            data: data.map(item => ({ x: item.timestamp, y: parseFloat(item.maxValue) || 0 }))
+          }, {
+            name: 'Min',
+            data: data.map(item => ({ x: item.timestamp, y: parseFloat(item.minValue) || 0 }))
+          }],
+          chart: {
+            height: 300,
+            type: 'line',
+            zoom: {
+              enabled: false
             }
           },
-          responsive: true,
+          dataLabels: {
+            enabled: false
+          },
+          xaxis: {
+            type: 'datetime',
+            labels: {
+              format: 'yyyy-MM-dd HH:mm:ss'
+            }
+          },
+          yaxis: {
+            title: {
+              text: 'Value'
+            }
+          },
+          legend: {
+            position: 'bottom'
+          },
+          stroke: {
+            width: 2
+          }
+        };
 
-          maintainAspectRatio: false
-        }
-      });
+        var chart = new ApexCharts($("#" + chartId).get(0), options);
+        chart.render();
+      }
     }
   };
 

@@ -24,7 +24,7 @@ public class Main
 
       vertx.deployVerticle(VisualPublicAPI.class.getName(), visualizationDeployment);
 
-      vertx.deployVerticle(Discovery.class.getName(), discoveryDeployment);
+      vertx.deployVerticle(Discovery.class.getName(), new DeploymentOptions().setWorkerPoolName("discoveryPool").setWorkerPoolSize(10), discoveryDeployment);
 
       vertx.deployVerticle(DatabaseOperations.class.getName(), crudOperationsDeployment);
 

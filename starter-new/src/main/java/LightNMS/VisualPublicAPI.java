@@ -484,14 +484,6 @@ public class VisualPublicAPI extends AbstractVerticle
 
         paramValues.add(message.getString("deviceType"));
 
-        paramValues.add(message.getString("ip"));
-
-        paramValues.add(message.getString("deviceType"));
-
-        paramValues.add(message.getString("ip"));
-
-        paramValues.add(message.getString("deviceType"));
-
         getMonitor.put(ConstVariables.ACTION, "get");
 
         getMonitor.put(ConstVariables.TABLENAME, message.getString("tableName"));
