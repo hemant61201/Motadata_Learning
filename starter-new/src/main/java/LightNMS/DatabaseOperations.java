@@ -17,10 +17,12 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
-//TODO remove unused imports
+
 public class DatabaseOperations extends AbstractVerticle
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
+  private static Connectionpool connectionPool;
 
   private void databaseHandler(Message<Object> message)
   {
@@ -126,7 +128,7 @@ public class DatabaseOperations extends AbstractVerticle
 
   private void executeCommonQuery(JsonObject message, Promise<Object> promise)
   {
-    Connection connection = Connectionpool.getConnection();
+    Connection connection = connectionPool.getConnection();
 
     if(connection != null)
     {
@@ -138,7 +140,7 @@ public class DatabaseOperations extends AbstractVerticle
         {
           vertx.<Integer>executeBlocking(blockingPromise ->
           {
-            try(PreparedStatement preparedStatement = connection.prepareStatement(query);)
+            try(PreparedStatement preparedStatement = connection.prepareStatement(query))
             {
               for (int i = 0; i < message.getJsonArray("paramValues").size(); i++)
               {
@@ -162,7 +164,7 @@ public class DatabaseOperations extends AbstractVerticle
           {
             if (result.succeeded())
             {
-              Connectionpool.removeConnection(connection);
+              connectionPool.removeConnection(connection);
 
               Integer updatedRow = result.result();
 
@@ -170,7 +172,7 @@ public class DatabaseOperations extends AbstractVerticle
             }
             else
             {
-              Connectionpool.removeConnection(connection);
+              connectionPool.removeConnection(connection);
 
               promise.fail(result.cause());
             }
@@ -199,7 +201,7 @@ public class DatabaseOperations extends AbstractVerticle
   {
     Promise<Object> promise = Promise.promise();
 
-    Connection connection = Connectionpool.getConnection();
+    Connection connection = connectionPool.getConnection();
 
     if(connection != null)
     {
@@ -244,13 +246,13 @@ public class DatabaseOperations extends AbstractVerticle
         {
           if (result.succeeded())
           {
-            Connectionpool.removeConnection(connection);
+            connectionPool.removeConnection(connection);
 
             promise.complete("Success");
           }
           else
           {
-            Connectionpool.removeConnection(connection);
+            connectionPool.removeConnection(connection);
 
             promise.fail(result.cause());
           }
@@ -279,7 +281,7 @@ public class DatabaseOperations extends AbstractVerticle
   {
     Promise<Object> promise = Promise.promise();
 
-    Connection connection = Connectionpool.getConnection();
+    Connection connection = connectionPool.getConnection();
 
     if(connection != null)
     {
@@ -455,7 +457,7 @@ public class DatabaseOperations extends AbstractVerticle
         {
           if (result.succeeded())
           {
-            Connectionpool.removeConnection(connection);
+            connectionPool.removeConnection(connection);
 
             HashMap<Integer, JsonObject> resultData = result.result();
 
@@ -463,7 +465,7 @@ public class DatabaseOperations extends AbstractVerticle
           }
           else
           {
-            Connectionpool.removeConnection(connection);
+            connectionPool.removeConnection(connection);
 
             promise.fail(result.cause());
           }
@@ -492,7 +494,7 @@ public class DatabaseOperations extends AbstractVerticle
   {
     Promise<Object> promise = Promise.promise();
 
-    Connection connection = Connectionpool.getConnection();
+    Connection connection = connectionPool.getConnection();
 
     if(connection != null)
     {
@@ -588,13 +590,13 @@ public class DatabaseOperations extends AbstractVerticle
       {
         if(result.succeeded())
         {
-          Connectionpool.removeConnection(connection);
+          connectionPool.removeConnection(connection);
 
-          promise.complete((JsonObject) result.result());
+          promise.complete(result.result());
         }
         else
         {
-          Connectionpool.removeConnection(connection);
+          connectionPool.removeConnection(connection);
 
           promise.fail(result.cause());
         }
@@ -616,7 +618,9 @@ public class DatabaseOperations extends AbstractVerticle
   {
     try
     {
-      boolean connectionpoolChecker = Connectionpool.createConnection();
+      connectionPool = Connectionpool.getInstance();
+
+      boolean connectionpoolChecker = connectionPool.createConnection();
 
       if(connectionpoolChecker)
       {
@@ -679,7 +683,7 @@ public class DatabaseOperations extends AbstractVerticle
   {
     try
     {
-      Connectionpool.closeConnections();
+      connectionPool.closeConnections();
     }
 
     catch (Exception exception)

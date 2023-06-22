@@ -20,6 +20,17 @@ public class Connectionpool
 
   private static final int POOLCAPACITY = ConstVariables.POOLCAPACITY;
 
+  private static Connectionpool instance;
+
+  private Connectionpool() {}
+
+  public static synchronized Connectionpool getInstance() {
+    if (instance == null) {
+      instance = new Connectionpool();
+    }
+    return instance;
+  }
+
   // private
   private static Properties authentication()
   {
@@ -40,7 +51,7 @@ public class Connectionpool
     return auth_Properties;
   }
 
-  public static boolean createConnection()
+  public boolean createConnection()
   {
     boolean isCreateConnectionSucess = true;
 
@@ -80,7 +91,7 @@ public class Connectionpool
     return isCreateConnectionSucess;
   }
 
-  public static Connection getConnection ()
+  public Connection getConnection ()
   {
     Connection connection = null;
     try
@@ -98,7 +109,7 @@ public class Connectionpool
     return connection;
   }
 
-  public static void removeConnection (Connection connection)
+  public void removeConnection (Connection connection)
   {
     try
     {
@@ -121,7 +132,7 @@ public class Connectionpool
     }
   }
 
-  public static void closeConnections()
+  public void closeConnections()
   {
     for (Connection connection : connectionQueue)
     {

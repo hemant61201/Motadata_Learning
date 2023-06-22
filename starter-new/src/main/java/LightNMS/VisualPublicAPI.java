@@ -488,6 +488,10 @@ public class VisualPublicAPI extends AbstractVerticle
 
         paramValues.add(message.getString("deviceType"));
 
+        paramValues.add(message.getString("ip"));
+
+        paramValues.add(message.getString("deviceType"));
+
         getMonitor.put(ConstVariables.ACTION, "get");
 
         getMonitor.put(ConstVariables.TABLENAME, message.getString("tableName"));
@@ -608,7 +612,7 @@ public class VisualPublicAPI extends AbstractVerticle
 
       router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
-      PropertyFileAuthentication authenticate = PropertyFileAuthentication.create(vertx,"user.properties");
+      PropertyFileAuthentication authenticate = PropertyFileAuthentication.create(vertx,ConstVariables.AUTHPATH);
 
       router.route("/api/*").handler(RedirectAuthHandler.create(authenticate, "/login.html"));
 

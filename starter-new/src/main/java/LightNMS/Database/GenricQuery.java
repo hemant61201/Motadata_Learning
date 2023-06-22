@@ -23,23 +23,17 @@ public class GenricQuery
 
         case ConstVariables.GET:
         {
-          String query = "select " + message.getString("columns") + " from " + message.getString("tableName") + message.getString("condition");
-
-          return query;
+          return  "select " + message.getString("columns") + " from " + message.getString("tableName") + message.getString("condition");
         }
 
         case ConstVariables.DELETE:
         {
-          String query = "delete from " + message.getString("tableName") + message.getString("condition");
-
-          return query;
+          return  "delete from " + message.getString("tableName") + message.getString("condition");
         }
 
         case ConstVariables.UPDATE:
         {
-          String query = "update " + message.getString("tableName") + " set " + message.getString("columns") + message.getString("condition");
-
-          return query;
+          return  "update " + message.getString("tableName") + " set " + message.getString("columns") + message.getString("condition");
         }
       }
     }

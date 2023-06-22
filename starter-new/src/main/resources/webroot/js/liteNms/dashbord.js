@@ -47,7 +47,7 @@ var dashBoardData =
 
       for (var ip in jsonData.cpu.CPU)
       {
-        var value = jsonData.cpu.CPU[ip];
+        var value = jsonData.cpu.CPU[ip] + "%";
 
         var row = `<tr><td>${ip}</td><td>${value}</td></tr>`;
 

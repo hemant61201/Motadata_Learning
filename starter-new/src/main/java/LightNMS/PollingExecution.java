@@ -19,6 +19,8 @@ public class PollingExecution extends AbstractVerticle
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
+  private static JsonArray sendIP;
+
   private Future<Object> getMonitorData(String action)
   {
     Promise<Object> promise = Promise.promise();
@@ -132,6 +134,8 @@ public class PollingExecution extends AbstractVerticle
                 }
 
                 JsonArray ipArray = new JsonArray(getData.getString("ip"));
+
+                sendIP = new JsonArray(getData.getString("ip"));
 
                 JsonArray userArray = new JsonArray(getData.getString("userName"));
 
@@ -368,6 +372,8 @@ public class PollingExecution extends AbstractVerticle
                   {
                     JsonArray successResult = new JsonArray(exeResult.result());
 
+                    JsonArray successIp = new JsonArray();
+
                     JsonArray batchUpdateParam = new JsonArray();
 
                     JsonArray batchAddParam = new JsonArray();
@@ -383,6 +389,8 @@ public class PollingExecution extends AbstractVerticle
                       paramValue.add(fpingData.getString("Status"));
 
                       paramValue.add(metricData.getString("IP"));
+
+                      successIp.add(metricData.getString("IP"));
 
                       paramValue.add("SSH");
 
@@ -427,10 +435,173 @@ public class PollingExecution extends AbstractVerticle
                         }
                       }
                     }
-
                     updateStatus(batchUpdateParam);
 
                     addPolling(batchAddParam);
+
+                    JsonArray failUpdateParam = new JsonArray();
+
+                    JsonArray failAddParam = new JsonArray();
+
+                    for (int j = 0; j < sendIP.size(); j++)
+                    {
+                      if(!successIp.contains(sendIP.getString(j)))
+                      {
+                        JsonArray fail = new JsonArray();
+                        fail.add("failed");
+                        fail.add(sendIP.getString(j));
+                        fail.add("SSH");
+                        failUpdateParam.add(fail);
+
+                        JsonArray failCPU = new JsonArray();
+                        failCPU.add("CPU");
+                        failCPU.add("0");
+                        failCPU.add(sendIP.getString(j));
+                        failCPU.add("SSH");
+                        failAddParam.add(failCPU);
+
+                        JsonArray failMemory = new JsonArray();
+                        failMemory.add("Memory");
+                        failMemory.add("0");
+                        failMemory.add(sendIP.getString(j));
+                        failMemory.add("SSH");
+                        failAddParam.add(failMemory);
+
+                        JsonArray failDisk = new JsonArray();
+                        failDisk.add("Disk");
+                        failDisk.add("0");
+                        failDisk.add(sendIP.getString(j));
+                        failDisk.add("SSH");
+                        failAddParam.add(failDisk);
+
+                        JsonArray failUptime = new JsonArray();
+                        failUptime.add("Uptime");
+                        failUptime.add("0");
+                        failUptime.add(sendIP.getString(j));
+                        failUptime.add("SSH");
+                        failAddParam.add(failUptime);
+
+                        JsonArray failLoss = new JsonArray();
+                        failLoss.add("Loss");
+                        failLoss.add("100%");
+                        failLoss.add(sendIP.getString(j));
+                        failLoss.add("SSH");
+                        failAddParam.add(failLoss);
+
+                        JsonArray failMin = new JsonArray();
+                        failMin.add("Min");
+                        failMin.add("0");
+                        failMin.add(sendIP.getString(j));
+                        failMin.add("SSH");
+                        failAddParam.add(failMin);
+
+                        JsonArray failAvg = new JsonArray();
+                        failAvg.add("Avg");
+                        failAvg.add("0");
+                        failAvg.add(sendIP.getString(j));
+                        failAvg.add("SSH");
+                        failAddParam.add(failAvg);
+
+                        JsonArray failMax = new JsonArray();
+                        failMax.add("Max");
+                        failMax.add("0");
+                        failMax.add(sendIP.getString(j));
+                        failMax.add("SSH");
+                        failAddParam.add(failMax);
+
+                        JsonArray failStatus = new JsonArray();
+                        failStatus.add("Status");
+                        failStatus.add("failed");
+                        failStatus.add(sendIP.getString(j));
+                        failStatus.add("SSH");
+                        failAddParam.add(failStatus);
+                      }
+                    }
+
+                    updateStatus(failUpdateParam);
+
+                    addPolling(failAddParam);
+                  }
+                  else
+                  {
+                    JsonArray failUpdateParam = new JsonArray();
+
+                    JsonArray failAddParam = new JsonArray();
+
+                    for (int j = 0; j < sendIP.size(); j++)
+                    {
+                      JsonArray fail = new JsonArray();
+                      fail.add("failed");
+                      fail.add(sendIP.getString(j));
+                      fail.add("SSH");
+                      failUpdateParam.add(fail);
+
+                      JsonArray failCPU = new JsonArray();
+                      failCPU.add("CPU");
+                      failCPU.add("0");
+                      failCPU.add(sendIP.getString(j));
+                      failCPU.add("SSH");
+                      failAddParam.add(failCPU);
+
+                      JsonArray failMemory = new JsonArray();
+                      failMemory.add("Memory");
+                      failMemory.add("0");
+                      failMemory.add(sendIP.getString(j));
+                      failMemory.add("SSH");
+                      failAddParam.add(failMemory);
+
+                      JsonArray failDisk = new JsonArray();
+                      failDisk.add("Disk");
+                      failDisk.add("0");
+                      failDisk.add(sendIP.getString(j));
+                      failDisk.add("SSH");
+                      failAddParam.add(failDisk);
+
+                      JsonArray failUptime = new JsonArray();
+                      failUptime.add("Uptime");
+                      failUptime.add("0");
+                      failUptime.add(sendIP.getString(j));
+                      failUptime.add("SSH");
+                      failAddParam.add(failUptime);
+
+                      JsonArray failLoss = new JsonArray();
+                      failLoss.add("Loss");
+                      failLoss.add("100%");
+                      failLoss.add(sendIP.getString(j));
+                      failLoss.add("SSH");
+                      failAddParam.add(failLoss);
+
+                      JsonArray failMin = new JsonArray();
+                      failMin.add("Min");
+                      failMin.add("0");
+                      failMin.add(sendIP.getString(j));
+                      failMin.add("SSH");
+                      failAddParam.add(failMin);
+
+                      JsonArray failAvg = new JsonArray();
+                      failAvg.add("Avg");
+                      failAvg.add("0");
+                      failAvg.add(sendIP.getString(j));
+                      failAvg.add("SSH");
+                      failAddParam.add(failAvg);
+
+                      JsonArray failMax = new JsonArray();
+                      failMax.add("Max");
+                      failMax.add("0");
+                      failMax.add(sendIP.getString(j));
+                      failMax.add("SSH");
+                      failAddParam.add(failMax);
+
+                      JsonArray failStatus = new JsonArray();
+                      failStatus.add("Status");
+                      failStatus.add("failed");
+                      failStatus.add(sendIP.getString(j));
+                      failStatus.add("SSH");
+                      failAddParam.add(failStatus);
+                    }
+                    updateStatus(failUpdateParam);
+
+                    addPolling(failAddParam);
                   }
                 }
                 else
