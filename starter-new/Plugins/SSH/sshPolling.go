@@ -45,9 +45,16 @@ type SSHResult struct {
 type SshPolling struct{}
 
 func (p SshPolling) GetSSHResult(ip string, id int, requestJSON string) (SSHResult, error) {
+
+	defer func() {
+		if r := recover(); r != nil {
+		}
+	}()
+
 	var request DiscoveryRequest
 
 	err := json.Unmarshal([]byte(requestJSON), &request)
+
 	if err != nil {
 		return SSHResult{}, fmt.Errorf("failed to unmarshal JSON: %v", err)
 	}
@@ -55,6 +62,7 @@ func (p SshPolling) GetSSHResult(ip string, id int, requestJSON string) (SSHResu
 	creds := request.CredentialProfile
 
 	username := creds.Username[id]
+
 	password := creds.Password[id]
 
 	config := &ssh.ClientConfig{
@@ -62,14 +70,16 @@ func (p SshPolling) GetSSHResult(ip string, id int, requestJSON string) (SSHResu
 		Auth: []ssh.AuthMethod{
 			ssh.Password(password),
 		},
-		Timeout:         2 * time.Second,
+		Timeout:         10 * time.Second,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
 	client, err := ssh.Dial("tcp", ip+":22", config)
+
 	if err != nil {
 		return SSHResult{}, fmt.Errorf("failed to connect to SSH server: %v", err)
 	}
+
 	defer client.Close()
 
 	result := SSHResult{
@@ -77,9 +87,11 @@ func (p SshPolling) GetSSHResult(ip string, id int, requestJSON string) (SSHResu
 	}
 
 	session, err := client.NewSession()
+
 	if err != nil {
 		return result, fmt.Errorf("failed to create SSH session: %v", err)
 	}
+
 	defer session.Close()
 
 	combinedCommand := `
@@ -91,36 +103,45 @@ func (p SshPolling) GetSSHResult(ip string, id int, requestJSON string) (SSHResu
 	`
 
 	output, err := executeCommand(session, combinedCommand)
+
 	if err != nil {
 		return result, fmt.Errorf("failed to retrieve system information: %v", err)
 	}
 
 	// Extract the individual values from the combined output
 	fields := strings.Split(output, "|")
+
 	if len(fields) != 4 {
 		return result, fmt.Errorf("unexpected output format: %s", output)
 	}
 
 	result.CPU = fields[0]
+
 	result.Memory = fields[1]
+
 	result.Disk = fields[2]
+
 	result.Uptime = fields[3]
 
 	return result, nil
 }
 
 func executeCommand(session *ssh.Session, command string) (string, error) {
+
 	var stdoutBuf, stderrBuf bytes.Buffer
 
 	session.Stdout = &stdoutBuf
+
 	session.Stderr = &stderrBuf
 
 	err := session.Run(command)
+
 	if err != nil {
 		return "", fmt.Errorf("failed to execute command '%s': %v", command, err)
 	}
 
 	output := strings.TrimSpace(stdoutBuf.String())
+
 	if output == "" {
 		output = strings.TrimSpace(stderrBuf.String())
 	}

@@ -7,52 +7,33 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"sync"
 )
 
-type Result struct {
-	Loss   string `json:"%loss"`
-	Min    string `json:"min"`
-	Avg    string `json:"avg"`
-	Max    string `json:"max"`
-	Status string `json:"status"`
-	IP     string `json:"ip"`
-	ID     int    `json:"ID"`
+type ResultMap struct {
+	Results map[string]Result
+	IPs     []string
+	IDs     []int
 }
 
-type SafeResults struct {
-	sync.Mutex
-	Results []Result
-}
+type SshPing struct{}
 
-type Ping struct{}
+func (p SshPing) PingPolling(requestJSON string) (*ResultMap, error) {
 
-func (p Ping) PingDiscovery(ip []string) string {
-
-	for _, ip := range ip {
-
-		cmd := exec.Command("fping", "-c", "3", ip)
-
-		_, err := cmd.CombinedOutput()
-
-		if err != nil {
-			return "failed"
+	defer func() {
+		if r := recover(); r != nil {
 		}
+	}()
 
-	}
-
-	return "success"
-}
-
-func (p Ping) PingPolling(requestJSON string) (map[string]Result, error) {
 	var request DiscoveryRequest
 
 	err := json.Unmarshal([]byte(requestJSON), &request)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal JSON: %v", err)
 	}
 
 	ips := request.DiscoveryProfile.IP
+
 	ids := request.DiscoveryProfile.IDs
 
 	if len(ips) != len(ids) {
@@ -72,7 +53,11 @@ func (p Ping) PingPolling(requestJSON string) (map[string]Result, error) {
 
 	lines := strings.Split(string(output), "\n")
 
-	resultMap := make(map[string]Result)
+	resultMap := &ResultMap{
+		Results: make(map[string]Result),
+		IPs:     ips,
+		IDs:     ids,
+	}
 
 	for i, line := range lines {
 		line = strings.TrimSpace(line)
@@ -86,10 +71,8 @@ func (p Ping) PingPolling(requestJSON string) (map[string]Result, error) {
 		matches := r.FindStringSubmatch(line)
 
 		ip := ips[i]
-		result := Result{
-			IP: ip,
-			ID: ids[i],
-		}
+
+		result := Result{}
 
 		if len(matches) != 8 {
 			result.Loss = "100%"
@@ -115,7 +98,7 @@ func (p Ping) PingPolling(requestJSON string) (map[string]Result, error) {
 			result.Status = status
 		}
 
-		resultMap[ip] = result
+		resultMap.Results[ip] = result
 	}
 
 	return resultMap, nil

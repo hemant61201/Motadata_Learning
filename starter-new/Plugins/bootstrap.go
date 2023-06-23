@@ -1,8 +1,8 @@
 package main
 
 import (
-	"awesomeProject2/Ping"
-	"awesomeProject2/SSH"
+	"Plugins/Ping"
+	"Plugins/SSH"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -29,6 +29,11 @@ type InputData struct {
 
 func main() {
 
+	defer func() {
+		if r := recover(); r != nil {
+		}
+	}()
+
 	if len(os.Args) < 2 {
 
 		fmt.Println("Please provide the JSON data as a command-line argument")
@@ -36,11 +41,11 @@ func main() {
 		return
 	}
 
-	jsonData := os.Args[1]
+	input := os.Args[1]
 
 	var inputData InputData
 
-	err := json.Unmarshal([]byte(jsonData), &inputData)
+	err := json.Unmarshal([]byte(input), &inputData)
 
 	if err != nil {
 
@@ -61,9 +66,9 @@ func main() {
 
 			discovery := &SSH.Discovery{}
 
-			result := ping.PingDiscovery(inputData.DiscoveryProfile.IP)
+			discoveryResult := ping.PingDiscovery(inputData.DiscoveryProfile.IP)
 
-			if result == "success" {
+			if discoveryResult == "success" {
 
 				fmt.Println(discovery.ExecuteDiscovery(inputData.DiscoveryProfile.IP, inputData.CredentialProfile.Username[0], inputData.CredentialProfile.Password[0]), inputData.DiscoveryProfile.ID)
 
@@ -75,27 +80,36 @@ func main() {
 
 			sshPing := &Ping.SshPing{}
 
-			resultMap, err := sshPing.SshPingPolling(jsonData)
+			resultMap, err := sshPing.PingPolling(input)
+
 			if err != nil {
 				fmt.Printf("Error performing fping polling: %v\n", err)
 				return
 			}
 
-			resultsCh := make(chan SSH.SSHResult)
+			resultsChanel := make(chan SSH.SSHResult)
 
 			var wg sync.WaitGroup
+
 			for i, ip := range resultMap.IPs {
-				//id := resultMap.IDs[i]
+
 				wg.Add(1)
+
 				go func(ip string, i int) {
+
 					defer wg.Done()
+
 					sshPolling := &SSH.SshPolling{}
-					sshResult, err := sshPolling.GetSSHResult(ip, i, jsonData)
+
+					sshResult, err := sshPolling.GetSSHResult(ip, i, input)
+
 					if err != nil {
 						fmt.Printf("Error retrieving SSH result for IP %s: %v\n", ip, err)
 						return
 					}
+
 					result := resultMap.Results[ip]
+
 					sshResult.Fping = SSH.Result{
 						Loss:   result.Loss,
 						Min:    result.Min,
@@ -104,27 +118,29 @@ func main() {
 						Status: result.Status,
 					}
 
-					resultsCh <- sshResult
+					resultsChanel <- sshResult
 				}(ip, i)
 			}
 
 			go func() {
 				wg.Wait()
-				close(resultsCh)
+				close(resultsChanel)
 			}()
 
 			results := make([]SSH.SSHResult, 0)
-			for sshResult := range resultsCh {
+
+			for sshResult := range resultsChanel {
 				results = append(results, sshResult)
 			}
 
-			jsonData, err := json.Marshal(results)
+			pollingResult, err := json.Marshal(results)
+
 			if err != nil {
 				fmt.Printf("Error marshaling JSON: %v\n", err)
 				return
 			}
 
-			fmt.Println(string(jsonData))
+			fmt.Println(string(pollingResult))
 		}
 
 	case "Ping":
@@ -135,25 +151,22 @@ func main() {
 
 			ping := &Ping.Ping{}
 
-			result := ping.PingDiscovery(inputData.DiscoveryProfile.IP)
+			discoveryResult := ping.PingDiscovery(inputData.DiscoveryProfile.IP)
 
-			fmt.Println(result+"_", inputData.DiscoveryProfile.ID)
+			fmt.Println(discoveryResult+"_", inputData.DiscoveryProfile.ID)
 
 		case "Polling":
 
-			ping := &Ping.Ping{}
+			sshPing := &Ping.SshPing{}
 
-			results, err := ping.PingPolling(jsonData)
+			resultMap, err := sshPing.PingPolling(input)
 
 			if err != nil {
-				fmt.Println("Error:", err)
+				fmt.Printf("Error performing fping polling: %v\n", err)
 				return
 			}
 
-			for _, ip := range inputData.DiscoveryProfile.IP {
-				result := results[ip]
-				fmt.Printf("{Loss:%s Min:%s Avg:%s Max:%s Status:%s IP:%s ID:%d}\n", result.Loss, result.Min, result.Avg, result.Max, result.Status, result.IP, result.ID)
-			}
+			fmt.Println(resultMap)
 
 		}
 

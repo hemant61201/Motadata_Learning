@@ -10,6 +10,11 @@ type Discovery struct{}
 
 func (d Discovery) ExecuteDiscovery(ip []string, username string, password string) string {
 
+	defer func() {
+		if r := recover(); r != nil {
+		}
+	}()
+
 	for _, ip := range ip {
 
 		_, err := ExecuteSSHDiscovery(ip, username, password)
@@ -26,6 +31,11 @@ func (d Discovery) ExecuteDiscovery(ip []string, username string, password strin
 }
 
 func ExecuteSSHDiscovery(ip string, username string, password string) (string, error) {
+
+	defer func() {
+		if r := recover(); r != nil {
+		}
+	}()
 
 	config := &ssh.ClientConfig{
 
