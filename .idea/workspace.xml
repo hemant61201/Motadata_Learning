@@ -4,19 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="22 June LightNMS">
+    <list default="true" id="fc993dd9-fa17-423a-900a-de4402147b34" name="Changes" comment="23 June LightNMS">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/ConstVariables.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/ConstVariables.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/Database/Connectionpool.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/Database/Connectionpool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/Database/MetricsData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/Plugins/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/Plugins/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/Plugins/Ping/pingDiscovery.go" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/Plugins/Ping/pingDiscovery.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/Plugins/Ping/pingPolling.go" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/Plugins/Ping/pingPolling.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/Plugins/Ping/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/Plugins/Ping/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/Plugins/SSH/sshDiscovery.go" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/Plugins/SSH/sshDiscovery.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/Plugins/SSH/sshPolling.go" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/Plugins/SSH/sshPolling.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/Plugins/bootstrap.go" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/Plugins/bootstrap.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/Plugins/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/Plugins/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/Plugins/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/Plugins/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/DatabaseOperations.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/DatabaseOperations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/Discovery.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/Discovery.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/VisualPublicAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/java/LightNMS/VisualPublicAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/api/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/api/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/js/liteNms/OnePageDiv.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/js/liteNms/OnePageDiv.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/js/liteNms/dashbord.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/js/liteNms/dashbord.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/js/liteNms/viewPingMonitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/js/liteNms/viewPingMonitor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/js/liteNms/viewSSHMonitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/starter-new/src/main/resources/webroot/js/liteNms/viewSSHMonitor.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,11 +72,11 @@
       <recent name="$PROJECT_DIR$/LightNMS/src/main/plugins" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/starter-new/src" />
       <recent name="$PROJECT_DIR$/starter/src/main/resources/webroot/js/liteNms" />
       <recent name="$PROJECT_DIR$/Networking_System/Networking_System/src" />
       <recent name="$PROJECT_DIR$/Networking_System/Networking_System" />
       <recent name="$PROJECT_DIR$/Networking_System/Networking/Admin_Module/src" />
-      <recent name="$PROJECT_DIR$/Networking_System/Networking/Admin_Module" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -99,21 +100,7 @@
       <workItem from="1686286632617" duration="8024000" />
       <workItem from="1686521054080" duration="19407000" />
       <workItem from="1687163327622" duration="714000" />
-      <workItem from="1687176291303" duration="4828000" />
-    </task>
-    <task id="LOCAL-00023" summary="April 24 JDBC">
-      <created>1682353237513</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1682353237513</updated>
-    </task>
-    <task id="LOCAL-00024" summary="April 28 JQuery">
-      <created>1682691694245</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1682691694245</updated>
+      <workItem from="1687176291303" duration="6479000" />
     </task>
     <task id="LOCAL-00025" summary="hi">
       <created>1682760833952</created>
@@ -444,7 +431,21 @@
       <option name="project" value="LOCAL" />
       <updated>1687410522094</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="23 June LightNMS">
+      <created>1687461919358</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1687461919359</updated>
+    </task>
+    <task id="LOCAL-00073" summary="23 June LightNMS">
+      <created>1687516131260</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1687516131261</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -464,7 +465,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="15 May Vertex" />
     <MESSAGE value="16 May Vertex" />
     <MESSAGE value="17 May Vertex" />
     <MESSAGE value="18 May Vertex" />
@@ -489,6 +489,7 @@
     <MESSAGE value="19 June LightNMS" />
     <MESSAGE value="21 June LightNMS" />
     <MESSAGE value="22 June LightNMS" />
-    <option name="LAST_COMMIT_MESSAGE" value="22 June LightNMS" />
+    <MESSAGE value="23 June LightNMS" />
+    <option name="LAST_COMMIT_MESSAGE" value="23 June LightNMS" />
   </component>
 </project>

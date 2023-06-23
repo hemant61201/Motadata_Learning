@@ -203,7 +203,7 @@ public class Discovery extends AbstractVerticle
         {
           NuProcess process = nuProcessBuilder.start();
 
-          process.waitFor(60, TimeUnit.SECONDS);
+          process.waitFor(120, TimeUnit.SECONDS);
         }
 
         catch (Exception exception)

@@ -20,9 +20,16 @@ public class DatabaseOperations extends AbstractVerticle
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-  private static final Object lock = new Object();
+  private static Connectionpool connectionPool = null;
 
-  private static Connectionpool connectionPool;
+  private static boolean connectionpoolChecker = false;
+
+  static
+  {
+    connectionPool = Connectionpool.getInstance();
+
+    connectionpoolChecker = connectionPool.createConnection();
+  }
 
   private void databaseHandler(Message<Object> message)
   {
@@ -608,16 +615,6 @@ public class DatabaseOperations extends AbstractVerticle
   {
     try
     {
-      synchronized (lock)
-      {
-        if (connectionPool == null)
-        {
-          connectionPool = Connectionpool.getInstance();
-        }
-      }
-
-      boolean connectionpoolChecker = connectionPool.createConnection();
-
       if(connectionpoolChecker)
       {
         JsonObject getPollingData = new JsonObject();
@@ -662,7 +659,7 @@ public class DatabaseOperations extends AbstractVerticle
       }
       else
       {
-        startPromise.fail("Crud operation verticle failed due to not able to create connection pool");
+        startPromise.fail("Database Operation verticle failed due to not able to create connection pool");
       }
     }
 

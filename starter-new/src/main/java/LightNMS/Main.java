@@ -18,7 +18,7 @@ public class Main
 
       Promise<String> discoveryDeployment = Promise.promise();
 
-      Promise<String> crudOperationsDeployment = Promise.promise();
+      Promise<String> databaseOperationsDeployment = Promise.promise();
 
       Promise<String> pollingExecutionDeployment = Promise.promise();
 
@@ -26,11 +26,11 @@ public class Main
 
       vertx.deployVerticle(Discovery.class.getName(), new DeploymentOptions().setWorkerPoolName("discoveryPool").setWorkerPoolSize(10), discoveryDeployment);
 
-      vertx.deployVerticle(DatabaseOperations.class.getName(), crudOperationsDeployment);
+      vertx.deployVerticle(DatabaseOperations.class.getName(), new DeploymentOptions().setWorkerPoolName("databasePool").setWorkerPoolSize(15), databaseOperationsDeployment);
 
       vertx.deployVerticle(PollingExecution.class.getName(), pollingExecutionDeployment);
 
-      CompositeFuture.all(visualizationDeployment.future(), discoveryDeployment.future(), crudOperationsDeployment.future(), pollingExecutionDeployment.future())
+      CompositeFuture.all(visualizationDeployment.future(), discoveryDeployment.future(), databaseOperationsDeployment.future(), pollingExecutionDeployment.future())
         .onComplete(ar ->
         {
           if (ar.succeeded())
