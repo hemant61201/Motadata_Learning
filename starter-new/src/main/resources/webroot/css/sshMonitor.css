@@ -28,3 +28,28 @@
   background-color: #f2f2f2;
   padding: 10px;
 }
+
+.row1 {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.data-row {
+  background-color: #f2f2f2;
+}
+
+.data-row td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.data-row td:first-child {
+  font-weight: bold;
+}
+
+.table-container {
+  flex: 1 1 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

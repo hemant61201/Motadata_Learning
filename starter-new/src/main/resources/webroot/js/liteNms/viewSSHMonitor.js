@@ -43,7 +43,50 @@ var SSHMonitor =
 
       drawDonutChart('availabilityChart', availabilityData);
 
-      // Create bar chart
+      var bpsValue = data.BpsValue;
+
+      var bpsRows = bpsValue ? bpsValue.substring(0, bpsValue.length - 1).split(';') : [];
+
+      if (bpsRows.length === 0)
+      {
+        var row = $('<tr>').addClass('data-row');
+
+        $('<td>').text('-').appendTo(row);
+
+        $('<td>').text('-').appendTo(row);
+
+        $('<td>').text('-').appendTo(row);
+
+        $('#dataTable tbody').append(row);
+      }
+
+      else
+      {
+        for (var i = 0; i < bpsRows.length; i++)
+        {
+          var rowValues = bpsRows[i].split(':');
+
+          var columnName = rowValues[0];
+
+          var columnValues = rowValues[1].split(',');
+
+          var receiveValue = columnValues[0];
+
+          var transmitValue = columnValues[1];
+
+          var row = $('<tr>').addClass('data-row');
+
+          $('<td>').text(columnName).appendTo(row);
+
+          $('<td>').text(receiveValue).appendTo(row);
+
+          $('<td>').text(transmitValue).appendTo(row);
+
+          $('#dataTable tbody').append(row);
+        }
+      }
+
+      // Create line chart
       var lineChartData = [];
 
       for (var i = 1; i < data.Avg.length; i += 2) {
