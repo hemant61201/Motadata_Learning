@@ -130,7 +130,7 @@ public class VisualPublicAPI extends AbstractVerticle
 
         addData.put(ConstVariables.ACTION, "add");
 
-        addData.put(ConstVariables.TABLENAME, message.getString("tableName"));
+        addData.put(ConstVariables.TABLENAME, "discovery_table");
 
         addData.put(ConstVariables.COLUMNS, columns);
 
@@ -168,7 +168,7 @@ public class VisualPublicAPI extends AbstractVerticle
 
         getData.put(ConstVariables.ACTION, "get");
 
-        getData.put(ConstVariables.TABLENAME, message.getString("tableName"));
+        getData.put(ConstVariables.TABLENAME, "discovery_table");
 
         getData.put(ConstVariables.COLUMNS, "*");
 
@@ -418,7 +418,7 @@ public class VisualPublicAPI extends AbstractVerticle
 
         updateData.put(ConstVariables.ACTION, "update");
 
-        updateData.put(ConstVariables.TABLENAME, message.getString("tableName"));
+        updateData.put(ConstVariables.TABLENAME, "discovery_table");
 
         updateData.put(ConstVariables.COLUMNS, data[1]);
 

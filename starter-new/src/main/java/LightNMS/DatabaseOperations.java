@@ -331,7 +331,7 @@ public class DatabaseOperations extends AbstractVerticle
                 {
                   jsonNode.withArray(metrics).add(data).add(timestamp);
                 }
-                else if (metrics.equals("Loss") || metrics.equals("Uptime"))
+                else if (metrics.equals("Loss") || metrics.equals("Uptime") || metrics.equals("BpsValue"))
                 {
                   jsonNode.put(metrics, data);
                 }
@@ -386,6 +386,8 @@ public class DatabaseOperations extends AbstractVerticle
 
               JsonArray idArray = new JsonArray();
 
+              HashMap<String, String> Uptime = new HashMap<>();
+
               while (resultSet.next())
               {
                 JsonObject rowData = new JsonObject();
@@ -402,6 +404,8 @@ public class DatabaseOperations extends AbstractVerticle
 
                   if(message.getString("address").equals("SSH"))
                   {
+                    Uptime.put(resultSet.getString("IP"), resultSet.getString("UPTIME"));
+
                     JsonObject credential = new JsonObject(resultSet.getString("CREDENTIAL"));
 
                     username.add(credential.getString("credential_userName"));
@@ -436,6 +440,8 @@ public class DatabaseOperations extends AbstractVerticle
                   monitorData.put("userName", username);
 
                   monitorData.put("password", password);
+
+                  monitorData.put("Uptime", Uptime);
                 }
 
                 monitorData.put("ip", ipArray);

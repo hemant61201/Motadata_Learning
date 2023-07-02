@@ -21,6 +21,8 @@ public class PollingExecution extends AbstractVerticle
 
   private static JsonArray sendIP;
 
+  private static JsonObject upTimes;
+
   private Future<Object> getMonitorData(String action)
   {
     Promise<Object> promise = Promise.promise();
@@ -108,13 +110,13 @@ public class PollingExecution extends AbstractVerticle
 
           getMonitorData.put(ConstVariables.TABLENAME, "monitor_table");
 
-          getMonitorData.put(ConstVariables.COLUMNS, "ip,id,credential");
+          getMonitorData.put(ConstVariables.COLUMNS, "m.IP, m.ID, m.credential, p.DATA AS Uptime");
 
           getMonitorData.put(ConstVariables.ADDRESS, "SSH");
 
           getMonitorData.put(ConstVariables.PARAMVALUES, paramValues);
 
-          getMonitorData.put(ConstVariables.CONDITION, " WHERE deviceType = ?");
+          getMonitorData.put(ConstVariables.CONDITION, " m LEFT JOIN (SELECT p1.IP, p1.DATA FROM polling_table p1 JOIN (SELECT IP, MAX(TIMESTAMP) AS latest_timestamp FROM polling_table WHERE METRICS = 'Uptime' GROUP BY IP) p2 ON p1.IP = p2.IP AND p1.TIMESTAMP = p2.latest_timestamp WHERE p1.METRICS = 'Uptime') p ON m.IP = p.IP WHERE deviceType = ?");
 
           Future<Object> GetMonitor = DatabaseOperations.executeGetQuery(vertx, getMonitorData);
 
@@ -136,6 +138,8 @@ public class PollingExecution extends AbstractVerticle
                 JsonArray ipArray = new JsonArray(getData.getString("ip"));
 
                 sendIP = new JsonArray(getData.getString("ip"));
+
+                upTimes = getData.getJsonObject("Uptime");
 
                 JsonArray userArray = new JsonArray(getData.getString("userName"));
 
@@ -243,6 +247,45 @@ public class PollingExecution extends AbstractVerticle
     {
       LOGGER.error("Error: AddPolling is null");
     }
+  }
+
+  public static long convertUptimeToSeconds(String uptime)
+  {
+    uptime = uptime.replace("up ", "");
+
+    String[] parts = uptime.split(", ");
+
+    long days = 0;
+
+    long hours = 0;
+
+    long minutes = 0;
+
+    for (String part : parts)
+    {
+      if (part.contains("days"))
+      {
+        days = Long.parseLong(part.split(" ")[0]);
+      }
+
+      else if (part.contains("hours"))
+      {
+        hours = Long.parseLong(part.split(" ")[0]);
+      }
+
+      else if (part.contains("minutes"))
+      {
+        minutes = Long.parseLong(part.split(" ")[0]);
+      }
+    }
+
+    long secondsInDay = 24 * 60 * 60;
+
+    long secondsInHour = 60 * 60;
+
+    long secondsInMinute = 60;
+
+    return days * secondsInDay + hours * secondsInHour + minutes * secondsInMinute;
   }
 
   @Override
@@ -420,6 +463,60 @@ public class PollingExecution extends AbstractVerticle
                             }
                           }
 
+                          else if (key.equals("BpsValue"))
+                          {
+                            parameter.add(key);
+
+                            long oldUptime;
+
+                            if(upTimes.containsKey(metricData.getString("IP")))
+                            {
+                              oldUptime = convertUptimeToSeconds(upTimes.getString(metricData.getString("IP")));
+                            }
+
+                            else
+                            {
+                              oldUptime = 0L;
+                            }
+
+                            long newUptime = convertUptimeToSeconds(metricData.getString("Uptime"));
+
+                            long time;
+
+                            if(oldUptime > newUptime)
+                            {
+                              time = newUptime;
+                            }
+
+                            else
+                            {
+                              time = newUptime - oldUptime;
+                            }
+
+                            StringBuilder bpsValue = new StringBuilder();
+
+                            String[] interfaces = metricData.getString(key).substring(0, metricData.getString(key).length() - 1).split(";");
+
+                            for(String interfaceData : interfaces)
+                            {
+                              String name = interfaceData.split(":")[0];
+
+                              long receiveValue = Long.parseLong(interfaceData.split(":")[1].split(",")[0]) / time;
+
+                              long transmitValue = Long.parseLong(interfaceData.split(":")[1].split(",")[1]) / time;
+
+                              bpsValue.append(name).append(":").append(receiveValue).append(",").append(transmitValue).append(";");
+                            }
+
+                            parameter.add(bpsValue.toString());
+
+                            parameter.add(metricData.getString("IP"));
+
+                            parameter.add("SSH");
+
+                            batchAddParam.add(parameter);
+                          }
+
                           else
                           {
                             parameter.add(key);
@@ -480,6 +577,13 @@ public class PollingExecution extends AbstractVerticle
                         failUptime.add(sendIP.getString(j));
                         failUptime.add("SSH");
                         failAddParam.add(failUptime);
+
+                        JsonArray failBpsValue = new JsonArray();
+                        failBpsValue.add("BpsValue");
+                        failBpsValue.add("");
+                        failBpsValue.add(sendIP.getString(j));
+                        failBpsValue.add("SSH");
+                        failAddParam.add(failBpsValue);
 
                         JsonArray failLoss = new JsonArray();
                         failLoss.add("Loss");
@@ -563,6 +667,13 @@ public class PollingExecution extends AbstractVerticle
                       failUptime.add(sendIP.getString(j));
                       failUptime.add("SSH");
                       failAddParam.add(failUptime);
+
+                      JsonArray failBpsValue = new JsonArray();
+                      failBpsValue.add("BpsValue");
+                      failBpsValue.add("");
+                      failBpsValue.add(sendIP.getString(j));
+                      failBpsValue.add("SSH");
+                      failAddParam.add(failBpsValue);
 
                       JsonArray failLoss = new JsonArray();
                       failLoss.add("Loss");
