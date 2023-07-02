@@ -34,12 +34,13 @@ type Result struct {
 }
 
 type SSHResult struct {
-	IP     string `json:"IP"`
-	CPU    string `json:"CPU"`
-	Memory string `json:"Memory"`
-	Disk   string `json:"Disk"`
-	Uptime string `json:"Uptime"`
-	Fping  Result `json:"Fping"`
+	IP       string `json:"IP"`
+	CPU      string `json:"CPU"`
+	Memory   string `json:"Memory"`
+	Disk     string `json:"Disk"`
+	Uptime   string `json:"Uptime"`
+	BpsValue string `json:"BpsValue"`
+	Fping    Result `json:"Fping"`
 }
 
 type SshPolling struct{}
@@ -99,7 +100,8 @@ func (p SshPolling) GetSSHResult(ip string, id int, requestJSON string) (SSHResu
 		memory_usage=$(free -m | awk 'NR==2{printf "%.2f%%", ($3/$2)*100 }')
 		disk_usage=$(df -h --output=pcent / | awk 'NR==2{print $1}')
 		uptime=$(uptime -p)
-		echo "$cpu_usage|$memory_usage|$disk_usage|$uptime"
+		bps=$(cat /proc/net/dev | awk 'NR>2 gsub(/:/,"") {printf $1 ":" $2 "," $10 ";"}')
+		echo "$cpu_usage|$memory_usage|$disk_usage|$uptime|$bps"
 	`
 
 	output, err := executeCommand(session, combinedCommand)
@@ -111,7 +113,7 @@ func (p SshPolling) GetSSHResult(ip string, id int, requestJSON string) (SSHResu
 	// Extract the individual values from the combined output
 	fields := strings.Split(output, "|")
 
-	if len(fields) != 4 {
+	if len(fields) != 5 {
 		return result, fmt.Errorf("unexpected output format: %s", output)
 	}
 
@@ -122,6 +124,8 @@ func (p SshPolling) GetSSHResult(ip string, id int, requestJSON string) (SSHResu
 	result.Disk = fields[2]
 
 	result.Uptime = fields[3]
+
+	result.BpsValue = fields[4]
 
 	return result, nil
 }

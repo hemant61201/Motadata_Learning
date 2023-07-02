@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"sync"
 )
 
 type CredentialProfile struct {
@@ -89,15 +88,9 @@ func main() {
 
 			resultsChanel := make(chan SSH.SSHResult)
 
-			var wg sync.WaitGroup
-
 			for i, ip := range resultMap.IPs {
 
-				wg.Add(1)
-
 				go func(ip string, i int) {
-
-					defer wg.Done()
 
 					sshPolling := &SSH.SshPolling{}
 
@@ -119,28 +112,32 @@ func main() {
 					}
 
 					resultsChanel <- sshResult
+
 				}(ip, i)
 			}
 
 			go func() {
-				wg.Wait()
 				close(resultsChanel)
 			}()
 
 			results := make([]SSH.SSHResult, 0)
 
 			for sshResult := range resultsChanel {
+
 				results = append(results, sshResult)
 			}
 
 			pollingResult, err := json.Marshal(results)
 
 			if err != nil {
+
 				fmt.Printf("Error marshaling JSON: %v\n", err)
+
 				return
 			}
 
 			fmt.Println(string(pollingResult))
+
 		}
 
 	case "Ping":
