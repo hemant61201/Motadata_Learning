@@ -88,6 +88,10 @@ func main() {
 
 			resultsChanel := make(chan SSH.SSHResult)
 
+			numIPs := len(resultMap.IPs)
+
+			completed := 0
+
 			for i, ip := range resultMap.IPs {
 
 				go func(ip string, i int) {
@@ -98,6 +102,7 @@ func main() {
 
 					if err != nil {
 						fmt.Printf("Error retrieving SSH result for IP %s: %v\n", ip, err)
+						resultsChanel <- SSH.SSHResult{} // Send an empty result to indicate failure
 						return
 					}
 
@@ -116,28 +121,35 @@ func main() {
 				}(ip, i)
 			}
 
-			go func() {
-				close(resultsChanel)
-			}()
-
 			results := make([]SSH.SSHResult, 0)
 
-			for sshResult := range resultsChanel {
+			for completed < numIPs {
 
-				results = append(results, sshResult)
+				select {
+
+				case sshResult := <-resultsChanel:
+
+					if (SSH.SSHResult{}) != sshResult {
+						results = append(results, sshResult)
+					}
+
+					completed++
+
+				default:
+					continue
+				}
 			}
+
+			close(resultsChanel)
 
 			pollingResult, err := json.Marshal(results)
 
 			if err != nil {
-
 				fmt.Printf("Error marshaling JSON: %v\n", err)
-
 				return
 			}
 
 			fmt.Println(string(pollingResult))
-
 		}
 
 	case "Ping":

@@ -117,7 +117,7 @@ func (p SshPolling) GetSSHResult(ip string, id int, requestJSON string) (SSHResu
 		return result, fmt.Errorf("unexpected output format: %s", output)
 	}
 
-	result.CPU = fields[0]
+	result.CPU = fields[0] + "%"
 
 	result.Memory = fields[1]
 
