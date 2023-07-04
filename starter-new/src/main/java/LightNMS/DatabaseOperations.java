@@ -388,6 +388,8 @@ public class DatabaseOperations extends AbstractVerticle
 
               HashMap<String, String> Uptime = new HashMap<>();
 
+              HashMap<String, String> BpsValue = new HashMap<>();
+
               while (resultSet.next())
               {
                 JsonObject rowData = new JsonObject();
@@ -405,6 +407,8 @@ public class DatabaseOperations extends AbstractVerticle
                   if(message.getString("address").equals("SSH"))
                   {
                     Uptime.put(resultSet.getString("IP"), resultSet.getString("UPTIME"));
+
+                    BpsValue.put(resultSet.getString("IP"), resultSet.getString("BPSVALUE"));
 
                     JsonObject credential = new JsonObject(resultSet.getString("CREDENTIAL"));
 
@@ -442,6 +446,8 @@ public class DatabaseOperations extends AbstractVerticle
                   monitorData.put("password", password);
 
                   monitorData.put("Uptime", Uptime);
+
+                  monitorData.put("BpsValue", BpsValue);
                 }
 
                 monitorData.put("ip", ipArray);

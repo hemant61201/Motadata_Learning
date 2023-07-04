@@ -13,15 +13,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class PollingExecution extends AbstractVerticle
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-  private static JsonArray sendIP;
+  private static final ConcurrentHashMap<Integer, JsonArray> sendIps = new ConcurrentHashMap<>();
 
-  private static JsonObject upTimes;
+  private static final ConcurrentHashMap<Integer, JsonObject> upTime = new ConcurrentHashMap<>();
+
+  private static final ConcurrentHashMap<Integer, JsonObject> bpsValue = new ConcurrentHashMap<>();
 
   private Future<Object> getMonitorData(String action)
   {
@@ -110,13 +113,13 @@ public class PollingExecution extends AbstractVerticle
 
           getMonitorData.put(ConstVariables.TABLENAME, "monitor_table");
 
-          getMonitorData.put(ConstVariables.COLUMNS, "m.IP, m.ID, m.credential, p.DATA AS Uptime");
+          getMonitorData.put(ConstVariables.COLUMNS, "m.IP, m.ID, m.credential, p1.DATA AS Uptime, p2.DATA AS BpsValue");
 
           getMonitorData.put(ConstVariables.ADDRESS, "SSH");
 
           getMonitorData.put(ConstVariables.PARAMVALUES, paramValues);
 
-          getMonitorData.put(ConstVariables.CONDITION, " m LEFT JOIN (SELECT p1.IP, p1.DATA FROM polling_table p1 JOIN (SELECT IP, MAX(TIMESTAMP) AS latest_timestamp FROM polling_table WHERE METRICS = 'Uptime' GROUP BY IP) p2 ON p1.IP = p2.IP AND p1.TIMESTAMP = p2.latest_timestamp WHERE p1.METRICS = 'Uptime') p ON m.IP = p.IP WHERE deviceType = ?");
+          getMonitorData.put(ConstVariables.CONDITION, " m LEFT JOIN ( SELECT p1.IP, p1.DATA FROM polling_table p1 JOIN ( SELECT IP, MAX(TIMESTAMP) AS latest_timestamp FROM polling_table WHERE METRICS = 'Uptime' GROUP BY IP ) p2 ON p1.IP = p2.IP AND p1.TIMESTAMP = p2.latest_timestamp WHERE p1.METRICS = 'Uptime' ) p1 ON m.IP = p1.IP LEFT JOIN ( SELECT p3.IP, p3.DATA FROM polling_table p3 JOIN ( SELECT IP, MAX(TIMESTAMP) AS latest_timestamp FROM polling_table WHERE METRICS = 'BpsValue' GROUP BY IP ) p4 ON p3.IP = p4.IP AND p3.TIMESTAMP = p4.latest_timestamp WHERE p3.METRICS = 'BpsValue' ) p2 ON m.IP = p2.IP WHERE deviceType = ?");
 
           Future<Object> GetMonitor = DatabaseOperations.executeGetQuery(vertx, getMonitorData);
 
@@ -137,9 +140,11 @@ public class PollingExecution extends AbstractVerticle
 
                 JsonArray ipArray = new JsonArray(getData.getString("ip"));
 
-                sendIP = new JsonArray(getData.getString("ip"));
+                sendIps.put(1, new JsonArray(getData.getString("ip")));
 
-                upTimes = getData.getJsonObject("Uptime");
+                upTime.put(1, getData.getJsonObject("Uptime"));
+
+                bpsValue.put(1, getData.getJsonObject("BpsValue"));
 
                 JsonArray userArray = new JsonArray(getData.getString("userName"));
 
@@ -469,14 +474,35 @@ public class PollingExecution extends AbstractVerticle
 
                             long oldUptime;
 
+                            String oldBps;
+
+                            JsonObject upTimes = upTime.get(1);
+
+                            JsonObject bpsValues = bpsValue.get(1);
+
                             if(upTimes.containsKey(metricData.getString("IP")))
                             {
-                              oldUptime = convertUptimeToSeconds(upTimes.getString(metricData.getString("IP")));
+                              if(upTimes.getString(metricData.getString("IP")) != null && bpsValues.getString(metricData.getString("IP")) != null)
+                              {
+                                oldUptime = convertUptimeToSeconds(upTimes.getString(metricData.getString("IP")));
+
+                                oldBps = bpsValues.getString(metricData.getString("IP"));
+                              }
+
+                              else
+                              {
+                                oldUptime = 0L;
+
+                                oldBps = "";
+                              }
+
                             }
 
                             else
                             {
                               oldUptime = 0L;
+
+                              oldBps = "";
                             }
 
                             long newUptime = convertUptimeToSeconds(metricData.getString("Uptime"));
@@ -497,15 +523,52 @@ public class PollingExecution extends AbstractVerticle
 
                             String[] interfaces = metricData.getString(key).substring(0, metricData.getString(key).length() - 1).split(";");
 
+                            String[] oldInterfaces;
+
+                            if(!Objects.equals(oldBps, ""))
+                            {
+                              oldInterfaces = oldBps.substring(0, oldBps.length() - 1).split(";");
+                            }
+
+                            else
+                            {
+                              oldInterfaces = new String[0];
+                            }
+
                             for(String interfaceData : interfaces)
                             {
                               String name = interfaceData.split(":")[0];
 
-                              long receiveValue = Long.parseLong(interfaceData.split(":")[1].split(",")[0]) / time;
+                              String oldInterfaceData = null;
 
-                              long transmitValue = Long.parseLong(interfaceData.split(":")[1].split(",")[1]) / time;
+                              for(String oldInterface : oldInterfaces)
+                              {
+                                if(oldInterface.contains(name))
+                                {
+                                  oldInterfaceData = oldInterface;
+                                }
+                              }
 
-                              bpsValue.append(name).append(":").append(receiveValue).append(",").append(transmitValue).append(";");
+                              if(oldInterfaceData != null)
+                              {
+                                if(name.equals(oldInterfaceData.split(":")[0]))
+                                {
+                                  long receiveValue = (Long.parseLong(interfaceData.split(":")[1].split(",")[0]) - Long.parseLong(oldInterfaceData.split(":")[1].split(",")[0])) / time;
+
+                                  long transmitValue = (Long.parseLong(interfaceData.split(":")[1].split(",")[1]) - Long.parseLong(oldInterfaceData.split(":")[1].split(",")[1])) / time;
+
+                                  bpsValue.append(name).append(":").append(receiveValue).append(",").append(transmitValue).append(";");
+                                }
+                              }
+
+                              else
+                              {
+                                long receiveValue = Long.parseLong(interfaceData.split(":")[1].split(",")[0]) / time;
+
+                                long transmitValue = Long.parseLong(interfaceData.split(":")[1].split(",")[1]) / time;
+
+                                bpsValue.append(name).append(":").append(receiveValue).append(",").append(transmitValue).append(";");
+                              }
                             }
 
                             parameter.add(bpsValue.toString());
@@ -535,6 +598,8 @@ public class PollingExecution extends AbstractVerticle
                     updateStatus(batchUpdateParam);
 
                     addPolling(batchAddParam);
+
+                    JsonArray sendIP = sendIps.get(1);
 
                     JsonArray failUpdateParam = new JsonArray();
 
@@ -628,6 +693,8 @@ public class PollingExecution extends AbstractVerticle
                   }
                   else
                   {
+                    JsonArray sendIP = sendIps.get(1);
+
                     JsonArray failUpdateParam = new JsonArray();
 
                     JsonArray failAddParam = new JsonArray();
@@ -710,6 +777,7 @@ public class PollingExecution extends AbstractVerticle
                       failStatus.add("SSH");
                       failAddParam.add(failStatus);
                     }
+
                     updateStatus(failUpdateParam);
 
                     addPolling(failAddParam);
