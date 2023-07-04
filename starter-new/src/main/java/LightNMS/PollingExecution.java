@@ -119,7 +119,7 @@ public class PollingExecution extends AbstractVerticle
 
           getMonitorData.put(ConstVariables.PARAMVALUES, paramValues);
 
-          getMonitorData.put(ConstVariables.CONDITION, " m LEFT JOIN ( SELECT p1.IP, p1.DATA FROM polling_table p1 JOIN ( SELECT IP, MAX(TIMESTAMP) AS latest_timestamp FROM polling_table WHERE METRICS = 'Uptime' GROUP BY IP ) p2 ON p1.IP = p2.IP AND p1.TIMESTAMP = p2.latest_timestamp WHERE p1.METRICS = 'Uptime' ) p1 ON m.IP = p1.IP LEFT JOIN ( SELECT p3.IP, p3.DATA FROM polling_table p3 JOIN ( SELECT IP, MAX(TIMESTAMP) AS latest_timestamp FROM polling_table WHERE METRICS = 'BpsValue' GROUP BY IP ) p4 ON p3.IP = p4.IP AND p3.TIMESTAMP = p4.latest_timestamp WHERE p3.METRICS = 'BpsValue' ) p2 ON m.IP = p2.IP WHERE deviceType = ?");
+          getMonitorData.put(ConstVariables.CONDITION, " m LEFT JOIN ( SELECT p1.IP, p1.DATA FROM polling_table p1 JOIN ( SELECT IP, MAX(TIMESTAMP) AS latest_timestamp FROM polling_table WHERE METRICS = 'Uptime' GROUP BY IP ) p2 ON p1.IP = p2.IP AND p1.TIMESTAMP = p2.latest_timestamp WHERE p1.METRICS = 'Uptime' ) p1 ON m.IP = p1.IP LEFT JOIN ( SELECT p3.IP, p3.DATA FROM polling_table p3 JOIN ( SELECT IP, MAX(TIMESTAMP) AS latest_timestamp FROM polling_table WHERE METRICS = 'Bytes' GROUP BY IP ) p4 ON p3.IP = p4.IP AND p3.TIMESTAMP = p4.latest_timestamp WHERE p3.METRICS = 'Bytes' ) p2 ON m.IP = p2.IP WHERE deviceType = ?");
 
           Future<Object> GetMonitor = DatabaseOperations.executeGetQuery(vertx, getMonitorData);
 
@@ -260,6 +260,10 @@ public class PollingExecution extends AbstractVerticle
 
     String[] parts = uptime.split(", ");
 
+    long months = 0;
+
+    long weeks = 0;
+
     long days = 0;
 
     long hours = 0;
@@ -268,7 +272,17 @@ public class PollingExecution extends AbstractVerticle
 
     for (String part : parts)
     {
-      if (part.contains("days"))
+      if(part.contains("month"))
+      {
+        months = Long.parseLong(part.split(" ")[0]);
+      }
+
+      else if(part.contains("week"))
+      {
+        weeks = Long.parseLong(part.split(" ")[0]);
+      }
+
+      else if (part.contains("days"))
       {
         days = Long.parseLong(part.split(" ")[0]);
       }
@@ -284,13 +298,17 @@ public class PollingExecution extends AbstractVerticle
       }
     }
 
+    long secondsInMonths = 30 * 24 * 60 * 60;
+
+    long secondsInWeeks = 7 * 24 * 60 * 60;
+
     long secondsInDay = 24 * 60 * 60;
 
     long secondsInHour = 60 * 60;
 
     long secondsInMinute = 60;
 
-    return days * secondsInDay + hours * secondsInHour + minutes * secondsInMinute;
+    return months * secondsInMonths + weeks * secondsInWeeks + days * secondsInDay + hours * secondsInHour + minutes * secondsInMinute;
   }
 
   @Override
@@ -470,6 +488,18 @@ public class PollingExecution extends AbstractVerticle
 
                           else if (key.equals("BpsValue"))
                           {
+                            JsonArray parameter1 = new JsonArray();
+
+                            parameter1.add("Bytes");
+
+                            parameter1.add(metricData.getString(key));
+
+                            parameter1.add(metricData.getString("IP"));
+
+                            parameter1.add("SSH");
+
+                            batchAddParam.add(parameter1);
+
                             parameter.add(key);
 
                             long oldUptime;
