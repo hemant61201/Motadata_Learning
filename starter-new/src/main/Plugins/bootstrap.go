@@ -2,6 +2,7 @@ package main
 
 import (
 	"Plugins/Ping"
+	"Plugins/SNMP"
 	"Plugins/SSH"
 	"encoding/json"
 	"fmt"
@@ -86,9 +87,9 @@ func main() {
 				return
 			}
 
-			resultsChanel := make(chan SSH.SSHResult)
+			size := len(resultMap.IPs)
 
-			numIPs := len(resultMap.IPs)
+			resultsChanel := make(chan SSH.SSHResult, size)
 
 			completed := 0
 
@@ -121,35 +122,28 @@ func main() {
 				}(ip, i)
 			}
 
-			results := make([]SSH.SSHResult, 0)
+			for sshResult := range resultsChanel {
 
-			for completed < numIPs {
+				if sshResult.IP != "" {
 
-				select {
+					pollingResult, err := json.Marshal(sshResult)
 
-				case sshResult := <-resultsChanel:
-
-					if (SSH.SSHResult{}) != sshResult {
-						results = append(results, sshResult)
+					if err != nil {
+						fmt.Printf("Error marshaling JSON: %v\n", err)
+						return
 					}
 
-					completed++
-
-				default:
-					continue
+					fmt.Println(string(pollingResult))
 				}
+
+				completed++
+
+				if completed == size {
+					close(resultsChanel)
+				}
+
 			}
 
-			close(resultsChanel)
-
-			pollingResult, err := json.Marshal(results)
-
-			if err != nil {
-				fmt.Printf("Error marshaling JSON: %v\n", err)
-				return
-			}
-
-			fmt.Println(string(pollingResult))
 		}
 
 	case "Ping":
@@ -176,6 +170,95 @@ func main() {
 			}
 
 			fmt.Println(resultMap)
+
+		}
+
+	case "SNMP":
+
+		switch inputData.Method {
+
+		case "Discovery":
+
+			ping := &Ping.Ping{}
+
+			discovery := &SNMP.Discovery{}
+
+			result := ping.PingDiscovery(inputData.DiscoveryProfile.IP)
+
+			if result == "success" {
+
+				fmt.Println(discovery.ExecuteDiscovery(inputData.DiscoveryProfile.IP, inputData.DiscoveryProfile.Port), inputData.DiscoveryProfile.ID)
+
+			} else {
+				fmt.Println("failed_", inputData.DiscoveryProfile.ID)
+			}
+
+		case "Polling":
+
+			snmpPing := &Ping.SshPing{}
+
+			resultMap, err := snmpPing.PingPolling(input)
+
+			if err != nil {
+				fmt.Printf("Error performing fping polling: %v\n", err)
+				return
+			}
+
+			size := len(resultMap.IPs)
+
+			resultsCh := make(chan SNMP.SNMPResult, size)
+
+			completed := 0
+
+			for i, ip := range resultMap.IPs {
+
+				go func(ip string, i int) {
+
+					snmpPolling := &SNMP.SNMPPolling{}
+
+					snmpResult, err := snmpPolling.GetSNMPResult(ip, inputData.DiscoveryProfile.Port)
+
+					if err != nil {
+						fmt.Printf("Error retrieving SNMP result for IP %s: %v\n", ip, err)
+						resultsCh <- SNMP.SNMPResult{} // Send an empty result to indicate failure
+						return
+					}
+
+					result := resultMap.Results[ip]
+
+					snmpResult.Fping = SNMP.Result{
+						Loss:   result.Loss,
+						Min:    result.Min,
+						Avg:    result.Avg,
+						Max:    result.Max,
+						Status: result.Status,
+					}
+
+					resultsCh <- snmpResult
+				}(ip, i)
+			}
+
+			for snmpResult := range resultsCh {
+
+				if snmpResult.IP != "" {
+
+					pollingData, err := json.Marshal(snmpResult)
+
+					if err != nil {
+						fmt.Printf("Error marshaling JSON: %v\n", err)
+						return
+					}
+
+					fmt.Println(string(pollingData))
+				}
+
+				completed++
+
+				if completed == size {
+					close(resultsCh)
+				}
+
+			}
 
 		}
 

@@ -76,6 +76,18 @@ public class Discovery extends AbstractVerticle
                 ipArray.add(value);
               }
 
+              int port;
+
+              if(getData.getString("DEVICETYPE").equals("SNMP"))
+              {
+                port = 161;
+              }
+
+              else
+              {
+                port = 22;
+              }
+
               JsonObject credentialObject = new JsonObject(credentialData);
 
               JsonArray userName = new JsonArray();
@@ -93,7 +105,7 @@ public class Discovery extends AbstractVerticle
                   .put("password", password))
                 .put("discoveryProfile", new JsonObject()
                   .put("ip", ipArray)
-                  .put("port", 22)
+                  .put("port", port)
                   .put("id", new JsonArray().add(getData.getInteger("ID"))));
 
               executeCommand(ConstVariables.BOOTSTRAPPATH, requestData.encode(), exeResult ->

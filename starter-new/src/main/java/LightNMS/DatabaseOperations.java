@@ -331,7 +331,7 @@ public class DatabaseOperations extends AbstractVerticle
                 {
                   jsonNode.withArray(metrics).add(data).add(timestamp);
                 }
-                else if (metrics.equals("Loss") || metrics.equals("Uptime") || metrics.equals("BpsValue"))
+                else if (metrics.equals("Loss") || metrics.equals("Uptime") || metrics.equals("BpsValue") || metrics.equals("SNMPData"))
                 {
                   jsonNode.put(metrics, data);
                 }

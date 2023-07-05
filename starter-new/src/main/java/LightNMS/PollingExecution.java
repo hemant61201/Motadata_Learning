@@ -101,6 +101,75 @@ public class PollingExecution extends AbstractVerticle
         }
         break;
 
+        case "SNMP":
+        {
+          JsonObject getMonitorData = new JsonObject();
+
+          JsonArray paramValues = new JsonArray();
+
+          paramValues.add("SNMP");
+
+          getMonitorData.put(ConstVariables.ACTION, "get");
+
+          getMonitorData.put(ConstVariables.TABLENAME, "monitor_table");
+
+          getMonitorData.put(ConstVariables.COLUMNS, "ip,id");
+
+          getMonitorData.put(ConstVariables.ADDRESS, "allIp");
+
+          getMonitorData.put(ConstVariables.PARAMVALUES, paramValues);
+
+          getMonitorData.put(ConstVariables.CONDITION, " WHERE deviceType = ?");
+
+          Future<Object> GetMonitor = DatabaseOperations.executeGetQuery(vertx, getMonitorData);
+
+          if (GetMonitor != null)
+          {
+            GetMonitor.onComplete(getResult ->
+            {
+              if (getResult.succeeded())
+              {
+                @SuppressWarnings("unchecked")
+                HashMap<Integer, JsonObject> data = (HashMap<Integer, JsonObject>) getResult.result();
+
+                JsonObject getData = new JsonObject();
+
+                for (Map.Entry<Integer, JsonObject> entry : data.entrySet()) {
+                  getData = entry.getValue();
+                }
+
+                JsonArray ipArray = new JsonArray(getData.getString("ip"));
+
+                JsonArray idArray = new JsonArray(getData.getString("id"));
+
+                JsonObject requestData = new JsonObject()
+                  .put("Method", "Polling")
+                  .put("Operation", "SNMP")
+                  .put("credentialProfile", new JsonObject()
+                    .put("username", new JsonArray(){})
+                    .put("password", new JsonArray(){}))
+                  .put("discoveryProfile", new JsonObject()
+                    .put("ip", ipArray)
+                    .put("port", 161)
+                    .put("id", idArray));
+
+                sendIps.put(1, new JsonArray(getData.getString("ip")));
+
+                promise.complete(requestData);
+              }
+              else
+              {
+                LOGGER.error("Error: " + getResult.cause());
+              }
+            });
+          }
+          else
+          {
+            LOGGER.error("Error: GetMonitor is null");
+          }
+        }
+        break;
+
         case "SSH":
         {
           JsonObject getMonitorData = new JsonObject();
@@ -569,6 +638,11 @@ public class PollingExecution extends AbstractVerticle
                             {
                               String name = interfaceData.split(":")[0];
 
+                              if(name.contains("["))
+                              {
+                                name = name.substring(1,name.length() - 1);
+                              }
+
                               String oldInterfaceData = null;
 
                               for(String oldInterface : oldInterfaces)
@@ -583,12 +657,25 @@ public class PollingExecution extends AbstractVerticle
                               {
                                 if(name.equals(oldInterfaceData.split(":")[0]))
                                 {
-                                  long receiveValue = (Long.parseLong(interfaceData.split(":")[1].split(",")[0]) - Long.parseLong(oldInterfaceData.split(":")[1].split(",")[0])) / time;
+                                  if((Long.parseLong(interfaceData.split(":")[1].split(",")[0]) > Long.parseLong(oldInterfaceData.split(":")[1].split(",")[0])))
+                                  {
+                                    long receiveValue = (Long.parseLong(interfaceData.split(":")[1].split(",")[0]) - Long.parseLong(oldInterfaceData.split(":")[1].split(",")[0])) / time;
 
-                                  long transmitValue = (Long.parseLong(interfaceData.split(":")[1].split(",")[1]) - Long.parseLong(oldInterfaceData.split(":")[1].split(",")[1])) / time;
+                                    long transmitValue = (Long.parseLong(interfaceData.split(":")[1].split(",")[1]) - Long.parseLong(oldInterfaceData.split(":")[1].split(",")[1])) / time;
 
-                                  bpsValue.append(name).append(":").append(receiveValue).append(",").append(transmitValue).append(";");
+                                    bpsValue.append(name).append(":").append(receiveValue).append(",").append(transmitValue).append(";");
+                                  }
+
+                                  else
+                                  {
+                                    long receiveValue = (Long.parseLong(interfaceData.split(":")[1].split(",")[0])) / time;
+
+                                    long transmitValue = (Long.parseLong(interfaceData.split(":")[1].split(",")[1])) / time;
+
+                                    bpsValue.append(name).append(":").append(receiveValue).append(",").append(transmitValue).append(";");
+                                  }
                                 }
+
                               }
 
                               else
@@ -805,6 +892,237 @@ public class PollingExecution extends AbstractVerticle
                       failStatus.add("failed");
                       failStatus.add(sendIP.getString(j));
                       failStatus.add("SSH");
+                      failAddParam.add(failStatus);
+                    }
+
+                    updateStatus(failUpdateParam);
+
+                    addPolling(failAddParam);
+                  }
+                }
+                else
+                {
+                  System.err.println("Process execution failed: " + exeResult.cause().getMessage());
+
+                  startPromise.fail(exeResult.cause());
+                }
+              });
+
+            }
+            else
+            {
+              LOGGER.error("Error: " + getResult.cause());
+            }
+          });
+        }
+        else
+        {
+          LOGGER.error("Error: GetMonitor is null");
+        }
+
+        Future<Object> getSnmpMonitor = getMonitorData("SNMP");
+
+        if (getSnmpMonitor != null)
+        {
+          getSnmpMonitor.onComplete(getResult ->
+          {
+            if (getResult.succeeded())
+            {
+              executeCommand(ConstVariables.BOOTSTRAPPATH, getResult.result().toString(), exeResult ->
+              {
+                if (exeResult.succeeded())
+                {
+                  if(exeResult.result() != null)
+                  {
+                    JsonArray successResult = new JsonArray(exeResult.result());
+
+                    JsonArray successIp = new JsonArray();
+
+                    JsonArray batchUpdateParam = new JsonArray();
+
+                    JsonArray batchAddParam = new JsonArray();
+
+                    for (int i = 0; i < successResult.size(); i++)
+                    {
+                      JsonObject metricData = successResult.getJsonObject(i);
+
+                      JsonArray paramValue = new JsonArray();
+
+                      JsonObject fpingData = metricData.getJsonObject("Fping");
+
+                      paramValue.add(fpingData.getString("Status"));
+
+                      paramValue.add(metricData.getString("IP"));
+
+                      successIp.add(metricData.getString("IP"));
+
+                      paramValue.add("SNMP");
+
+                      batchUpdateParam.add(paramValue);
+
+                      for (String key : metricData.fieldNames())
+                      {
+                        if (!key.equals("IP"))
+                        {
+                          JsonArray parameter = new JsonArray();
+
+                          if (key.equals("Fping"))
+                          {
+                            for (String keys : fpingData.fieldNames())
+                            {
+                              JsonArray param = new JsonArray();
+
+                              param.add(keys);
+
+                              param.add(fpingData.getString(keys));
+
+                              param.add(metricData.getString("IP"));
+
+                              param.add("SNMP");
+
+                              batchAddParam.add(param);
+                            }
+                          }
+
+                          else
+                          {
+                            parameter.add(key);
+
+                            parameter.add(metricData.getJsonObject(key).toString());
+
+                            parameter.add(metricData.getString("IP"));
+
+                            parameter.add("SNMP");
+
+                            batchAddParam.add(parameter);
+                          }
+                        }
+                      }
+                    }
+                    updateStatus(batchUpdateParam);
+
+                    addPolling(batchAddParam);
+
+                    JsonArray sendIP = sendIps.get(1);
+
+                    JsonArray failUpdateParam = new JsonArray();
+
+                    JsonArray failAddParam = new JsonArray();
+
+                    for (int j = 0; j < sendIP.size(); j++)
+                    {
+                      if(!successIp.contains(sendIP.getString(j)))
+                      {
+                        JsonArray fail = new JsonArray();
+                        fail.add("failed");
+                        fail.add(sendIP.getString(j));
+                        fail.add("SNMP");
+                        failUpdateParam.add(fail);
+
+                        JsonArray failSnmp = new JsonArray();
+                        failSnmp.add("SnmpData");
+                        failSnmp.add("");
+                        failSnmp.add(sendIP.getString(j));
+                        failSnmp.add("SNMP");
+                        failAddParam.add(failSnmp);
+
+                        JsonArray failLoss = new JsonArray();
+                        failLoss.add("Loss");
+                        failLoss.add("100%");
+                        failLoss.add(sendIP.getString(j));
+                        failLoss.add("SNMP");
+                        failAddParam.add(failLoss);
+
+                        JsonArray failMin = new JsonArray();
+                        failMin.add("Min");
+                        failMin.add("0");
+                        failMin.add(sendIP.getString(j));
+                        failMin.add("SNMP");
+                        failAddParam.add(failMin);
+
+                        JsonArray failAvg = new JsonArray();
+                        failAvg.add("Avg");
+                        failAvg.add("0");
+                        failAvg.add(sendIP.getString(j));
+                        failAvg.add("SNMP");
+                        failAddParam.add(failAvg);
+
+                        JsonArray failMax = new JsonArray();
+                        failMax.add("Max");
+                        failMax.add("0");
+                        failMax.add(sendIP.getString(j));
+                        failMax.add("SNMP");
+                        failAddParam.add(failMax);
+
+                        JsonArray failStatus = new JsonArray();
+                        failStatus.add("Status");
+                        failStatus.add("failed");
+                        failStatus.add(sendIP.getString(j));
+                        failStatus.add("SNMP");
+                        failAddParam.add(failStatus);
+                      }
+                    }
+
+                    updateStatus(failUpdateParam);
+
+                    addPolling(failAddParam);
+                  }
+                  else
+                  {
+                    JsonArray sendIP = sendIps.get(1);
+
+                    JsonArray failUpdateParam = new JsonArray();
+
+                    JsonArray failAddParam = new JsonArray();
+
+                    for (int j = 0; j < sendIP.size(); j++)
+                    {
+                      JsonArray fail = new JsonArray();
+                      fail.add("failed");
+                      fail.add(sendIP.getString(j));
+                      fail.add("SNMP");
+                      failUpdateParam.add(fail);
+
+                      JsonArray failSnmp = new JsonArray();
+                      failSnmp.add("SnmpData");
+                      failSnmp.add("");
+                      failSnmp.add(sendIP.getString(j));
+                      failSnmp.add("SNMP");
+                      failAddParam.add(failSnmp);
+
+                      JsonArray failLoss = new JsonArray();
+                      failLoss.add("Loss");
+                      failLoss.add("100%");
+                      failLoss.add(sendIP.getString(j));
+                      failLoss.add("SNMP");
+                      failAddParam.add(failLoss);
+
+                      JsonArray failMin = new JsonArray();
+                      failMin.add("Min");
+                      failMin.add("0");
+                      failMin.add(sendIP.getString(j));
+                      failMin.add("SNMP");
+                      failAddParam.add(failMin);
+
+                      JsonArray failAvg = new JsonArray();
+                      failAvg.add("Avg");
+                      failAvg.add("0");
+                      failAvg.add(sendIP.getString(j));
+                      failAvg.add("SNMP");
+                      failAddParam.add(failAvg);
+
+                      JsonArray failMax = new JsonArray();
+                      failMax.add("Max");
+                      failMax.add("0");
+                      failMax.add(sendIP.getString(j));
+                      failMax.add("SNMP");
+                      failAddParam.add(failMax);
+
+                      JsonArray failStatus = new JsonArray();
+                      failStatus.add("Status");
+                      failStatus.add("failed");
+                      failStatus.add(sendIP.getString(j));
+                      failStatus.add("SNMP");
                       failAddParam.add(failStatus);
                     }
 

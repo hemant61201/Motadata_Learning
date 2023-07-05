@@ -515,11 +515,18 @@ var viewMonitorConfig =
                   monitorView.viewMonitor(ajaxResponse);
                 }
 
-                else
+                else if(deviceType === "SSH")
                 {
                   sshMonitor.sshMonitor();
 
                   SSHMonitor.sshMonitor(ajaxResponse);
+                }
+
+                else
+                {
+                  snmpMonitor.snmpMonitor();
+
+                  SNMPMonitor.snmpMonitor(ajaxResponse);
                 }
 
               }

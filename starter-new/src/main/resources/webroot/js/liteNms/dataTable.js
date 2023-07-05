@@ -2,6 +2,7 @@ var dataTable =
   {
     loadDataTable: function (id, resultArray)
     {
+      console.log(resultArray)
       $(id).DataTable({
 
         data: resultArray,

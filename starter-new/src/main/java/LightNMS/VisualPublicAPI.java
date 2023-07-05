@@ -497,9 +497,14 @@ public class VisualPublicAPI extends AbstractVerticle
           getMonitor.put(ConstVariables.CONDITION, ConstVariables.PINGCONDITION);
         }
 
-        else
+        else if(message.getString("deviceType").equals("SSH"))
         {
           getMonitor.put(ConstVariables.CONDITION, ConstVariables.SSHCONDITION);
+        }
+
+        else if(message.getString("deviceType").equals("SNMP"))
+        {
+          getMonitor.put(ConstVariables.CONDITION, ConstVariables.SNMPCONDITION);
         }
 
         Future<Object> future = DatabaseOperations.executeGetQuery(vertx, getMonitor);

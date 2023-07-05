@@ -41,4 +41,6 @@ public class ConstVariables
   public static final String PINGCONDITION = " p WHERE p.ip = ? AND p.deviceType = ? AND (( p.metrics IN ('Loss') AND p.timestamp = ( SELECT MAX(sub.timestamp) FROM polling_table sub WHERE sub.metrics = p.metrics AND sub.ip = p.ip AND sub.deviceType = p.deviceType)) OR (p.metrics IN ('Min', 'Max', 'Avg', 'Status') AND p.timestamp >= NOW() - INTERVAL '86400' SECOND)) ORDER BY p.metrics";
 
   public static final String SSHCONDITION = " p WHERE p.ip = ? AND p.deviceType = ? AND (( p.metrics IN ('Loss', 'Uptime', 'BpsValue') AND p.timestamp = ( SELECT MAX(sub.timestamp) FROM polling_table sub WHERE sub.metrics = p.metrics AND sub.ip = p.ip AND sub.deviceType = p.deviceType)) OR (p.metrics IN ('Min', 'Max', 'Avg', 'CPU', 'Memory', 'Disk', 'Status') AND p.timestamp >= NOW() - INTERVAL '86400' SECOND)) ORDER BY p.metrics";
+
+  public static final String SNMPCONDITION = " p WHERE p.ip = ? AND p.deviceType = ? AND (( p.metrics IN ('SNMPData') AND p.timestamp = ( SELECT MAX(sub.timestamp) FROM polling_table sub WHERE sub.metrics = p.metrics AND sub.ip = p.ip AND sub.deviceType = p.deviceType)) OR (p.metrics IN ('Min', 'Max', 'Avg', 'Status') AND p.timestamp >= NOW() - INTERVAL '86400' SECOND)) ORDER BY p.metrics";
 }

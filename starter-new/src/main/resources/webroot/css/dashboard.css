@@ -60,3 +60,25 @@
 .table tr:nth-child(even) {
   background-color: #f5f5f5;
 }
+
+.attractive-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.attractive-table th,
+.attractive-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.attractive-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.attractive-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
