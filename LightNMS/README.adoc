@@ -1,4 +1,4 @@
-= Lightnms
+= Litenms
 
 image:https://img.shields.io/badge/vert.x-4.4.2-purple.svg[link="https://vertx.io"]
 
